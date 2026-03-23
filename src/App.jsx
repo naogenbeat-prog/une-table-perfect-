@@ -1,0 +1,256 @@
+import React, { useState, useEffect } from "react";
+import { Menu, X, ChevronRight, Instagram, Facebook, Twitter, Star, Quote } from "lucide-react";
+
+// --- 設定エリア ---
+const CONFIG = {
+  brandName: "UNE TABLE",
+  tagline: "至高の味わいを、あなただけの空間へ。",
+  // 一時的なダミー写真（後で本物に差し替えます！）
+  heroImage: "https://images.unsplash.com/photo-1555243896-c709bfa0b564?auto=format&fit=crop&q=80&w=2000",
+};
+
+const images = {
+  concept1: "https://images.unsplash.com/photo-1555244162-803834f70033?auto=format&fit=crop&q=80&w=1200",
+  serviceWedding: "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&q=80&w=800",
+  serviceCorporate: "https://images.unsplash.com/photo-1505236858219-8359eb29e329?auto=format&fit=crop&q=80&w=800",
+  servicePrivate: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&q=80&w=800",
+  gallery:[
+    "https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?auto=format&fit=crop&q=80&w=800",
+    "https://images.unsplash.com/photo-1563805042-7684c8a9e9cb?auto=format&fit=crop&q=80&w=800",
+    "https://images.unsplash.com/photo-1476224203421-9ac39bcb3327?auto=format&fit=crop&q=80&w=800",
+    "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&q=80&w=800",
+    "https://images.unsplash.com/photo-1530103043960-ef38714abb15?auto=format&fit=crop&q=80&w=800",
+    "https://images.unsplash.com/photo-1514326640560-7d063ef2aed5?auto=format&fit=crop&q=80&w=800",
+  ],
+};
+
+const Navbar = ({ isScrolled, isMobileMenuOpen, setIsMobileMenuOpen }) => (
+  <nav className={`fixed w-full z-50 transition-all duration-700 ${isScrolled ? "bg-zinc-950/95 backdrop-blur-md py-4 border-b border-zinc-800" : "bg-transparent py-6"}`}>
+    <div className="max-w-7xl mx-auto px-6 md:px-12 flex justify-between items-center">
+      <div className="text-2xl text-white tracking-[0.3em] font-light cursor-pointer uppercase">{CONFIG.brandName}</div>
+      <div className="hidden md:flex space-x-10 items-center text-sm tracking-[0.2em] uppercase">
+        {["Concept", "Services", "Menu", "Gallery"].map((item) => (
+          <a key={item} href={`#${item.toLowerCase()}`} className="text-stone-300 hover:text-amber-500 transition-colors">{item}</a>
+        ))}
+        <a href="#contact" className="border border-amber-500/50 text-amber-500 px-8 py-3 hover:bg-amber-600 hover:text-white hover:border-amber-600 transition-all duration-300">Reservation</a>
+      </div>
+      <button className="md:hidden text-stone-300 z-50" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>{isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}</button>
+    </div>
+    <div className={`fixed inset-0 bg-zinc-950 z-40 flex flex-col items-center justify-center transition-opacity duration-500 ${isMobileMenuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}>
+      <div className="flex flex-col space-y-8 text-center text-lg tracking-widest uppercase">
+        {["Concept", "Services", "Menu", "Gallery", "Contact"].map((item) => (
+          <a key={item} href={`#${item.toLowerCase()}`} className="text-stone-300 hover:text-amber-500 transition-colors" onClick={() => setIsMobileMenuOpen(false)}>{item}</a>
+        ))}
+      </div>
+    </div>
+  </nav>
+);
+
+const Hero = () => (
+  <section className="relative h-screen flex items-center justify-center overflow-hidden">
+    <div className="absolute inset-0 z-0">
+      <img src={CONFIG.heroImage} alt="Catering Table" className="w-full h-full object-cover scale-105 animate-[subtle-zoom_20s_infinite_alternate]" />
+      <div className="absolute inset-0 bg-gradient-to-b from-zinc-950/60 via-zinc-950/40 to-zinc-950"></div>
+    </div>
+    <div className="relative z-10 text-center px-4 max-w-4xl mx-auto mt-20">
+      <h2 className="text-amber-500 tracking-[0.3em] text-xs md:text-sm uppercase mb-8">Premium Catering Service</h2>
+      <h1 className="text-4xl md:text-6xl lg:text-7xl text-white font-light leading-tight mb-8 drop-shadow-lg">至高の味わいを、<br />あなただけの空間へ。</h1>
+      <p className="text-sm md:text-base text-stone-300 font-light mb-12 max-w-2xl mx-auto leading-loose tracking-wide">厳選された旬の食材を使用し、目にも楽しい彩をお届けします。<br className="hidden md:block" />特別な日を彩る、最高峰のケータリング体験をお届けします。</p>
+      <div className="flex flex-col sm:flex-row gap-6 justify-center">
+        <a href="#contact" className="bg-amber-600/10 backdrop-blur-sm border border-amber-500/50 text-amber-500 hover:bg-amber-600 hover:text-white hover:border-amber-600 transition-all duration-500 px-10 py-4 tracking-[0.2em] uppercase text-sm">ご予約・ご相談</a>
+        <a href="#menu" className="border border-white/20 text-white hover:bg-white/10 transition-all duration-500 px-10 py-4 tracking-[0.2em] uppercase text-sm">メニューを見る</a>
+      </div>
+    </div>
+  </section>
+);
+
+const Concept = () => (
+  <section id="concept" className="py-24 md:py-40 px-6 md:px-12 max-w-7xl mx-auto">
+    <div className="flex flex-col md:flex-row items-center gap-12 md:gap-24 mb-32">
+      <div className="w-full md:w-1/2 relative group">
+        <div className="relative pb-[130%] overflow-hidden">
+          <img src={images.concept1} alt="Concept" className="absolute inset-0 w-full h-full object-cover transition-transform duration-[2000ms] group-hover:scale-110" />
+        </div>
+        <div className="absolute -bottom-6 -right-6 w-full h-full border border-amber-500/20 -z-10"></div>
+      </div>
+      <div className="w-full md:w-1/2">
+        <div className="flex items-center gap-4 mb-6">
+          <div className="h-[1px] w-12 bg-amber-500"></div>
+          <h3 className="text-amber-500 tracking-[0.2em] text-sm uppercase">Our Philosophy</h3>
+        </div>
+        <h2 className="text-3xl md:text-5xl text-white font-light leading-snug mb-10">一瞬の感動を、<br />永遠の記憶に。</h2>
+        <p className="text-stone-400 leading-loose mb-8 font-light text-sm md:text-base">{CONFIG.brandName}（ユヌ・ターブル）は、フランス語で「一つのテーブル」を意味します。私たちは、厳選された食材を確かな技術で、目にも美しい一皿へと昇華させます。</p>
+        <p className="text-stone-400 leading-loose font-light text-sm md:text-base">企業様のレセプションパーティーから、各団体様の大切な懇親会。「一つのテーブル」を囲むかけがえのない時間に、究極のおもてなしをお約束いたします。</p>
+      </div>
+    </div>
+  </section>
+);
+
+const Services = () => (
+  <section id="services" className="py-24 bg-zinc-900 px-6">
+    <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12">
+      {[
+        { title: "Reception", img: images.serviceWedding, desc: "大切な方との会合を、", highlight: "彩り豊かな祝宴で。" },
+        { title: "Corporate", img: images.serviceCorporate, desc: "ブランドイメージを高める", highlight: "洗練された料理。" },
+        { title: "Private", img: images.servicePrivate, desc: "オーダーメイドで高級レストランに変わる", highlight: "特別な贅沢。" },
+      ].map((s, i) => (
+        <div key={i} className="group relative overflow-hidden aspect-[3/4]">
+          <img src={s.img} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" alt={s.title} />
+          <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all"></div>
+          <div className="absolute bottom-10 left-10 right-10">
+            <h4 className="text-2xl text-white mb-4 font-light tracking-[0.2em] border-l-2 border-amber-500 pl-4">{s.title}</h4>
+            <p className="text-stone-100 text-[14px] tracking-widest leading-relaxed opacity-0 group-hover:opacity-100 transition-all duration-700 transform translate-y-4 group-hover:translate-y-0">{s.desc}<br /><span className="text-amber-500 font-bold text-lg md:text-xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] block mt-1">{s.highlight}</span></p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+);
+
+const MenuSection = () => (
+  <section id="menu" className="py-24 md:py-32 bg-zinc-950 px-6">
+    <div className="max-w-7xl mx-auto">
+      <div className="text-center mb-20">
+        <h3 className="text-amber-500 tracking-[0.2em] text-sm uppercase mb-4">Our Menu</h3>
+        <h2 className="text-3xl md:text-5xl text-white font-light mb-6 tracking-wider">至福の厳選プラン</h2>
+        <div className="w-24 h-[1px] bg-amber-500/50 mx-auto"></div>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {[
+          { name: "Season", price: "¥4,500~", desc: "洗練されたスタンダードコース。季節の味覚を軽やかに楽しめます。", items:["フィンガーフード４品", "串もの４品", "寿司２品", "デザート"] },
+          { name: "Signature", price: "¥6,000~", desc: "当店のスペシャリティ。最高級の食材を用いた華やかセッティング。", items:["フィンガーフード６品", "串もの６品", "寿司３品", "デザート2種"] },
+          { name: "Sur Mesure", price: "¥8,000~", desc: "完全オーダーメイド. お客様の想いを形にする唯一無二の体験。", items:["食材指定可能", "飲料指定可能", "着席配置可能", "演出指定可能"] },
+        ].map((plan, i) => (
+          <div key={i} className="group p-10 border border-zinc-800 bg-zinc-900/30 hover:border-amber-500/50 transition-all duration-500">
+            <h4 className="text-amber-500 tracking-widest text-xs uppercase mb-4">Plan {i + 1}</h4>
+            <h3 className="text-2xl text-white mb-2 font-light">{plan.name}</h3>
+            <p className="text-xl text-stone-400 mb-6 font-sans">{plan.price} <span className="text-xs">/ person</span></p>
+            <p className="text-sm text-stone-500 mb-8 leading-loose h-20">{plan.desc}</p>
+            <ul className="space-y-3 mb-10 text-xs tracking-widest text-stone-400 border-t border-zinc-800 pt-8">
+              {plan.items.map((item) => <li key={item} className="flex items-center"><ChevronRight size={12} className="mr-2 text-amber-500" /> {item}</li>)}
+            </ul>
+            <button className="w-full py-4 border border-zinc-700 text-xs tracking-[0.2em] uppercase hover:bg-white hover:text-black transition-all">Select Plan</button>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+);
+
+const Testimonials = () => (
+  <section className="py-24 bg-zinc-900/50 border-y border-zinc-800/50 px-6">
+    <div className="max-w-5xl mx-auto text-center">
+      <Quote className="mx-auto text-amber-500/20 mb-8" size={60} />
+      <p className="text-xl md:text-2xl text-stone-300 italic font-light leading-relaxed mb-8">"創業記念のパーティーで利用しました。料理の美しさはもちろん、<br className="hidden md:block" />全員ソムリエの資格をお持ちでサービングの所作も完璧でした。お酒の種類の豊富さにも驚きました。"</p>
+      <div className="flex items-center justify-center gap-1 mb-4">
+        {[...Array(5)].map((_, i) => <Star key={i} size={16} className="fill-amber-500 text-amber-500" />)}
+      </div>
+      <cite className="text-amber-500 tracking-widest uppercase text-xs not-italic">- 東京都 S.K様 (Private Dinner)</cite>
+    </div>
+  </section>
+);
+
+const Gallery = () => (
+  <section id="gallery" className="py-24 md:py-32 px-4 md:px-8 max-w-screen-2xl mx-auto">
+    <div className="text-center mb-20">
+      <h3 className="text-amber-500 tracking-[0.2em] text-sm uppercase mb-6">Gallery</h3>
+      <h2 className="text-3xl md:text-5xl text-white font-light tracking-wide">美しき一皿の記録</h2>
+    </div>
+    <div className="columns-1 md:columns-2 lg:columns-3 gap-4 space-y-4">
+      {images.gallery.map((img, idx) => (
+        <div key={idx} className="relative overflow-hidden group break-inside-avoid bg-zinc-900">
+          <img src={img} className="w-full object-cover transition-transform duration-[2000ms] group-hover:scale-110 opacity-90 group-hover:opacity-100" alt={`Gallery ${idx}`} />
+        </div>
+      ))}
+    </div>
+  </section>
+);
+
+const Contact = () => {
+  const[formData, setFormData] = useState({ name: "", email: "", message: "" });
+  const[status, setStatus] = useState("idle");
+  const handleChange = (e) => { setFormData((prev) => ({ ...prev,[name]: e.target.value })); };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setStatus("submitting");
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          access_key: "f62692b3-e35a-46dc-8cfb-39afaab1ee76",
+          subject: "【une table】Webサイトから新しいお問い合わせがあります",
+          name: formData.name, email: formData.email, message: formData.message,
+        }),
+      });
+      if (response.status === 200) { setStatus("success"); setFormData({ name: "", email: "", message: "" }); } 
+      else { setStatus("error"); }
+    } catch (error) { setStatus("error"); }
+  };
+
+  return (
+    <section id="contact" className="py-24 md:py-32 bg-zinc-950">
+      <div className="max-w-4xl mx-auto px-6 md:px-12">
+        <div className="text-center mb-16">
+          <h3 className="text-amber-500 tracking-[0.2em] text-sm uppercase mb-6">Contact</h3>
+          <h2 className="text-3xl md:text-5xl text-white font-light mb-8">ご予約・お問い合わせ</h2>
+        </div>
+        <div className="bg-zinc-900/50 p-8 md:p-14 border border-zinc-800 relative min-h-[400px] flex flex-col justify-center">
+          {status === "success" ? (
+            <div className="text-center py-12 animate-[fadeIn_0.5s_ease-out]">
+              <h3 className="text-2xl text-amber-500 mb-4 tracking-widest font-light">Thank You.</h3>
+              <p className="text-stone-300 leading-loose text-sm md:text-base">お問い合わせを受け付けました。<br />担当者より順次ご連絡いたします。</p>
+              <button onClick={() => setStatus("idle")} className="mt-10 border border-amber-500/50 text-amber-500 px-8 py-3 hover:bg-amber-600 hover:text-white transition-all text-xs tracking-widest uppercase">別の問い合わせをする</button>
+            </div>
+          ) : (
+            <form className="space-y-8 animate-[fadeIn_0.5s_ease-out]" onSubmit={handleSubmit}>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <input type="text" name="name" value={formData.name} onChange={handleChange} required placeholder="お名前" className="bg-transparent border-b border-zinc-700 text-white py-2 focus:outline-none focus:border-amber-500 transition-colors" />
+                <input type="email" name="email" value={formData.email} onChange={handleChange} required placeholder="メールアドレス" className="bg-transparent border-b border-zinc-700 text-white py-2 focus:outline-none focus:border-amber-500 transition-colors" />
+              </div>
+              <textarea rows="4" name="message" value={formData.message} onChange={handleChange} required placeholder="ご相談内容" className="w-full bg-transparent border-b border-zinc-700 text-white py-2 focus:outline-none focus:border-amber-500 resize-none transition-colors"></textarea>
+              <button type="submit" disabled={status === "submitting"} className={`w-full py-4 tracking-widest uppercase transition-all duration-300 ${status === "submitting" ? "bg-zinc-800 text-zinc-500 cursor-not-allowed" : "bg-amber-600 hover:bg-amber-500 text-white"}`}>{status === "submitting" ? "送信中..." : "送信する"}</button>
+              {status === "error" && <p className="text-red-500 text-sm text-center mt-4">送信に失敗しました。通信環境をご確認の上、再度お試しください。</p>}
+            </form>
+          )}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const App = () => {
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => setIsScrolled(window.scrollY > 50);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  },[]);
+
+  return (
+    <div className="min-h-screen bg-zinc-950 text-stone-300 font-serif selection:bg-amber-900 selection:text-white">
+      <Navbar isScrolled={isScrolled} isMobileMenuOpen={isMobileMenuOpen} setIsMobileMenuOpen={setIsMobileMenuOpen} />
+      <Hero />
+      <Concept />
+      <Services />
+      <MenuSection />
+      <Testimonials />
+      <Gallery />
+      <Contact />
+      <footer className="py-12 bg-zinc-950 text-center border-t border-zinc-900">
+        <div className="text-2xl text-white tracking-[0.3em] font-light mb-6 uppercase">{CONFIG.brandName}</div>
+        <div className="flex justify-center space-x-6 mb-8 text-stone-500">
+          <Instagram size={18} className="hover:text-white cursor-pointer" />
+          <Facebook size={18} className="hover:text-white cursor-pointer" />
+          <Twitter size={18} className="hover:text-white cursor-pointer" />
+        </div>
+        <p className="text-stone-700 text-[10px] tracking-widest uppercase">&copy; {new Date().getFullYear()} {CONFIG.brandName} Catering.</p>
+      </footer>
+      <style dangerouslySetInnerHTML={{ __html: `@keyframes subtle-zoom { from { transform: scale(1); } to { transform: scale(1.1); } } @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } } html { scroll-behavior: smooth; }`}} />
+    </div>
+  );
+};
+
+export default App;
