@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Menu, X, ChevronRight, Instagram, Facebook, Twitter, Star, Quote } from "lucide-react";
+import { Menu, X, ChevronRight,Mail} from "lucide-react";
 
 // --- 設定エリア ---
 const CONFIG = {
@@ -242,9 +242,7 @@ const App = () => {
       <footer className="py-12 bg-zinc-950 text-center border-t border-zinc-900">
         <div className="text-2xl text-white tracking-[0.3em] font-light mb-6 uppercase">{CONFIG.brandName}</div>
         <div className="flex justify-center space-x-6 mb-8 text-stone-500">
-          <Instagram size={18} className="hover:text-white cursor-pointer" />
-          <Facebook size={18} className="hover:text-white cursor-pointer" />
-          <Twitter size={18} className="hover:text-white cursor-pointer" />
+         <Mail size={18} className="hover:text-white cursor-pointer" />
         </div>
         <p className="text-stone-700 text-[10px] tracking-widest uppercase">&copy; {new Date().getFullYear()} {CONFIG.brandName} Catering.</p>
       </footer>
