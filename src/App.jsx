@@ -16,8 +16,7 @@ const images = {
   servicePrivate: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&q=80&w=800",
   gallery:[
     "https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?auto=format&fit=crop&q=80&w=800",
-    "https://images.unsplash.com/photo-1563805042-7684c8a9e9cb?auto=format&fit=crop&q=80&w=800",
-    "https://images.unsplash.com/photo-1476224203421-9ac39bcb3327?auto=format&fit=crop&q=80&w=800",
+    "https://images.unsplash.com/photo-1563805042-7684c8a9e9cb?auto=format&fit=crop&q=80&w=800"
     "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&q=80&w=800",
     "https://images.unsplash.com/photo-1530103043960-ef38714abb15?auto=format&fit=crop&q=80&w=800",
     "https://images.unsplash.com/photo-1514326640560-7d063ef2aed5?auto=format&fit=crop&q=80&w=800",
@@ -117,9 +116,9 @@ const MenuSection = () => (
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {[
-          { name: "Season", price: "¥4,500~", desc: "洗練されたスタンダードコース。季節の味覚を軽やかに楽しめます。", items:["フィンガーフード４品", "串もの４品", "寿司２品", "デザート"] },
-          { name: "Signature", price: "¥6,000~", desc: "当店のスペシャリティ。最高級の食材を用いた華やかセッティング。", items:["フィンガーフード６品", "串もの６品", "寿司３品", "デザート2種"] },
-          { name: "Sur Mesure", price: "¥8,000~", desc: "完全オーダーメイド. お客様の想いを形にする唯一無二の体験。", items:["食材指定可能", "飲料指定可能", "着席配置可能", "演出指定可能"] },
+          { name: "立食パーティー", price: "¥4,500~", desc: "洗練されたスタンダードコース。軽やかに楽しめます。", items:["フィンガーフード４品", "串もの４品", "寿司３品", "デザート"] },
+          { name: "立食・着席", price: "¥6,000~", desc: "当店のスペシャリティ。厳選食材を用いた華やかなセッティング。", items:["フィンガーフード６品", "串もの６品", "寿司３品", "デザート2種"] },
+          { name: "着席形態", price: "¥8,000~", desc: "完全オーダーメイド. お客様の想いを形にする唯一無二のサービス。", items:["食材指定可能", "飲料指定可能", "着席配置可能", "演出指定可能"] },
         ].map((plan, i) => (
           <div key={i} className="group p-10 border border-zinc-800 bg-zinc-900/30 hover:border-amber-500/50 transition-all duration-500">
             <h4 className="text-amber-500 tracking-widest text-xs uppercase mb-4">Plan {i + 1}</h4>
@@ -154,7 +153,7 @@ const Gallery = () => (
   <section id="gallery" className="py-24 md:py-32 px-4 md:px-8 max-w-screen-2xl mx-auto">
     <div className="text-center mb-20">
       <h3 className="text-amber-500 tracking-[0.2em] text-sm uppercase mb-6">Gallery</h3>
-      <h2 className="text-3xl md:text-5xl text-white font-light tracking-wide">美しき一皿の記録</h2>
+      <h2 className="text-3xl md:text-5xl text-white font-light tracking-wide">美しき「テーブル」の記録</h2>
     </div>
     <div className="columns-1 md:columns-2 lg:columns-3 gap-4 space-y-4">
       {images.gallery.map((img, idx) => (
