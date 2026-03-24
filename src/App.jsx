@@ -66,7 +66,7 @@ const Hero = () => (
 
 const Concept = () => (
   <section id="concept" className="py-24 md:py-40 px-6 md:px-12 max-w-7xl mx-auto">
-    <div className="flex flex-col md:flex-row items-center gap-12 md:gap-24 mb-32">
+    <div className="flex flex-col md:flex-row items-center gap-12 md:gap-24 mb-12">
       <div className="w-full md:w-1/2 relative group">
         <div className="relative pb-[130%] overflow-hidden">
           <img src={images.concept1} alt="Concept" className="absolute inset-0 w-full h-full object-cover transition-transform duration-[2000ms] group-hover:scale-110" />
@@ -76,11 +76,11 @@ const Concept = () => (
       <div className="w-full md:w-1/2">
         <div className="flex items-center gap-4 mb-6">
           <div className="h-[1px] w-12 bg-amber-500"></div>
-          <h3 className="text-amber-500 tracking-[0.2em] text-sm uppercase">Our Philosophy</h3>
+          <h3 className="text-amber-500 tracking-[0.2em] text-sm uppercase">CONSEPT</h3>
         </div>
-        <h2 className="text-3xl md:text-5xl text-white font-light leading-snug mb-2">一瞬の感動を<br />永遠の思い出に</h2>
+        <h2 className="text-3xl md:text-5xl text-white font-light leading-snug mb-20">一瞬の感動を<br />永遠の思い出に</h2>
         <p className="text-amber-500 leading-loose mb-8 font-light text-base md:text-lg">{CONFIG.brandName}（ユヌ・ターブル）は、フランス語で「一つのテーブル」を意味します。私たちは、厳選された食材を確かな技術で、目にも美しい一皿へと昇華させます。</p>
-        <p className="text-stone-400 leading-loose font-light text-sm md:text-base">企業様のレセプションパーティーから、各団体様の大切な懇親会。「一つのテーブル」を囲むかけがえのない時間に、究極のおもてなしをお約束いたします。</p>
+        <p className="text-amber-500 leading-loose font-light text-sm md:text-base">企業様のレセプションパーティーから、各団体様の大切な懇親会。「一つのテーブル」を囲むかけがえのない時間に、究極のおもてなしをお約束いたします。</p>
       </div>
     </div>
   </section>
