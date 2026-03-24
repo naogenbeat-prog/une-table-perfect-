@@ -92,7 +92,7 @@ const Services = () => (
       {[
         { title: "Cocktail party", img: images.serviceWedding, desc: "カジュアルな会合を盛り上げる、", highlight: "彩り豊かな演出" },
         { title: "Standing receotion", img: images.serviceCorporate, desc: "大切なビジネスシーンに適した", highlight: "洗練されたサービス" },
-        { title: "Private", img: images.servicePrivate, desc: "オーダーメイドのレストランに変わる", highlight: "すべてにこだわった特別な空間" },
+        { title: "Private", img: images.servicePrivate, desc: "オーダーメイドのレストラン", highlight: "すべてにこだわった特別な空間" },
       ].map((s, i) => (
         <div key={i} className="group relative overflow-hidden aspect-[3/4]">
           <img src={s.img} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" alt={s.title} />
@@ -112,7 +112,7 @@ const MenuSection = () => (
     <div className="max-w-7xl mx-auto">
       <div className="text-center mb-20">
         <h3 className="text-amber-500 tracking-[0.2em] text-sm uppercase mb-4">Our Menu</h3>
-        <h2 className="text-3xl md:text-5xl text-white font-light mb-6 tracking-wider">至福の厳選プラン</h2>
+        <h2 className="text-3xl md:text-5xl text-white font-light mb-6 tracking-wider">至福のプラン</h2>
         <div className="w-24 h-[1px] bg-amber-500/50 mx-auto"></div>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
