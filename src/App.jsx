@@ -54,8 +54,8 @@ const Hero = () => (
     </div>
     <div className="relative z-10 text-center px-4 max-w-4xl mx-auto mt-20">
       <h2 className="text-amber-500 tracking-[0.3em] text-xs md:text-base uppercase mb-4">Premium Catering Service</h2>
-      <h1 className="text-4xl md:text-6xl lg:text-7xl text-white font-light leading-tight mb-8 drop-shadow-lg">華やかな装いを <br />あなただけの空間へ </h1>
-      <p className="text-sm md:text-2xl text-stone-300 font-light mb-8 max-w-2xl mx-auto leading-loose tracking-wide">厳選された旬の食材を使用し目にも楽しい彩をお届けします。<br className="hidden md:block" />特別な日を彩る最高峰のケータリング体験をお届けします。</p>
+      <h1 className="text-4xl md:text-6xl lg:text-7xl text-white font-light leading-tight mb-16 drop-shadow-lg">華やかな装いを <br />あなただけの空間へ </h1>
+      <p className="text-sm md:text-2xl text-stone-300 font-light mb-20 max-w-2xl mx-auto leading-loose tracking-wide">厳選された旬の食材を使用し目にも楽しい彩をお届け致します。<br className="hidden md:block" />特別な日を彩る最高峰のケータリング体験をお届けします。</p>
       <div className="flex flex-col sm:flex-row gap-6 justify-center">
         <a href="#contact" className="bg-amber-600/10 backdrop-blur-sm border border-amber-500/50 text-amber-500 hover:bg-amber-600 hover:text-white hover:border-amber-600 transition-all duration-500 px-10 py-4 tracking-[0.2em] uppercase text-sm">ご予約・ご相談</a>
         <a href="#menu" className="border border-white/20 text-white hover:bg-white/10 transition-all duration-500 px-10 py-4 tracking-[0.2em] uppercase text-sm">メニューを見る</a>
@@ -80,7 +80,7 @@ const Concept = () => (
         </div>
         <h2 className="text-3xl md:text-5xl text-white font-light leading-snug mb-20">一瞬の感動を<br />永遠の思い出に</h2>
         <p className="text-amber-500 leading-loose mb-8 font-light text-base md:text-lg">{CONFIG.brandName}（ユヌ・ターブル）は、フランス語で「一つのテーブル」を意味します。私たちは、厳選された食材を確かな技術で、目にも美しい一皿へと昇華させます。</p>
-        <p className="text-amber-500 leading-loose font-light text-sm md:text-base">企業様のレセプションパーティーから、各団体様の大切な懇親会。「一つのテーブル」を囲むかけがえのない時間に、究極のおもてなしをお約束いたします。</p>
+        <p className="text-amber-500 leading-loose font-light text-sm md:text-lg">企業様のレセプションパーティーから、各団体様の大切な懇親会。「一つのテーブル」を囲むかけがえのない時間に、究極のおもてなしをお約束いたします。</p>
       </div>
     </div>
   </section>
