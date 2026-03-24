@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Menu, X, ChevronRight,Mail} from "lucide-react";
+import { Menu, X, ChevronRight, Star, Quote, Mail } from "lucide-react";
 
 // --- 設定エリア ---
 const CONFIG = {
   brandName: "UNE TABLE",
   tagline: "至高の味わいを、あなただけの空間へ。",
-  // 一時的なダミー写真（後で本物に差し替えます！）
+  // 一時的なダミー写真（後でGitHubのpublicフォルダに本物をアップロードします！）
   heroImage: "https://images.unsplash.com/photo-1555243896-c709bfa0b564?auto=format&fit=crop&q=80&w=2000",
 };
 
@@ -169,7 +169,12 @@ const Gallery = () => (
 const Contact = () => {
   const[formData, setFormData] = useState({ name: "", email: "", message: "" });
   const[status, setStatus] = useState("idle");
-  const handleChange = (e) => { setFormData((prev) => ({ ...prev,[name]: e.target.value })); };
+  
+  const handleChange = (e) => { 
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value })); 
+  };
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     setStatus("submitting");
@@ -220,8 +225,8 @@ const Contact = () => {
 };
 
 const App = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const[isScrolled, setIsScrolled] = useState(false);
+  const[isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
@@ -242,7 +247,7 @@ const App = () => {
       <footer className="py-12 bg-zinc-950 text-center border-t border-zinc-900">
         <div className="text-2xl text-white tracking-[0.3em] font-light mb-6 uppercase">{CONFIG.brandName}</div>
         <div className="flex justify-center space-x-6 mb-8 text-stone-500">
-         <Mail size={18} className="hover:text-white cursor-pointer" />
+          <Mail size={18} className="hover:text-white cursor-pointer" />
         </div>
         <p className="text-stone-700 text-[10px] tracking-widest uppercase">&copy; {new Date().getFullYear()} {CONFIG.brandName} Catering.</p>
       </footer>
