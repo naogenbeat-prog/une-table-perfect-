@@ -6,7 +6,7 @@ const CONFIG = {
   brandName: "UNE TABLE",
   tagline: "至高の味わいを、あなただけの空間へ。",
   // 一時的なダミー写真（後でGitHubのpublicフォルダに本物をアップロードします！）
-  heroImage: "https://images.unsplash.com/photo-1555243896-c709bfa0b564?auto=format&fit=crop&q=80&w=2000",
+  heroImage:  "/hero-bg.jpg",
 };
 
 const images = {
