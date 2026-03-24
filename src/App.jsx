@@ -53,8 +53,8 @@ const Hero = () => (
       <div className="absolute inset-0 bg-gradient-to-b from-zinc-950/60 via-zinc-950/40 to-zinc-950"></div>
     </div>
     <div className="relative z-10 text-center px-4 max-w-4xl mx-auto mt-40">
-      <h2 className="text-amber-500 tracking-[0.3em] text-sm md:text-lg uppercase mb-20">Premium Catering Service</h2>
-      <h1 className="text-4xl md:text-7xl lg:text-7xl text-white font-light leading-tight mb-20 drop-shadow-lg">華やかな装いを <br />あなただけの空間へ </h1>
+      <h2 className="text-amber-500 tracking-[0.3em] text-sm md:text-lg uppercase mb-24">Premium Catering Service</h2>
+      <h1 className="text-4xl md:text-7xl lg:text-7xl text-white font-light leading-tight mb-24 drop-shadow-lg">華やかな装いを <br />あなただけの空間へ </h1>
       <p className="text-xl md:text-2xl text-white font-light mb-10 max-w-2xl mx-auto leading-loose tracking-wide">厳選された旬の食材を使用し、目にも楽しい彩を添えて。<br className="hidden md:block" /> 特別な日を彩る最高峰のケータリングをお届け致します。</p>
       <div className="flex flex-col sm:flex-row gap-6 justify-center">
         <a href="#contact" className="bg-amber-600/10 backdrop-blur-sm border border-amber-500/50 text-amber-500 hover:bg-amber-600 hover:text-white hover:border-amber-600 transition-all duration-500 px-10 py-4 tracking-[0.2em] uppercase text-sm">ご予約・ご相談</a>
