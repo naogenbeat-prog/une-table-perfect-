@@ -90,9 +90,9 @@ const Services = () => (
   <section id="services" className="py-24 bg-zinc-900 px-6">
     <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12">
       {[
-        { title: "Cocktail party", img: images.serviceWedding, desc: "大切な方との会合を、", highlight: "彩り豊かな祝宴で。" },
-        { title: "Corporate", img: images.serviceCorporate, desc: "ブランドイメージを高める", highlight: "洗練された料理。" },
-        { title: "Private", img: images.servicePrivate, desc: "オーダーメイドで高級レストランに変わる", highlight: "特別な贅沢。" },
+        { title: "Cocktail party", img: images.serviceWedding, desc: "カジュアルな会合を盛り上げる、", highlight: "彩り豊かな演出" },
+        { title: "Standing receotion", img: images.serviceCorporate, desc: "大切なビジネスシーンに適した", highlight: "洗練されたサービス" },
+        { title: "Private", img: images.servicePrivate, desc: "オーダーメイドのレストランに変わる", highlight: "すべてにこだわった特別な空間" },
       ].map((s, i) => (
         <div key={i} className="group relative overflow-hidden aspect-[3/4]">
           <img src={s.img} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" alt={s.title} />
