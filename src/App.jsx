@@ -4,7 +4,7 @@ import { Menu, X, ChevronRight, Star, Quote, Mail } from "lucide-react";
 // --- 設定エリア ---
 const CONFIG = {
   brandName: "UNE TABLE",
-  tagline: "至高の味わいを、あなただけの空間へ。",
+  tagline: "華やかな装いを、あなただけの空間へ。",
   // 一時的なダミー写真（後でGitHubのpublicフォルダに本物をアップロードします！）
   heroImage:  "/hero-bg.jpg",
 };
