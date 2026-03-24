@@ -2,10 +2,30 @@
 <html lang="ja">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React</title>
+    <title>UNE TABLE - Catering</title>
+    
+    <!-- ▼ 3種類のGoogleフォントを読み込む ▼ -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Noto+Sans+JP:wght@300;400&family=Noto+Serif+JP:wght@300;400&display=swap" rel="stylesheet">
+    
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- ▼ クラス名（font-〇〇）で使い分けられるようにする設定 ▼ -->
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              serif: ['"Noto Serif JP"', 'serif'],        // font-serif（明朝体：ベース）
+              sans: ['"Noto Sans JP"', 'sans-serif'],     // font-sans（ゴシック体：説明文用）
+              brand: ['"Cormorant Garamond"', 'serif'],   // font-brand（英字のおしゃれフォント）
+            }
+          }
+        }
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>
