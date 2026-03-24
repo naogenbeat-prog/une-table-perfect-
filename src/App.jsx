@@ -74,11 +74,11 @@ const Concept = () => (
         <div className="absolute -bottom-6 -right-6 w-full h-full border border-amber-500/20 -z-10"></div>
       </div>
       <div className="w-full md:w-1/2">
-        <div className="flex items-center gap-4 mb-16">
+        <div className="flex items-center gap-4 mb-20">
           <div className="h-[1px] w-12 bg-white"></div>
           <h3 className="text-white tracking-[0.2em] text-sm uppercase">CONSEPT</h3>
         </div>
-        <h2 className="font-brand text-white text-5xl md:text-5xl text-amber-500 font-light leading-snug mb-20">一瞬の感動を<br />永遠の思い出に</h2>
+        <h2 className="font-brand text-amber-500 text-5xl md:text-5xl text-amber-500 font-light leading-snug mb-20">一瞬の感動を<br />永遠の思い出に</h2>
         <p className="text-white mb-8 font-light text-base md:text-lg">{CONFIG.brandName}（ユヌ・ターブル）は、フランス語で「一つのテーブル」を意味します。私たちは、厳選された食材を確かな技術で、目にも美しい一皿へと昇華させます。</p>
         <p className="text-white leading-loose font-light text-base md:text-lg">企業様のレセプションパーティーから、各団体様の大切な懇親会。「一つのテーブル」を囲むかけがえのない時間に、究極のおもてなしをお約束いたします。</p>
       </div>
