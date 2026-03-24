@@ -74,7 +74,7 @@ const Concept = () => (
         <div className="absolute -bottom-6 -right-6 w-full h-full border border-amber-500/20 -z-10"></div>
       </div>
       <div className="w-full md:w-1/2">
-        <div className="flex items-center gap-4 mb-6">
+        <div className="flex items-center gap-4 mb-16">
           <div className="h-[1px] w-12 bg-white"></div>
           <h3 className="text-white tracking-[0.2em] text-sm uppercase">CONSEPT</h3>
         </div>
