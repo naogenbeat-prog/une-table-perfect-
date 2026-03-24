@@ -90,7 +90,7 @@ const Services = () => (
   <section id="services" className="py-24 bg-zinc-900 px-6">
     <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12">
       {[
-        { title: "Reception", img: images.serviceWedding, desc: "大切な方との会合を、", highlight: "彩り豊かな祝宴で。" },
+        { title: "Cocktail party", img: images.serviceWedding, desc: "大切な方との会合を、", highlight: "彩り豊かな祝宴で。" },
         { title: "Corporate", img: images.serviceCorporate, desc: "ブランドイメージを高める", highlight: "洗練された料理。" },
         { title: "Private", img: images.servicePrivate, desc: "オーダーメイドで高級レストランに変わる", highlight: "特別な贅沢。" },
       ].map((s, i) => (
