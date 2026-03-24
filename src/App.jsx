@@ -78,8 +78,8 @@ const Concept = () => (
           <div className="h-[1px] w-12 bg-amber-500"></div>
           <h3 className="text-amber-500 tracking-[0.2em] text-sm uppercase">Our Philosophy</h3>
         </div>
-        <h2 className="text-3xl md:text-5xl text-white font-light leading-snug mb-12">一瞬の感動を<br />永遠の思い出に</h2>
-        <p className="text-stone-400 leading-loose mb-8 font-light text-sm md:text-base">{CONFIG.brandName}（ユヌ・ターブル）は、フランス語で「一つのテーブル」を意味します。私たちは、厳選された食材を確かな技術で、目にも美しい一皿へと昇華させます。</p>
+        <h2 className="text-3xl md:text-5xl text-white font-light leading-snug mb-2">一瞬の感動を<br />永遠の思い出に</h2>
+        <p className="text-amber-500 leading-loose mb-8 font-light text-base md:text-lg">{CONFIG.brandName}（ユヌ・ターブル）は、フランス語で「一つのテーブル」を意味します。私たちは、厳選された食材を確かな技術で、目にも美しい一皿へと昇華させます。</p>
         <p className="text-stone-400 leading-loose font-light text-sm md:text-base">企業様のレセプションパーティーから、各団体様の大切な懇親会。「一つのテーブル」を囲むかけがえのない時間に、究極のおもてなしをお約束いたします。</p>
       </div>
     </div>
