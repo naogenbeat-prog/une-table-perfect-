@@ -17,7 +17,7 @@ const CONFIG = {
 };
 
 const images = {
-  concept1: "/business-2.png",
+  concept1: "/business-12.jpg",
   serviceWedding: "/cocktail-2.png",
   serviceCorporate: "/cocktail-7.png",
   servicePrivate: "/private-2.JPG",
