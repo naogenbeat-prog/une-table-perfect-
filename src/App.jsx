@@ -31,7 +31,7 @@ const images = {
 
 const Navbar = ({ isScrolled, isMobileMenuOpen, setIsMobileMenuOpen }) => (
   <nav className={`fixed w-full z-50 transition-all duration-700 ${isScrolled ? "bg-zinc-950/95 backdrop-blur-md py-4 border-b border-zinc-800" : "bg-transparent py-6"}`}>
-    <div className="max-w-5xl mx-auto px-6 md:px-12 flex justify-start items-center gap~12">
+    <div className=""w-full px-6 md:px-12　flex justify-start items-center gap-16">
       <div className="text-2xl text-white tracking-[0.3em] font-light cursor-pointer uppercase">{CONFIG.brandName}</div>
       <div className="hidden md:flex space-x-10 items-center text-sm tracking-[0.2em] uppercase">
         {["Concept", "Services", "Menu", "Gallery"].map((item) => (
