@@ -42,7 +42,7 @@ const Navbar = ({ isScrolled }) => (
       </div>
 
       {/* 📋 メニュー部分（スマホでも常に表示、文字は極小で横並び） */}
-      <div className="flex space-x-4 md:space-x-10 items-center text-[9px] md:text-sm tracking-[0.1em] md:tracking-[0.2em] uppercase mt-1 md:mt-0">
+      <div className="flex space-x-4 md:space-x-10 items-center text-[11px] md:text-sm tracking-[0.1em] md:tracking-[0.2em] uppercase mt-1 md:mt-0">
         {["Concept", "Services", "Menu", "Gallery"].map((item) => (
           <a key={item} href={`#${item.toLowerCase()}`} className="text-stone-300 hover:text-amber-500 transition-colors whitespace-nowrap">
             {item}
