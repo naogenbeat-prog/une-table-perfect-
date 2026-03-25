@@ -85,9 +85,6 @@ const Hero = () => (
           <a href="#contact" className="bg-amber-600/10 backdrop-blur-sm border border-amber-500/50 text-amber-500 hover:bg-amber-600 hover:text-white hover:border-amber-600 transition-all duration-500 px-10 py-4 tracking-[0.2em] uppercase text-sm">
             ご予約・ご相談
           </a>
-          <a href="#menu" className="border border-white/20 text-white hover:bg-white/10 transition-all duration-500 px-10 py-4 tracking-[0.2em] uppercase text-sm">
-            メニューを見る
-          </a>
         </div>
       </div>
       
