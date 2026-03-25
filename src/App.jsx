@@ -117,7 +117,7 @@ const MenuSection = () => (
     <div className="max-w-7xl mx-auto">
       <div className="text-center mb-20">
         <h3 className="text-amber-500 tracking-[0.2em] text-sm uppercase mb-4">Our Menu</h3>
-        <h2 className="text-3xl md:text-5xl text-white font-light mb-6 tracking-wider">至福のプラン</h2>
+        <h2 className="font-brand text-3xl md:text-5xl text-white font-light mb-6 tracking-wider">至福のプラン</h2>
         <div className="w-24 h-[1px] bg-amber-500/50 mx-auto"></div>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -159,7 +159,7 @@ const Gallery = () => (
   <section id="gallery" className="py-24 md:py-32 px-4 md:px-8 max-w-screen-2xl mx-auto">
     <div className="text-center mb-20">
       <h3 className="text-amber-500 tracking-[0.2em] text-sm uppercase mb-6">Gallery</h3>
-      <h2 className="text-3xl md:text-5xl text-white font-light tracking-wide">「テーブル」の記録</h2>
+      <h2 className="font-brand text-3xl md:text-5xl text-white font-light tracking-wide">「テーブル」の記録</h2>
     </div>
     <div className="columns-1 md:columns-2 lg:columns-3 gap-4 space-y-4">
       {images.gallery.map((img, idx) => (
