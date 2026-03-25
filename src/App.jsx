@@ -70,7 +70,7 @@ const Hero = () => (
       
       {/* 👑 ここが「ド真ん中」のエリア（flex-1 で上下の余白を自動で押し広げる） */}
       <div className="flex-1 flex flex-col justify-center items-center">
-        <h1 className="text-4xl md:text-6xl lg:text-7xl text-white font-light leading-tight text-center drop-shadow-lg -mt-24 md:-mt-32">
+        <h1 className="text-4xl md:text-6xl lg:text-7xl text-white font-light leading-tight text-center drop-shadow-lg -translate-y-24 md:-translate-y-32">
           華やかな装いを<br />あなただけの空間へ。
         </h1>
       </div>
