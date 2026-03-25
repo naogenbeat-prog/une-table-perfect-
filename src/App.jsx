@@ -66,7 +66,7 @@ const Hero = () => (
     </div>
     
     {/* ▼ 高さを画面いっぱい（h-full）にして、要素を上下に分ける（flex-col）設定 ▼ */}
-    <div className="relative z-10 flex flex-col h-full px-4 max-w-4xl mx-auto pt-32 pb-24 md:pb-32">
+    <div className="relative z-10 flex flex-col h-full px-4 max-w-4xl mx-auto pt-32 pb-32 md:pb-24">
       
       {/* 👑 ここが「ド真ん中」のエリア（flex-1 で上下の余白を自動で押し広げる） */}
       <div className="flex-1 flex flex-col justify-center items-center">
