@@ -30,28 +30,32 @@ const images = {
   ],
 };
 
-const Navbar = ({ isScrolled, isMobileMenuOpen, setIsMobileMenuOpen }) => (
-  <nav className={`fixed w-full z-50 transition-all duration-700 ${isScrolled ? "bg-zinc-950/95 backdrop-blur-md py-4 border-b border-zinc-800" : "bg-transparent py-6"}`}>
-    <div className="w-full px-6 md:px-12 flex justify-start items-center gap-16">
-       <div className="text-2xl text-white tracking-[0.3em] font-light cursor-pointer uppercase">
+const Navbar = ({ isScrolled }) => (
+  <nav className={`fixed w-full z-50 transition-all duration-700 ${isScrolled ? "bg-zinc-950/95 backdrop-blur-md py-3 md:py-4 border-b border-zinc-800" : "bg-transparent py-4 md:py-6"}`}>
+    {/* スマホでは縦並び（flex-col）、パソコンでは横並び（md:flex-row） */}
+    <div className="w-full px-4 md:px-12 flex flex-col md:flex-row justify-center md:justify-start items-center gap-2 md:gap-16">
+      
+      {/* 👑 ロゴ部分 */}
+      <div className="text-xl md:text-2xl text-white tracking-[0.3em] font-light cursor-pointer uppercase">
         {CONFIG.brandName}
       </div>
-      <div className="hidden md:flex space-x-10 items-center text-sm tracking-[0.2em] uppercase">
+
+      {/* 📋 メニュー部分（スマホでも常に表示、文字は極小で横並び） */}
+      <div className="flex space-x-4 md:space-x-10 items-center text-[9px] md:text-sm tracking-[0.1em] md:tracking-[0.2em] uppercase mt-1 md:mt-0">
         {["Concept", "Services", "Menu", "Gallery"].map((item) => (
-          <a key={item} href={`#${item.toLowerCase()}`} className="text-stone-300 hover:text-amber-500 transition-colors">{item}</a>
+          <a key={item} href={`#${item.toLowerCase()}`} className="text-stone-300 hover:text-amber-500 transition-colors whitespace-nowrap">
+            {item}
+          </a>
         ))}
-        <a href="#contact" className="border border-amber-500/50 text-amber-500 px-8 py-3 hover:bg-amber-600 hover:text-white hover:border-amber-600 transition-all duration-300">Reservation</a>
+        {/* スマホでは枠線をなくしてスッキリとした文字リンクに */}
+        <a href="#contact" className="text-amber-500 hover:text-white transition-colors whitespace-nowrap font-bold">
+          Reservation
+        </a>
       </div>
-      <button className="md:hidden text-stone-300 z-50" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>{isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}</button>
-    </div>
-    <div className={`fixed inset-0 bg-zinc-950 z-40 flex flex-col items-center justify-center transition-opacity duration-500 ${isMobileMenuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}>
-      <div className="flex flex-col space-y-8 text-center text-lg tracking-widest uppercase">
-        {["Concept", "Services", "Menu", "Gallery", "Contact"].map((item) => (
-          <a key={item} href={`#${item.toLowerCase()}`} className="text-stone-300 hover:text-amber-500 transition-colors" onClick={() => setIsMobileMenuOpen(false)}>{item}</a>
-        ))}
-      </div>
+      
     </div>
   </nav>
+);
 );
 
 const Hero = () => (
