@@ -146,7 +146,7 @@ const MenuSection = () => (
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {[
           { name: "立食スタイル", price: "¥4,500~", desc: "洗練されたスタンダードコース。軽やかに楽しめます。", items:["フィンガーフード４品", "串もの４品", "寿司３品", "デザート", "お飲み物１２種"] },
-          { name: "立食・着席", price: "¥6,000~", desc: "当店のスペシャリティ。厳選食材を用いた華やかなセッティング。", items:["フィンガーフード６品", "串もの６品", "寿司３品", "デザート2種", "お飲み物１７種] },
+          { name: "立食・着席", price: "¥6,000~", desc: "当店のスペシャリティ。厳選食材を用いた華やかなセッティング。", items:["フィンガーフード６品", "串もの６品", "寿司３品", "デザート２種", "お飲み物１７種"] },
           { name: "着席スタイル", price: "¥8,000~", desc: "完全オーダーメイド。お客様の想いを形に致します。", items:["食材指定可能", "飲料指定可能", "着席配置可能", "演出指定可能"] },
         ].map((plan, i) => (
           <div key={i} className="group p-10 border border-zinc-800 bg-zinc-900/30 hover:border-amber-500/50 transition-all duration-500">
