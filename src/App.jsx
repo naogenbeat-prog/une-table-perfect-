@@ -17,14 +17,14 @@ const CONFIG = {
 };
 
 const images = {
-  concept1: "/concept-img.png",
-  serviceWedding: "hero-bg.jpg",
-  serviceCorporate: "hero-bg.jpg",
-  servicePrivate: "hero-bg.jpg",
+  concept1: "/concept-img-2.png",
+  serviceWedding: "/cocktail-2.png",
+  serviceCorporate: "/business-2.png",
+  servicePrivate: "/private-1.png",
   gallery:[
     "/roastbeef-2.png",
-    "https://images.unsplash.com/photo-1563805042-7684c8a9e9cb?auto=format&fit=crop&q=80&w=800",
-    "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&q=80&w=800",
+    "/business-1.jpeg",
+    "/concept-img.png",
     "https://images.unsplash.com/photo-1530103043960-ef38714abb15?auto=format&fit=crop&q=80&w=800",
     "https://images.unsplash.com/photo-1514326640560-7d063ef2aed5?auto=format&fit=crop&q=80&w=800",
   ],
