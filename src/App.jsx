@@ -26,7 +26,8 @@ const images = {
     "/business-1.jpeg",
     "/concept-img.png",
     "/cocktail-3.png",
-    "/business-9.jpeg",
+    "/business-9.jpeg"
+    "/business-8.jpeg",
   ],
 };
 
