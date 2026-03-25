@@ -31,7 +31,7 @@ const images = {
 
 const Navbar = ({ isScrolled, isMobileMenuOpen, setIsMobileMenuOpen }) => (
   <nav className={`fixed w-full z-50 transition-all duration-700 ${isScrolled ? "bg-zinc-950/95 backdrop-blur-md py-4 border-b border-zinc-800" : "bg-transparent py-6"}`}>
-    <div className="max-w-5xl mx-auto px-6 md:px-12 flex justify-between items-center">
+    <div className="max-w-5xl mx-auto px-6 md:px-12 flex justify-start items-center gap~12">
       <div className="text-2xl text-white tracking-[0.3em] font-light cursor-pointer uppercase">{CONFIG.brandName}</div>
       <div className="hidden md:flex space-x-10 items-center text-sm tracking-[0.2em] uppercase">
         {["Concept", "Services", "Menu", "Gallery"].map((item) => (
@@ -203,7 +203,7 @@ const Contact = () => {
       <div className="max-w-4xl mx-auto px-6 md:px-12">
         <div className="text-center mb-16">
           <h3 className="text-amber-500 tracking-[0.2em] text-sm uppercase mb-6">Contact</h3>
-          <h2 className="text-3xl md:text-5xl text-white font-light mb-8">ご予約・お問い合わせ</h2>
+          <h2 className="font-brand text-3xl md:text-5xl text-white font-light mb-8">ご予約・お問い合わせ</h2>
         </div>
         <div className="bg-zinc-900/50 p-8 md:p-14 border border-zinc-800 relative min-h-[400px] flex flex-col justify-center">
           {status === "success" ? (
