@@ -18,7 +18,7 @@ const CONFIG = {
 const images = {
   concept1: "/concept-img.png",
   serviceWedding: "hero-bg.jpg",
-  serviceCorporate: "https://images.unsplash.com/photo-1505236858219-8359eb29e329?auto=format&fit=crop&q=80&w=800",
+  serviceCorporate: "cyakuseki 5.png",
   servicePrivate: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&q=80&w=800",
   gallery:[
     "https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?auto=format&fit=crop&q=80&w=800",
