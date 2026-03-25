@@ -20,7 +20,7 @@ const images = {
   concept1: "/business-2.png",
   serviceWedding: "/cocktail-2.png",
   serviceCorporate: "/cocktail-7.png",
-  servicePrivate: "/private-1.png",
+  servicePrivate: "/private-2.JPG",
   gallery:[
     "/business-4.jpg",
     "/business-1.jpeg",
