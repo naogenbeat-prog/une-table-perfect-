@@ -33,7 +33,7 @@ const images = {
 const Navbar = ({ isScrolled, isMobileMenuOpen, setIsMobileMenuOpen }) => (
   <nav className={`fixed w-full z-50 transition-all duration-700 ${isScrolled ? "bg-zinc-950/95 backdrop-blur-md py-4 border-b border-zinc-800" : "bg-transparent py-6"}`}>
     <div className="w-full px-6 md:px-12 flex justify-start items-center gap-16">
-      <img src={CONFIG.logoImage} alt={CONFIG.brandName} className="h-14 md:h-16 cursor-pointer object-contain" />
+      <img src={CONFIG.logoImage} alt={CONFIG.brandName} className="h-20 md:h-30 cursor-pointer object-contain" />
       <div className="hidden md:flex space-x-10 items-center text-sm tracking-[0.2em] uppercase">
         {["Concept", "Services", "Menu", "Gallery"].map((item) => (
           <a key={item} href={`#${item.toLowerCase()}`} className="text-stone-300 hover:text-amber-500 transition-colors">{item}</a>
