@@ -79,7 +79,7 @@ const Hero = () => (
       <div className="text-center">
         <p className="text-xl md:text-xl text-stone-300 font-light mb-8 max-w-2xl mx-auto leading-loose tracking-wide">
           厳選された旬の食材を使用し、目にも楽しい彩を添えて。<br className="hidden md:block" />
-          特別な日を彩る最高峰のケータリングをお届け致します。
+           特別な日を彩る最高峰のケータリングをお届け致します。
         </p>
         <div className="flex flex-col sm:flex-row gap-6 justify-center">
           <a href="#contact" className="bg-amber-600/10 backdrop-blur-sm border border-amber-500/50 text-amber-500 hover:bg-amber-600 hover:text-white hover:border-amber-600 transition-all duration-500 px-10 py-4 tracking-[0.2em] uppercase text-sm">
