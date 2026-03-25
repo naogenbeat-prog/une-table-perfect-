@@ -59,19 +59,38 @@ const Navbar = ({ isScrolled }) => (
 );
 
 const Hero = () => (
-  <section className="relative h-screen flex items-center justify-center overflow-hidden">
+  <section className="relative h-screen overflow-hidden">
     <div className="absolute inset-0 z-0">
       <img src={CONFIG.heroImage} alt="Catering Table" className="w-full h-full object-cover scale-105 animate-[subtle-zoom_20s_infinite_alternate]" />
       <div className="absolute inset-0 bg-gradient-to-b from-zinc-950/60 via-zinc-950/40 to-zinc-950"></div>
     </div>
-    <div className="relative z-10 text-center px-4 max-w-4xl mx-auto mt-30">
-      <h2 className="text-amber-500 tracking-[0.3em] text-sm md:text-lg uppercase mb-24">Premium Catering Service</h2>
-      <h1 className="font-brand text-4xl md:text-7xl lg:text-7xl text-white font-light leading-tight mb-24 drop-shadow-lg">華やかな装いを <br />あなただけの空間へ </h1>
-      <p className="font-brand text-xl md:text-2xl text-white font-light mb-10 max-w-2xl mx-auto leading-loose tracking-wide">厳選された旬の食材を使用し、目にも楽しい彩を添えて。<br className="hidden md:block" /> 特別な日を彩る最高峰のケータリングをお届け致します。</p>
-      <div className="flex flex-col sm:flex-row gap-6 justify-center">
-        <a href="#contact" className="bg-amber-600/10 backdrop-blur-sm border border-amber-500/50 text-amber-500 hover:bg-amber-600 hover:text-white hover:border-amber-600 transition-all duration-500 px-10 py-4 tracking-[0.2em] uppercase text-sm">ご予約・ご相談</a>
-        <a href="#menu" className="border border-white/20 text-white hover:bg-white/10 transition-all duration-500 px-10 py-4 tracking-[0.2em] uppercase text-sm">メニューを見る</a>
+    
+    {/* ▼ 高さを画面いっぱい（h-full）にして、要素を上下に分ける（flex-col）設定 ▼ */}
+    <div className="relative z-10 flex flex-col h-full px-4 max-w-4xl mx-auto pt-32 pb-16 md:pb-24">
+      
+      {/* 👑 ここが「ド真ん中」のエリア（flex-1 で上下の余白を自動で押し広げる） */}
+      <div className="flex-1 flex flex-col justify-center items-center">
+        <h1 className="text-4xl md:text-6xl lg:text-7xl text-white font-light leading-tight text-center drop-shadow-lg">
+          華やかな装いを<br />あなただけの空間へ。
+        </h1>
       </div>
+      
+      {/* 📝 ここが「一番下寄せ」のエリア（上に押しやられて一番下に固定される） */}
+      <div className="text-center">
+        <p className="text-sm md:text-base text-stone-300 font-light mb-8 max-w-2xl mx-auto leading-loose tracking-wide">
+          厳選された旬の食材を使用し、目にも楽しい彩を添えて。<br className="hidden md:block" />
+          特別な日を彩る最高峰のケータリングをお届け致します。
+        </p>
+        <div className="flex flex-col sm:flex-row gap-6 justify-center">
+          <a href="#contact" className="bg-amber-600/10 backdrop-blur-sm border border-amber-500/50 text-amber-500 hover:bg-amber-600 hover:text-white hover:border-amber-600 transition-all duration-500 px-10 py-4 tracking-[0.2em] uppercase text-sm">
+            ご予約・ご相談
+          </a>
+          <a href="#menu" className="border border-white/20 text-white hover:bg-white/10 transition-all duration-500 px-10 py-4 tracking-[0.2em] uppercase text-sm">
+            メニューを見る
+          </a>
+        </div>
+      </div>
+      
     </div>
   </section>
 );
