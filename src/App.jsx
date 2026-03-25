@@ -20,7 +20,7 @@ const images = {
   concept1: "/business-12.jpg",
   serviceWedding: "/cocktail-2.png",
   serviceCorporate: "/cocktail-7.png",
-  servicePrivate: "/private-2.JPG",
+  servicePrivate: "/private-4.jpg",
   gallery:[
     "/business-4.jpg",
     "/business-1.jpeg",
@@ -77,7 +77,7 @@ const Hero = () => (
       
       {/* 📝 ここが「一番下寄せ」のエリア（上に押しやられて一番下に固定される） */}
       <div className="text-center">
-        <p className="text-sm md:text-base text-stone-300 font-light mb-8 max-w-2xl mx-auto leading-loose tracking-wide">
+        <p className="text-base md:text-base text-stone-300 font-light mb-8 max-w-2xl mx-auto leading-loose tracking-wide">
           厳選された旬の食材を使用し、目にも楽しい彩を添えて。<br className="hidden md:block" />
           特別な日を彩る最高峰のケータリングをお届け致します。
         </p>
