@@ -13,6 +13,7 @@ const CONFIG = {
   tagline: "華やかな装いを あなただけの空間へ ",
   // 一時的なダミー写真（後でGitHubのpublicフォルダに本物をアップロードします！）
   heroImage:  "/hero-bg.jpg",
+  logoImage: "/logo.png",
 };
 
 const images = {
@@ -32,7 +33,7 @@ const images = {
 const Navbar = ({ isScrolled, isMobileMenuOpen, setIsMobileMenuOpen }) => (
   <nav className={`fixed w-full z-50 transition-all duration-700 ${isScrolled ? "bg-zinc-950/95 backdrop-blur-md py-4 border-b border-zinc-800" : "bg-transparent py-6"}`}>
     <div className="w-full px-6 md:px-12 flex justify-start items-center gap-16">
-      <div className="text-2xl text-white tracking-[0.3em] font-light cursor-pointer uppercase">{CONFIG.brandName}</div>
+      <img src={CONFIG.logoImage} alt={CONFIG.brandName} className="h-8 md:h-10 cursor-pointer object-contain" />
       <div className="hidden md:flex space-x-10 items-center text-sm tracking-[0.2em] uppercase">
         {["Concept", "Services", "Menu", "Gallery"].map((item) => (
           <a key={item} href={`#${item.toLowerCase()}`} className="text-stone-300 hover:text-amber-500 transition-colors">{item}</a>
@@ -250,7 +251,7 @@ const App = () => {
       <Gallery />
       <Contact />
       <footer className="py-12 bg-zinc-950 text-center border-t border-zinc-900">
-        <div className="text-2xl text-white tracking-[0.3em] font-light mb-6 uppercase">{CONFIG.brandName}</div>
+        <img src={CONFIG.logoImage} alt={CONFIG.brandName} className="h-10 md:h-12 mx-auto mb-6 object-contain" />
         <div className="flex justify-center space-x-6 mb-8 text-stone-500">
            <a href="#contact" className="hover:text-white transition-colors">
             <Mail size={18} />
