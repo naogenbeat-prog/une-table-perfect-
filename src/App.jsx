@@ -262,7 +262,7 @@ const Contact = () => {
   };
 
   return (
-    <section id="contact" className="py-24 md:py-32 bg-zinc-950">
+    <section id="contact" className="pt-24 pb-12 md:pt-32 md:pb-16 bg-zinc-950">
       <div className="max-w-4xl mx-auto px-6 md:px-12">
         <div className="text-center mb-16">
           <h3 className="text-amber-500 tracking-[0.2em] text-sm uppercase mb-6">Contact</h3>
