@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-// ▼ 戻るボタン用のアイコン（ChevronLeft）を追加しています ▼
 import { Menu, X, ChevronRight, Star, Quote, Mail, ChevronLeft } from "lucide-react";
 
+// ▼ 自作Instagramアイコン ▼
 const Instagram = ({ size = 24, className = "" }) => (
   <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
     <rect width="20" height="20" x="2" y="2" rx="5" ry="5"/>
@@ -33,15 +33,42 @@ const images = {
   ],
 };
 
-// ▼ Cocktail Party 専用の写真リスト ▼
-const cocktailPhotos =[
-  images.serviceWedding,
-  "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&q=80&w=800",
-  "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?auto=format&fit=crop&q=80&w=800",
-  "https://images.unsplash.com/photo-1555244162-803834f70033?auto=format&fit=crop&q=80&w=800"
-];
+// ▼ 各詳細ページ専用の画像・テキストデータ ▼
+// （※ここに写真を書き足せば、各ページに無限に写真を追加できます！）
+const galleryData = {
+  cocktail: {
+    title: "Cocktail party",
+    desc: "カジュアルな会合を盛り上げる、彩り豊かな演出。フィンガーフードで会話も弾む特別な空間を演出します。",
+    photos:[
+      images.serviceWedding,
+      "/cocktail-3.png",
+      "/concept-img.png",
+      "https://images.unsplash.com/photo-1555244162-803834f70033?auto=format&fit=crop&q=80&w=800"
+    ]
+  },
+  standing: {
+    title: "Standing reception",
+    desc: "大切なビジネスシーンに適した効率的ディスプレイ。ブランドイメージを高める洗練された立食スタイルを提供します。",
+    photos:[
+      images.serviceCorporate,
+      "/business-12.jpg",
+      "/business-4.jpg",
+      "/business-1.jpeg",
+      "/business-9.jpeg"
+    ]
+  },
+  private: {
+    title: "Private",
+    desc: "オーダーメイドのレストラン。すべてにこだわった特別な空間で、プライベートな贅沢をお楽しみください。",
+    photos:[
+      images.servicePrivate,
+      "/private-5.jpeg",
+      "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&q=80&w=800",
+      "https://images.unsplash.com/photo-1514326640560-7d063ef2aed5?auto=format&fit=crop&q=80&w=800"
+    ]
+  }
+};
 
-// ▼ メニューの機能追加（他のページからでもトップに戻れるように） ▼
 const Navbar = ({ isScrolled, currentView, onViewChange }) => {
   const handleNavClick = (e, target) => {
     if (currentView !== "home") {
@@ -53,7 +80,6 @@ const Navbar = ({ isScrolled, currentView, onViewChange }) => {
   return (
     <nav className={`fixed w-full z-50 transition-all duration-700 ${isScrolled || currentView !== "home" ? "bg-zinc-950/95 backdrop-blur-md py-3 md:py-4 border-b border-zinc-800" : "bg-transparent py-4 md:py-6"}`}>
       <div className="w-full px-4 md:px-12 flex flex-col md:flex-row justify-center md:justify-start items-center gap-2 md:gap-16">
-        {/* クリックでトップに戻る機能を追加 */}
         <div onClick={() => onViewChange("home")} className="text-xl md:text-2xl text-white tracking-[0.3em] font-light cursor-pointer uppercase">
           {CONFIG.brandName}
         </div>
@@ -121,52 +147,30 @@ const Concept = () => (
   </section>
 );
 
-// ▼ サービスのカードがクリックされた時の機能を追加 ▼
-const Services = ({ onCocktailClick }) => (
+// ▼ すべてのカードがクリック可能になりました！ ▼
+const Services = ({ onViewChange }) => (
   <section id="services" className="py-24 bg-zinc-900 px-6">
     <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12">
-      
-      {/* 1. Cocktail party (ここだけクリック機能と、View Photosの文字を追加！) */}
-      <div onClick={onCocktailClick} className="group relative overflow-hidden aspect-[3/4] cursor-pointer">
-        <img src={images.serviceWedding} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-100 group-hover:scale-105" alt="Cocktail party" />
-        <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all"></div>
-        <div className="absolute bottom-10 left-10 right-10">
-          <h4 className="text-2xl text-white mb-4 font-light tracking-[0.2em] border-l-2 border-amber-500 pl-4">Cocktail party</h4>
-          <p className="text-stone-100 text-[14px] tracking-widest leading-relaxed opacity-0 group-hover:opacity-100 transition-all duration-700 transform translate-y-4 group-hover:translate-y-0">
-            カジュアルな会合を盛り上げる、<br /><span className="text-amber-500 font-bold text-lg md:text-xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] block mt-1">彩り豊かな演出</span>
-          </p>
-          <div className="absolute right-0 bottom-0 opacity-0 group-hover:opacity-100 transition-all duration-700 transform translate-x-4 group-hover:translate-x-0">
-             <span className="text-amber-500 text-xs tracking-widest uppercase flex items-center mt-4">
-               <ChevronRight size={14} className="mr-1"/>View Photos
-             </span>
+      {[
+        { id: "cocktail", title: "Cocktail party", img: images.serviceWedding, desc: "カジュアルな会合を盛り上げる、", highlight: "彩り豊かな演出" },
+        { id: "standing", title: "Standing receotion", img: images.serviceCorporate, desc: "大切なビジネスシーンに適した", highlight: "効率的ディスプレイ" },
+        { id: "private", title: "Private", img: images.servicePrivate, desc: "オーダーメイドのレストラン", highlight: "すべてにこだわった特別な空間" },
+      ].map((s, i) => (
+        <div key={i} onClick={() => onViewChange(s.id)} className="group relative overflow-hidden aspect-[3/4] cursor-pointer">
+          <img src={s.img} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-100 group-hover:scale-105" alt={s.title} />
+          <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all"></div>
+          <div className="absolute bottom-10 left-10 right-10">
+            <h4 className="text-2xl text-white mb-4 font-light tracking-[0.2em] border-l-2 border-amber-500 pl-4">{s.title}</h4>
+            <p className="text-stone-100 text-[14px] tracking-widest leading-relaxed opacity-0 group-hover:opacity-100 transition-all duration-700 transform translate-y-4 group-hover:translate-y-0">{s.desc}<br /><span className="text-amber-500 font-bold text-lg md:text-xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] block mt-1">{s.highlight}</span></p>
+            {/* ▼ どのカードにも「View Photos」が表示されます ▼ */}
+            <div className="absolute right-0 bottom-0 opacity-0 group-hover:opacity-100 transition-all duration-700 transform translate-x-4 group-hover:translate-x-0">
+               <span className="text-amber-500 text-xs tracking-widest uppercase flex items-center mt-4">
+                 <ChevronRight size={14} className="mr-1"/>View Photos
+               </span>
+            </div>
           </div>
         </div>
-      </div>
-
-      {/* 2. Standing receotion */}
-      <div className="group relative overflow-hidden aspect-[3/4]">
-        <img src={images.serviceCorporate} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" alt="Standing receotion" />
-        <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all"></div>
-        <div className="absolute bottom-10 left-10 right-10">
-          <h4 className="text-2xl text-white mb-4 font-light tracking-[0.2em] border-l-2 border-amber-500 pl-4">Standing receotion</h4>
-          <p className="text-stone-100 text-[14px] tracking-widest leading-relaxed opacity-0 group-hover:opacity-100 transition-all duration-700 transform translate-y-4 group-hover:translate-y-0">
-            大切なビジネスシーンに適した<br /><span className="text-amber-500 font-bold text-lg md:text-xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] block mt-1">効率的ディスプレイ</span>
-          </p>
-        </div>
-      </div>
-
-      {/* 3. Private */}
-      <div className="group relative overflow-hidden aspect-[3/4]">
-        <img src={images.servicePrivate} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" alt="Private" />
-        <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all"></div>
-        <div className="absolute bottom-10 left-10 right-10">
-          <h4 className="text-2xl text-white mb-4 font-light tracking-[0.2em] border-l-2 border-amber-500 pl-4">Private</h4>
-          <p className="text-stone-100 text-[14px] tracking-widest leading-relaxed opacity-0 group-hover:opacity-100 transition-all duration-700 transform translate-y-4 group-hover:translate-y-0">
-            オーダーメイドのレストラン<br /><span className="text-amber-500 font-bold text-lg md:text-xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] block mt-1">すべてにこだわった特別な空間</span>
-          </p>
-        </div>
-      </div>
-
+      ))}
     </div>
   </section>
 );
@@ -287,10 +291,15 @@ const Contact = () => {
   );
 };
 
-// ▼ カクテルパーティー専用の写真ギャラリーページ ▼
-const CocktailGalleryView = ({ onBack }) => {
-  // 開いた時に一番上にスクロールする
-  useEffect(() => { window.scrollTo(0, 0); },[]);
+// ▼ 【大進化】どのカードを押しても使える「万能ギャラリーページ」 ▼
+const DetailGalleryView = ({ viewId, onBack }) => {
+  const data = galleryData[viewId]; // クリックされた場所のデータを引き出します
+  
+  // ページを開いた時に一番上にスクロールする魔法
+  useEffect(() => { window.scrollTo(0, 0); }, [viewId]);
+
+  if (!data) return null; // データがない時は何もしない（エラー防止）
+
   return (
     <div className="min-h-screen bg-zinc-950 pt-28 pb-24 px-6 md:px-12 animate-[fadeIn_0.5s_ease-out]">
       <div className="max-w-7xl mx-auto">
@@ -298,15 +307,13 @@ const CocktailGalleryView = ({ onBack }) => {
           <ChevronLeft size={16} className="mr-2" /> Back to Top
         </button>
         <div className="mb-16">
-          <h2 className="font-brand text-4xl md:text-5xl text-amber-500 font-light mb-6">Cocktail party</h2>
-          <p className="text-stone-400 leading-loose max-w-2xl">
-            カジュアルな会合を盛り上げる、彩り豊かな演出。フィンガーフードで会話も弾む特別な空間を演出します。
-          </p>
+          <h2 className="font-brand text-4xl md:text-5xl text-amber-500 font-light mb-6">{data.title}</h2>
+          <p className="text-stone-400 leading-loose max-w-2xl">{data.desc}</p>
         </div>
         <div className="columns-1 md:columns-2 lg:columns-3 gap-4 space-y-4">
-          {cocktailPhotos.map((img, idx) => (
+          {data.photos.map((img, idx) => (
             <div key={idx} className="relative overflow-hidden group break-inside-avoid bg-zinc-900">
-              <img src={img} className="w-full object-cover transition-transform duration-[2000ms] hover:scale-105" alt={`Cocktail ${idx}`} />
+              <img src={img} className="w-full object-cover transition-transform duration-[2000ms] hover:scale-105" alt={`${data.title} ${idx}`} />
             </div>
           ))}
         </div>
@@ -317,8 +324,7 @@ const CocktailGalleryView = ({ onBack }) => {
 
 const App = () => {
   const[isScrolled, setIsScrolled] = useState(false);
-  // ▼ 画面の切り替えスイッチ ▼
-  const[currentView, setCurrentView] = useState("home"); 
+  const[currentView, setCurrentView] = useState("home"); // home, cocktail, standing, private
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
@@ -335,14 +341,16 @@ const App = () => {
         <>
           <Hero />
           <Concept />
-          <Services onCocktailClick={() => setCurrentView("cocktail")} />
+          {/* クリックされたカードのID（cocktail, standing, private）をスイッチに渡す */}
+          <Services onViewChange={setCurrentView} />
           <MenuSection />
           <Testimonials />
           <Gallery />
           <Contact />
         </>
       ) : (
-        <CocktailGalleryView onBack={() => setCurrentView("home")} />
+        /* クリックされたカードのIDをギャラリーページに渡して表示！ */
+        <DetailGalleryView viewId={currentView} onBack={() => setCurrentView("home")} />
       )}
 
       <footer className="py-12 bg-zinc-950 text-center border-t border-zinc-900">
