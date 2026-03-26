@@ -14,12 +14,13 @@ const Instagram = ({ size = 24, className = "" }) => (
 const CONFIG = {
   brandName: "UNE TABLE",
   tagline: "至高の味わいを、あなただけの空間へ。",
-  heroImage: "/hero-bg.jpg",
-  logoImage: "/logo.png",
+  // ▼ 安全のため、絶対に表示されるダミー画像にしています ▼
+  heroImage: "https://images.unsplash.com/photo-1555243896-c709bfa0b564?auto=format&fit=crop&q=80&w=2000",
+  logoImage: "https://via.placeholder.com/300x100/000000/FFFFFF?text=UNE+TABLE",
 };
 
 const images = {
-  concept1: "/concept-img.jpg",
+  concept1: "https://images.unsplash.com/photo-1555244162-803834f70033?auto=format&fit=crop&q=80&w=1200",
   serviceWedding: "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&q=80&w=800",
   serviceCorporate: "https://images.unsplash.com/photo-1505236858219-8359eb29e329?auto=format&fit=crop&q=80&w=800",
   servicePrivate: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&q=80&w=800",
@@ -33,7 +34,7 @@ const images = {
   ],
 };
 
-// ▼ 新機能！各詳細ページ用の画像リスト（後で自由に追加できます） ▼
+// ▼ 各詳細ページ用の画像リスト ▼
 const detailPages = {
   cocktail: {
     title: "Cocktail Party",
@@ -216,11 +217,9 @@ const Gallery = ({ onViewChange }) => (
   </section>
 );
 
-// ▼ 新機能！専用ページのレイアウト ▼
 const DetailView = ({ viewId, onViewChange }) => {
   const data = detailPages[viewId];
-  // ページを開いた時に一番上にスクロールする設定
-  useEffect(() => { window.scrollTo(0, 0); }, [viewId]);
+  useEffect(() => { window.scrollTo(0, 0); },[viewId]);
 
   return (
     <div className="min-h-screen bg-zinc-950 pt-32 pb-24 px-6 md:px-12 animate-[fadeIn_0.5s_ease-out]">
@@ -290,7 +289,7 @@ const Contact = () => {
 
 const App = () => {
   const [isScrolled, setIsScrolled] = useState(false);
-  const[currentView, setCurrentView] = useState("home"); // home, cocktail, standing, private, gallery
+  const[currentView, setCurrentView] = useState("home"); 
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
@@ -302,7 +301,6 @@ const App = () => {
     <div className="min-h-screen bg-zinc-950 text-stone-300 font-sans selection:bg-amber-900 selection:text-white">
       <Navbar isScrolled={isScrolled} currentView={currentView} onViewChange={setCurrentView} />
       
-      {/* ▼ 今どの画面を見ているかで、表示する中身を切り替える魔法 ▼ */}
       {currentView === "home" ? (
         <>
           <Hero />
@@ -321,8 +319,7 @@ const App = () => {
         <img src={CONFIG.logoImage} alt={CONFIG.brandName} className="h-8 md:h-12 mx-auto mb-6 object-contain" />
         <div className="flex justify-center items-center space-x-6 mb-8 text-stone-500">
           <a href="#contact" className="hover:text-white transition-colors"><Mail size={18} /></a>
-          {/* インスタのリンクを変えられます */}
-          <a href="https://www.instagram.com/あなたのアカウント名" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors"><Instagram size={18} /></a>
+          <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors"><Instagram size={18} /></a>
         </div>
         <p className="text-stone-700 text-[10px] tracking-widest uppercase">&copy; {new Date().getFullYear()} {CONFIG.brandName} Catering.</p>
       </footer>
