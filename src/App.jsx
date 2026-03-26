@@ -38,7 +38,7 @@ const images = {
 const galleryData = {
   cocktail: {
     title: "Cocktail party",
-    desc: "カジュアルな会合を盛り上げる、彩り豊かな演出。フィンガーフードで会話も弾む特別な空間を演出します。",
+    desc: <>カジュアルな会合を盛り上げる、彩り豊かな演出。<br />フィンガーフードで会話も弾む特別な空間を演出します。</>,
     photos:[
       images.serviceWedding,
       "/cocktail-3.png",
@@ -48,7 +48,7 @@ const galleryData = {
   },
   standing: {
     title: "Standing reception",
-    desc: "大切なビジネスシーンに適した効率的ディスプレイ。ブランドイメージを高める洗練された立食スタイルを提供します。",
+    desc: <>大切なビジネスシーンに適した効率的ディスプレイ。<br />ブランドイメージを高める洗練された立食スタイルを提供します。</>,
     photos:[
       images.serviceCorporate,
       "/business-12.jpg",
@@ -59,7 +59,7 @@ const galleryData = {
   },
   private: {
     title: "Private",
-    desc: "オーダーメイドのレストラン。すべてにこだわった特別な空間で、プライベートな贅沢をお楽しみください。",
+    desc: <>オーダーメイドのレストラン。<br />すべてにこだわった特別な空間で、プライベートな贅沢をお楽しみください。</>,
     photos:[
       images.servicePrivate,
       "/private-5.jpeg",
