@@ -59,6 +59,7 @@ const galleryData = {
       "/business-11.jpeg",
       "/business-11.png",
       "/business-9.jpeg",
+      "/business-11.png",
     ]
   },
   private: {
