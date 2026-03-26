@@ -10,7 +10,7 @@ const Instagram = ({ size = 24, className = "" }) => (
 // --- 設定エリア ---
 const CONFIG = {
   brandName: "UNE TABLE",
-  tagline: "華やかな装いを あなただけの空間へ ",
+  tagline: "華やかな装いを, あなただけの空間へ ",
   // 一時的なダミー写真（後でGitHubのpublicフォルダに本物をアップロードします！）
   heroImage:  "/hero-bg.jpg",
   logoImage: "/logo.png",
