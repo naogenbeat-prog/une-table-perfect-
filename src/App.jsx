@@ -57,7 +57,7 @@ const galleryData = {
       "/business-4.jpg",
       "/business-1.jpeg",
       "/business-11.jpeg",
-      "/business-11.pneg",
+      "/business-11.png",
       "/business-9.jpeg",
     ]
   },
@@ -67,8 +67,8 @@ const galleryData = {
     photos:[
       images.servicePrivate,
       "/private-5.jpeg",
-      "/private-3.jpeg",
-      "/private-2.jpeg",
+      "/private-3.jpg",
+      "/private-2.jpg",
     ]
   }
 };
