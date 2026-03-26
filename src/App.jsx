@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Menu, X, ChevronRight, Star, Quote, Mail } from "lucide-react";
+
+// ▼ 自作Instagramアイコン ▼
 const Instagram = ({ size = 24, className = "" }) => (
   <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
     <rect width="20" height="20" x="2" y="2" rx="5" ry="5"/>
@@ -7,53 +9,48 @@ const Instagram = ({ size = 24, className = "" }) => (
     <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/>
   </svg>
 );
+
 // --- 設定エリア ---
 const CONFIG = {
   brandName: "UNE TABLE",
-  tagline: "華やかな装いを あなただけの空間へ ",
-  // 一時的なダミー写真（後でGitHubのpublicフォルダに本物をアップロードします！）
-  heroImage:  "/hero-bg.jpg",
+  tagline: "至高の味わいを、あなただけの空間へ。",
+  heroImage: "/hero-bg.jpg",
   logoImage: "/logo.png",
 };
 
 const images = {
-  concept1: "/business-12.jpg",
-  serviceWedding: "/cocktail-2.png",
-  serviceCorporate: "/cocktail-7.png",
-  servicePrivate: "/private-4.jpg",
+  concept1: "/concept-img.jpg",
+  serviceWedding: "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&q=80&w=800",
+  serviceCorporate: "https://images.unsplash.com/photo-1505236858219-8359eb29e329?auto=format&fit=crop&q=80&w=800",
+  servicePrivate: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&q=80&w=800",
   gallery:[
-    "/business-4.jpg",
-    "/business-1.jpeg",
-    "/concept-img.png",
-    "/cocktail-3.png",
-    "/business-9.jpeg",
-    "/private-5.jpeg",
+    "https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?auto=format&fit=crop&q=80&w=800",
+    "https://images.unsplash.com/photo-1563805042-7684c8a9e9cb?auto=format&fit=crop&q=80&w=800",
+    "https://images.unsplash.com/photo-1476224203421-9ac39bcb3327?auto=format&fit=crop&q=80&w=800",
+    "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&q=80&w=800",
+    "https://images.unsplash.com/photo-1530103043960-ef38714abb15?auto=format&fit=crop&q=80&w=800",
+    "https://images.unsplash.com/photo-1514326640560-7d063ef2aed5?auto=format&fit=crop&q=80&w=800",
   ],
 };
 
+// ▼ Cocktail Party 専用の写真リスト ▼
+const cocktailPhotos =[
+  images.serviceWedding,
+  "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&q=80&w=800",
+  "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?auto=format&fit=crop&q=80&w=800",
+  "https://images.unsplash.com/photo-1555244162-803834f70033?auto=format&fit=crop&q=80&w=800"
+];
+
 const Navbar = ({ isScrolled }) => (
   <nav className={`fixed w-full z-50 transition-all duration-700 ${isScrolled ? "bg-zinc-950/95 backdrop-blur-md py-3 md:py-4 border-b border-zinc-800" : "bg-transparent py-4 md:py-6"}`}>
-    {/* スマホでは縦並び（flex-col）、パソコンでは横並び（md:flex-row） */}
-    <div className="w-full px-4 md:px-12 flex flex-col md:flex-row justify-center md:justify-start items-center gap-2 md:gap-16">
-      
-      {/* 👑 ロゴ部分 */}
-      <div className="text-xl md:text-2xl text-white tracking-[0.3em] font-light cursor-pointer uppercase">
-        {CONFIG.brandName}
-      </div>
-
-      {/* 📋 メニュー部分（スマホでも常に表示、文字は極小で横並び） */}
+    <div className="w-full px-4 md:px-12 flex flex-col md:flex-row justify-start items-center gap-2 md:gap-12">
+      <img src={CONFIG.logoImage} alt={CONFIG.brandName} className="h-8 md:h-12 cursor-pointer object-contain" />
       <div className="flex space-x-4 md:space-x-10 items-center text-[11px] md:text-sm tracking-[0.1em] md:tracking-[0.2em] uppercase mt-1 md:mt-0">
         {["Concept", "Services", "Menu", "Gallery"].map((item) => (
-          <a key={item} href={`#${item.toLowerCase()}`} className="text-stone-300 hover:text-amber-500 transition-colors whitespace-nowrap">
-            {item}
-          </a>
+          <a key={item} href={`#${item.toLowerCase()}`} className="text-stone-300 hover:text-amber-500 transition-colors whitespace-nowrap">{item}</a>
         ))}
-        {/* スマホでは枠線をなくしてスッキリとした文字リンクに */}
-        <a href="#contact" className="text-amber-500 hover:text-white transition-colors whitespace-nowrap font-bold">
-          Reservation
-        </a>
+        <a href="#contact" className="text-amber-500 hover:text-white transition-colors whitespace-nowrap font-bold">Reservation</a>
       </div>
-      
     </div>
   </nav>
 );
@@ -64,37 +61,30 @@ const Hero = () => (
       <img src={CONFIG.heroImage} alt="Catering Table" className="w-full h-full object-cover scale-105 animate-[subtle-zoom_20s_infinite_alternate]" />
       <div className="absolute inset-0 bg-gradient-to-b from-zinc-950/60 via-zinc-950/40 to-zinc-950"></div>
     </div>
-    
-    {/* ▼ 高さを画面いっぱい（h-full）にして、要素を上下に分ける（flex-col）設定 ▼ */}
-    <div className="relative z-10 flex flex-col h-full px-4 max-w-4xl mx-auto pt-32 pb-32 md:pb-24">
-      
-      {/* 👑 ここが「ド真ん中」のエリア（flex-1 で上下の余白を自動で押し広げる） */}
+    <div className="relative z-10 flex flex-col h-full px-4 max-w-4xl mx-auto pt-32 pb-24 md:pb-32">
       <div className="flex-1 flex flex-col justify-center items-center">
-        <h1 className="font-serif text-4xl md:text-6xl lg:text-7xl text-white font-light leading-tight text-center drop-shadow-lg -translate-y-16 md:-translate-y-12">
+        <h1 className="font-serif text-4xl md:text-6xl lg:text-7xl text-white font-light leading-tight text-center drop-shadow-lg -translate-y-10 md:-translate-y-16">
           華やかな装いを<br />あなただけの空間へ。
         </h1>
       </div>
-      
-      {/* 📝 ここが「一番下寄せ」のエリア（上に押しやられて一番下に固定される） */}
       <div className="text-center">
-        <p className="text-xl md:text-xl text-stone-300 font-light mb-8 max-w-2xl mx-auto leading-loose tracking-wide">
-          厳選された旬の食材を使用し、目にも楽しい彩りを添えて。<br className="hidden md:block" />
+        <p className="text-sm md:text-base text-stone-300 font-light mb-8 max-w-2xl mx-auto leading-loose tracking-wide">
+          厳選された旬の食材を使用し、目にも楽しい彩を添えて。<br className="hidden md:block" />
           特別な日を彩る最高峰のケータリングをお届け致します。
         </p>
-        <div className="flex flex-col sm:flex-row gap-6 justify-center">
+        <div className="flex justify-center">
           <a href="#contact" className="bg-amber-600/10 backdrop-blur-sm border border-amber-500/50 text-amber-500 hover:bg-amber-600 hover:text-white hover:border-amber-600 transition-all duration-500 px-10 py-4 tracking-[0.2em] uppercase text-sm">
             ご予約・ご相談
           </a>
         </div>
       </div>
-      
     </div>
   </section>
 );
 
 const Concept = () => (
   <section id="concept" className="py-24 md:py-40 px-6 md:px-12 max-w-7xl mx-auto">
-    <div className="flex flex-col md:flex-row items-center gap-12 md:gap-24 mb-26">
+    <div className="flex flex-col md:flex-row items-center gap-12 md:gap-24 mb-32">
       <div className="w-full md:w-1/2 relative group">
         <div className="relative pb-[130%] overflow-hidden">
           <img src={images.concept1} alt="Concept" className="absolute inset-0 w-full h-full object-cover transition-transform duration-[2000ms] group-hover:scale-110" />
@@ -102,35 +92,60 @@ const Concept = () => (
         <div className="absolute -bottom-6 -right-6 w-full h-full border border-amber-500/20 -z-10"></div>
       </div>
       <div className="w-full md:w-1/2">
-        <div className="flex items-center gap-4 mb-20">
-          <div className="h-[1px] w-12 bg-white"></div>
-          <h3 className="text-white tracking-[0.2em] text-sm uppercase">CONSEPT</h3>
+        <div className="flex items-center gap-4 mb-6">
+          <div className="h-[1px] w-12 bg-amber-500"></div>
+          <h3 className="text-amber-500 tracking-[0.2em] text-sm uppercase">Our Philosophy</h3>
         </div>
-        <h2 className="font-brand text-amber-500 text-5xl md:text-5xl text-amber-500 font-light leading-snug mb-20">感動の一瞬を<br />永遠の思い出に</h2>
-        <p className="text-white mb-8 font-light text-base md:text-lg">{CONFIG.brandName}（ユヌ・ターブル）は、フランス語で「一つのテーブル」を意味します。私たちは、厳選された食材を確かな技術で、目にも美しい一皿へと昇華させます。</p>
-        <p className="text-white leading-loose font-light text-base md:text-lg">企業様のレセプションパーティーから、各団体様の大切な懇親会。「一つのテーブル」を囲むかけがえのない時間に、究極のおもてなしをお約束いたします。</p>
+        <h2 className="font-serif text-3xl md:text-5xl text-white font-light leading-snug mb-10">一瞬の感動を、<br />永遠の記憶に。</h2>
+        <p className="text-stone-400 leading-loose mb-8 font-light text-sm md:text-base">{CONFIG.brandName}（ユヌ・ターブル）は、フランス語で「一つのテーブル」を意味します。私たちは、厳選された食材を確かな技術で、目にも美しい一皿へと昇華させます。</p>
+        <p className="text-stone-400 leading-loose font-light text-sm md:text-base">企業様のレセプションパーティーから、各団体様の大切な懇親会。「一つのテーブル」を囲むかけがえのない時間に、究極のおもてなしをお約束いたします。</p>
       </div>
     </div>
   </section>
 );
 
-const Services = () => (
+const Services = ({ onCocktailClick }) => (
   <section id="services" className="py-24 bg-zinc-900 px-6">
     <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12">
-      {[
-        { title: "Cocktail party", img: images.serviceWedding, desc: "カジュアルな会合を盛り上げる、", highlight: "彩り豊かな演出" },
-        { title: "Standing receotion", img: images.serviceCorporate, desc: "大切なビジネスシーンに適した", highlight: "効率的ディスプレイ" },
-        { title: "Private", img: images.servicePrivate, desc: "オーダーメイドのレストラン", highlight: "すべてにこだわった特別な空間" },
-      ].map((s, i) => (
-        <div key={i} className="group relative overflow-hidden aspect-[3/4]">
-          <img src={s.img} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" alt={s.title} />
-          <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all"></div>
-          <div className="absolute bottom-10 left-10 right-10">
-            <h4 className="text-2xl text-white mb-4 font-light tracking-[0.2em] border-l-2 border-amber-500 pl-4">{s.title}</h4>
-            <p className="text-stone-100 text-[14px] tracking-widest leading-relaxed opacity-0 group-hover:opacity-100 transition-all duration-700 transform translate-y-4 group-hover:translate-y-0">{s.desc}<br /><span className="text-amber-500 font-bold text-lg md:text-xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] block mt-1">{s.highlight}</span></p>
+      
+      {/* ▼ 1. Cocktail（ここだけクリックで写真ページが開く！） ▼ */}
+      <div onClick={onCocktailClick} className="group relative overflow-hidden aspect-[3/4] cursor-pointer">
+        <img src={images.serviceWedding} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-100 group-hover:scale-105" alt="Cocktail" />
+        <div className="absolute inset-0 bg-black/50 group-hover:bg-black/20 transition-all"></div>
+        <div className="absolute bottom-10 left-10 right-10">
+          <h4 className="text-2xl text-white mb-4 font-light tracking-[0.2em] border-l-2 border-amber-500 pl-4">Cocktail</h4>
+          <p className="text-stone-100 text-[14px] tracking-widest leading-relaxed opacity-0 group-hover:opacity-100 transition-all duration-700 transform translate-y-4 group-hover:translate-y-0">
+            華やかなレセプションを、<br /><span className="text-amber-500 font-bold text-lg md:text-xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] block mt-1">彩り豊かなフィンガーフードで。</span>
+          </p>
+          <div className="absolute right-0 bottom-0 opacity-0 group-hover:opacity-100 transition-all duration-700 transform translate-x-4 group-hover:translate-x-0">
+             <span className="text-amber-500 text-xs tracking-widest uppercase">View Photos</span>
           </div>
         </div>
-      ))}
+      </div>
+
+      {/* 2. Standing */}
+      <div className="group relative overflow-hidden aspect-[3/4]">
+        <img src={images.serviceCorporate} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" alt="Standing" />
+        <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all"></div>
+        <div className="absolute bottom-10 left-10 right-10">
+          <h4 className="text-2xl text-white mb-4 font-light tracking-[0.2em] border-l-2 border-amber-500 pl-4">Standing</h4>
+          <p className="text-stone-100 text-[14px] tracking-widest leading-relaxed opacity-0 group-hover:opacity-100 transition-all duration-700 transform translate-y-4 group-hover:translate-y-0">
+            企業様の懇親会を彩る、<br /><span className="text-amber-500 font-bold text-lg md:text-xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] block mt-1">洗練された立食スタイル。</span>
+          </p>
+        </div>
+      </div>
+
+      {/* 3. Private */}
+      <div className="group relative overflow-hidden aspect-[3/4]">
+        <img src={images.servicePrivate} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" alt="Private" />
+        <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all"></div>
+        <div className="absolute bottom-10 left-10 right-10">
+          <h4 className="text-2xl text-white mb-4 font-light tracking-[0.2em] border-l-2 border-amber-500 pl-4">Private</h4>
+          <p className="text-stone-100 text-[14px] tracking-widest leading-relaxed opacity-0 group-hover:opacity-100 transition-all duration-700 transform translate-y-4 group-hover:translate-y-0">
+            高級レストランに変わる、<br /><span className="text-amber-500 font-bold text-lg md:text-xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] block mt-1">オーダーメイドの特別な贅沢。</span>
+          </p>
+        </div>
+      </div>
     </div>
   </section>
 );
@@ -140,14 +155,14 @@ const MenuSection = () => (
     <div className="max-w-7xl mx-auto">
       <div className="text-center mb-20">
         <h3 className="text-amber-500 tracking-[0.2em] text-sm uppercase mb-4">Our Menu</h3>
-        <h2 className="font-brand text-3xl md:text-5xl text-white font-light mb-6 tracking-wider">スタンダードプラン</h2>
+        <h2 className="font-serif text-3xl md:text-5xl text-white font-light mb-6 tracking-wider">至福のプラン</h2>
         <div className="w-24 h-[1px] bg-amber-500/50 mx-auto"></div>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {[
-          { name: "立食スタイル", price: "¥4,500~", desc: "洗練されたスタンダードコース。軽やかに楽しめます。", items:["フィンガーフード４品", "串もの４品", "寿司３品", "デザート", "お飲み物１２種"] },
-          { name: "立食・着席", price: "¥6,000~", desc: "当店のスペシャリティ。厳選食材を用いた華やかなセッティング。", items:["フィンガーフード６品", "串もの６品", "寿司３品", "デザート２種", "お飲み物１７種"] },
-          { name: "着席スタイル", price: "¥8,000~", desc: "完全オーダーメイド。お客様の想いを形に致します。", items:["食材指定可能", "飲料指定可能", "着席配置可能", "演出指定可能"] },
+          { name: "立食パーティー", price: "¥4,500~", desc: "洗練されたスタンダードコース。軽やかに楽しめます。", items:["フィンガーフード４品", "串もの４品", "寿司３品", "デザート"] },
+          { name: "立食・着席", price: "¥6,000~", desc: "当店のスペシャリティ。厳選食材を用いた華やかなセッティング。", items:["フィンガーフード６品", "串もの６品", "寿司３品", "デザート2種"] },
+          { name: "着席形態", price: "¥8,000~", desc: "完全オーダーメイド. お客様の想いを形にする唯一無二のサービス。", items:["食材指定可能", "飲料指定可能", "着席配置可能", "演出指定可能"] },
         ].map((plan, i) => (
           <div key={i} className="group p-10 border border-zinc-800 bg-zinc-900/30 hover:border-amber-500/50 transition-all duration-500">
             <h4 className="text-amber-500 tracking-widest text-xs uppercase mb-4">Plan {i + 1}</h4>
@@ -182,7 +197,7 @@ const Gallery = () => (
   <section id="gallery" className="py-24 md:py-32 px-4 md:px-8 max-w-screen-2xl mx-auto">
     <div className="text-center mb-20">
       <h3 className="text-amber-500 tracking-[0.2em] text-sm uppercase mb-6">Gallery</h3>
-      <h2 className="font-brand text-3xl md:text-5xl text-white font-light tracking-wide">「テーブル」の記録</h2>
+      <h2 className="font-serif text-3xl md:text-5xl text-white font-light tracking-wide">美しき一皿の記録</h2>
     </div>
     <div className="columns-1 md:columns-2 lg:columns-3 gap-4 space-y-4">
       {images.gallery.map((img, idx) => (
@@ -197,36 +212,23 @@ const Gallery = () => (
 const Contact = () => {
   const[formData, setFormData] = useState({ name: "", email: "", message: "" });
   const[status, setStatus] = useState("idle");
-  
-  const handleChange = (e) => { 
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value })); 
-  };
-  
+  const handleChange = (e) => { const { name, value } = e.target; setFormData((prev) => ({ ...prev, [name]: value })); };
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setStatus("submitting");
+    e.preventDefault(); setStatus("submitting");
     try {
       const response = await fetch("https://api.web3forms.com/submit", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify({
-          access_key: "f62692b3-e35a-46dc-8cfb-39afaab1ee76",
-          subject: "【une table】Webサイトから新しいお問い合わせがあります",
-          name: formData.name, email: formData.email, message: formData.message,
-        }),
+        method: "POST", headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({ access_key: "f62692b3-e35a-46dc-8cfb-39afaab1ee76", subject: "【une table】Webサイトから新しいお問い合わせがあります", ...formData }),
       });
-      if (response.status === 200) { setStatus("success"); setFormData({ name: "", email: "", message: "" }); } 
-      else { setStatus("error"); }
+      if (response.status === 200) { setStatus("success"); setFormData({ name: "", email: "", message: "" }); } else { setStatus("error"); }
     } catch (error) { setStatus("error"); }
   };
-
   return (
     <section id="contact" className="py-24 md:py-32 bg-zinc-950">
       <div className="max-w-4xl mx-auto px-6 md:px-12">
         <div className="text-center mb-16">
           <h3 className="text-amber-500 tracking-[0.2em] text-sm uppercase mb-6">Contact</h3>
-          <h2 className="font-brand text-3xl md:text-5xl text-white font-light mb-8">ご予約・お問い合わせ</h2>
+          <h2 className="font-serif text-3xl md:text-5xl text-white font-light mb-8">ご予約・お問い合わせ</h2>
         </div>
         <div className="bg-zinc-900/50 p-8 md:p-14 border border-zinc-800 relative min-h-[400px] flex flex-col justify-center">
           {status === "success" ? (
@@ -243,7 +245,6 @@ const Contact = () => {
               </div>
               <textarea rows="4" name="message" value={formData.message} onChange={handleChange} required placeholder="ご相談内容" className="w-full bg-transparent border-b border-zinc-700 text-white py-2 focus:outline-none focus:border-amber-500 resize-none transition-colors"></textarea>
               <button type="submit" disabled={status === "submitting"} className={`w-full py-4 tracking-widest uppercase transition-all duration-300 ${status === "submitting" ? "bg-zinc-800 text-zinc-500 cursor-not-allowed" : "bg-amber-600 hover:bg-amber-500 text-white"}`}>{status === "submitting" ? "送信中..." : "送信する"}</button>
-              {status === "error" && <p className="text-red-500 text-sm text-center mt-4">送信に失敗しました。通信環境をご確認の上、再度お試しください。</p>}
             </form>
           )}
         </div>
@@ -252,9 +253,38 @@ const Contact = () => {
   );
 };
 
+// ▼ 新機能！Cocktail Party専用のギャラリーページ ▼
+const CocktailGalleryView = ({ onBack }) => {
+  // 開いたときに画面の一番上にスクロールする魔法
+  useEffect(() => { window.scrollTo(0, 0); },[]);
+  return (
+    <div className="min-h-screen bg-zinc-950 pt-20 pb-24 px-6 md:px-12 animate-[fadeIn_0.5s_ease-out]">
+      <div className="max-w-7xl mx-auto">
+        <button onClick={onBack} className="text-amber-500 hover:text-white transition-colors mb-12 tracking-widest text-sm uppercase flex items-center">
+          ← Back to Top
+        </button>
+        <div className="mb-16">
+          <h2 className="font-serif text-3xl md:text-5xl text-white font-light mb-6">Cocktail Party</h2>
+          <p className="text-stone-400 leading-loose max-w-2xl">
+            華やかなカクテルパーティーやレセプション。彩り豊かなフィンガーフードで会話も弾む特別な空間を演出します。
+          </p>
+        </div>
+        <div className="columns-1 md:columns-2 lg:columns-3 gap-4 space-y-4">
+          {cocktailPhotos.map((img, idx) => (
+            <div key={idx} className="relative overflow-hidden group break-inside-avoid bg-zinc-900">
+              <img src={img} className="w-full object-cover transition-transform duration-[2000ms] hover:scale-105" alt={`Cocktail ${idx}`} />
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const App = () => {
-  const[isScrolled, setIsScrolled] = useState(false);
-  const[isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  // ▼ これが「今どの画面を開いているか」を管理するスイッチです ▼
+  const [showCocktailGallery, setShowCocktailGallery] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
@@ -262,27 +292,32 @@ const App = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   },[]);
 
+  // ★もし「Cocktail」がクリックされてスイッチがONになったら、専用ページだけを表示する！
+  if (showCocktailGallery) {
+    return (
+      <div className="min-h-screen bg-zinc-950 text-stone-300 font-sans selection:bg-amber-900 selection:text-white">
+        <CocktailGalleryView onBack={() => setShowCocktailGallery(false)} />
+        <style dangerouslySetInnerHTML={{ __html: `@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } } html { scroll-behavior: smooth; }`}} />
+      </div>
+    );
+  }
+
+  // ★普段はこっち（いつものページ）を表示する！
   return (
-    <div className="min-h-screen bg-zinc-950 text-stone-300 font-serif selection:bg-amber-900 selection:text-white">
-      <Navbar isScrolled={isScrolled} isMobileMenuOpen={isMobileMenuOpen} setIsMobileMenuOpen={setIsMobileMenuOpen} />
+    <div className="min-h-screen bg-zinc-950 text-stone-300 font-sans selection:bg-amber-900 selection:text-white">
+      <Navbar isScrolled={isScrolled} />
       <Hero />
       <Concept />
-      <Services />
+      <Services onCocktailClick={() => setShowCocktailGallery(true)} />
       <MenuSection />
       <Testimonials />
       <Gallery />
       <Contact />
       <footer className="py-12 bg-zinc-950 text-center border-t border-zinc-900">
-        <img src={CONFIG.logoImage} alt={CONFIG.brandName} className="h-14 md:h-16 mx-auto mb-6 object-contain" />
-        <div className="flex justify-center space-x-6 mb-8 text-stone-500">
-           <a href="#contact" className="hover:text-white transition-colors">
-            <Mail size={18} />
-          </a>
-        
-          {/* ▼ Instagramアイコン（クリックでインスタの画面が開く） ▼ */}
-          <a href="https://www.instagram.com/unetable_catering" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
-            <Instagram size={18} />
-          </a>
+        <img src={CONFIG.logoImage} alt={CONFIG.brandName} className="h-8 md:h-12 mx-auto mb-6 object-contain" />
+        <div className="flex justify-center items-center space-x-6 mb-8 text-stone-500">
+          <a href="#contact" className="hover:text-white transition-colors"><Mail size={18} /></a>
+          <a href="https://www.instagram.com/あなたのアカウント名" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors"><Instagram size={18} /></a>
         </div>
         <p className="text-stone-700 text-[10px] tracking-widest uppercase">&copy; {new Date().getFullYear()} {CONFIG.brandName} Catering.</p>
       </footer>
