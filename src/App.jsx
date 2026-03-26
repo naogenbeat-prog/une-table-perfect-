@@ -193,7 +193,7 @@ const MenuSection = () => (
             {/* ▼ Plan 1~3 の行はまるごと削除しました！ ▼ */}
             
             {/* ▼ プラン名を text-3xl md:text-4xl にして大きく！ ▼ */}
-            <h3 className="text-3xl md:text-4xl text-white mb-4 font-light">{plan.name}</h3>
+            <h3 className="text-3xl md:text-3xl text-white mb-4 font-light">{plan.name}</h3>
             
             <p className="text-xl text-stone-400 mb-6 font-sans">{plan.price} <span className="text-xs">/ person</span></p>
             <ul className="space-y-3 mb-10 text-xs tracking-widest text-stone-400 border-t border-zinc-800 pt-8">
