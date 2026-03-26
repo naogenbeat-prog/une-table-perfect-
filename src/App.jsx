@@ -308,10 +308,15 @@ const DetailGalleryView = ({ viewId, onBack }) => {
         <button onClick={onBack} className="text-amber-500 hover:text-white transition-colors mb-12 tracking-widest text-sm uppercase flex items-center">
           <ChevronLeft size={16} className="mr-2" /> Back to Top
         </button>
-        <div className="mb-16">
+        
+        {/* ▼ text-center（文字の中央揃え）を追加！ ▼ */}
+        <div className="mb-16 text-center">
           <h2 className="font-brand text-4xl md:text-5xl text-amber-500 font-light mb-6">{data.title}</h2>
-          <p className="text-stone-400 leading-loose max-w-2xl">{data.desc}</p>
+          
+          {/* ▼ mx-auto（文章の枠自体を中央に配置する）を追加！ ▼ */}
+          <p className="text-stone-400 leading-loose max-w-2xl mx-auto">{data.desc}</p>
         </div>
+        
         <div className="columns-1 md:columns-2 lg:columns-3 gap-4 space-y-4">
           {data.photos.map((img, idx) => (
             <div key={idx} className="relative overflow-hidden group break-inside-avoid bg-zinc-900">
