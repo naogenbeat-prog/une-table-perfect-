@@ -10,7 +10,7 @@ const Instagram = ({ size = 24, className = "" }) => (
 // --- 設定エリア ---
 const CONFIG = {
   brandName: "UNE TABLE",
-  tagline: "華やかな装いを, あなただけの空間へ ",
+  tagline: "華やかな装いを あなただけの空間へ ",
   // 一時的なダミー写真（後でGitHubのpublicフォルダに本物をアップロードします！）
   heroImage:  "/hero-bg.jpg",
   logoImage: "/logo.png",
@@ -71,7 +71,7 @@ const Hero = () => (
       {/* 👑 ここが「ド真ん中」のエリア（flex-1 で上下の余白を自動で押し広げる） */}
       <div className="flex-1 flex flex-col justify-center items-center">
         <h1 className="font-serif text-4xl md:text-6xl lg:text-7xl text-white font-light leading-tight text-center drop-shadow-lg -translate-y-16 md:-translate-y-12">
-          華やかな装いを<br />あなただけの空間へ。
+          華やかな装いを,<br />あなただけの空間へ。
         </h1>
       </div>
       
