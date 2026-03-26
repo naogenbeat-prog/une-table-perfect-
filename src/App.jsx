@@ -42,8 +42,10 @@ const galleryData = {
     photos:[
       images.serviceWedding,
       "/cocktail-3.png",
-      "/concept-img.png",
-      "https://images.unsplash.com/photo-1555244162-803834f70033?auto=format&fit=crop&q=80&w=800"
+      "/business-16.png",
+      "/cocktail-14.jpg",
+      "/business-14.jpg",
+      "/business-13.png"
     ]
   },
   standing: {
@@ -54,6 +56,8 @@ const galleryData = {
       "/business-12.jpg",
       "/business-4.jpg",
       "/business-1.jpeg",
+      "/business-11.jpeg",
+      "/business-11.pneg",
       "/business-9.jpeg"
     ]
   },
@@ -63,8 +67,9 @@ const galleryData = {
     photos:[
       images.servicePrivate,
       "/private-5.jpeg",
-      "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&q=80&w=800",
-      "https://images.unsplash.com/photo-1514326640560-7d063ef2aed5?auto=format&fit=crop&q=80&w=800"
+      "/private-3.jpeg",
+      "/private-2.jpeg",
+      
     ]
   }
 };
