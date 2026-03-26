@@ -355,12 +355,12 @@ const App = () => {
 
       <footer className="py-16 bg-zinc-950 text-center border-t border-zinc-900">
         {/* ▼ 文字を画像ロゴに変更し、高さを大きく設定（スマホ:80px, パソコン:128px） ▼ */}
-        <img src={CONFIG.logoImage} alt={CONFIG.brandName} className="h-[80px] md:h-[128px] w-auto mx-auto mb-10 object-contain" />
+        <img src={CONFIG.logoImage} alt={CONFIG.brandName} className="h-[180px] md:h-[240px] w-auto mx-auto mb-10 object-contain" />
         
         {/* ▼ アイコンのサイズを 18 から 32 に巨大化！間隔も少し広げました ▼ */}
         <div className="flex justify-center items-center space-x-8 mb-10 text-stone-500">
-          <a href="#contact" className="hover:text-white transition-colors"><Mail size={32} /></a>
-          <a href="https://www.instagram.com/unetable_catering" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors"><Instagram size={32} /></a>
+          <a href="#contact" className="hover:text-white transition-colors"><Mail size={48} /></a>
+          <a href="https://www.instagram.com/unetable_catering" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors"><Instagram size={48} /></a>
         </div>
         
         <p className="text-stone-700 text-[10px] tracking-widest uppercase">&copy; {new Date().getFullYear()} {CONFIG.brandName} Catering.</p>
