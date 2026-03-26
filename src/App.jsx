@@ -188,12 +188,14 @@ const MenuSection = () => (
           { name: "立食スタイル", price: "¥4,500~", desc: "洗練されたスタンダードコース。軽やかに楽しめます。", items:["フィンガーフード４品", "串もの４品", "寿司３品", "デザート", "お飲み物１２種"] },
           { name: "立食・着席", price: "¥6,000~", desc: "当店のスペシャリティ。厳選食材を用いた華やかなセッティング。", items:["フィンガーフード６品", "串もの６品", "寿司３品", "デザート２種", "お飲み物１７種"] },
           { name: "着席スタイル", price: "¥8,000~", desc: "完全オーダーメイド。お客様の想いを形に致します。", items:["食材指定可能", "飲料指定可能", "着席配置可能", "演出指定可能"] },
-        ].map((plan, i) => (
+       ].map((plan, i) => (
           <div key={i} className="group p-10 border border-zinc-800 bg-zinc-900/30 hover:border-amber-500/50 transition-all duration-500">
-            <h4 className="text-amber-500 tracking-widest text-xs uppercase mb-4">Plan {i + 1}</h4>
-            <h3 className="text-2xl text-white mb-2 font-light">{plan.name}</h3>
+            {/* ▼ Plan 1~3 の行はまるごと削除しました！ ▼ */}
+            
+            {/* ▼ プラン名を text-3xl md:text-4xl にして大きく！ ▼ */}
+            <h3 className="text-3xl md:text-4xl text-white mb-4 font-light">{plan.name}</h3>
+            
             <p className="text-xl text-stone-400 mb-6 font-sans">{plan.price} <span className="text-xs">/ person</span></p>
-            <p className="text-sm text-stone-500 mb-8 leading-loose h-20">{plan.desc}</p>
             <ul className="space-y-3 mb-10 text-xs tracking-widest text-stone-400 border-t border-zinc-800 pt-8">
               {plan.items.map((item) => <li key={item} className="flex items-center"><ChevronRight size={12} className="mr-2 text-amber-500" /> {item}</li>)}
             </ul>
