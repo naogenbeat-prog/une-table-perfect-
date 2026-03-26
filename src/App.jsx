@@ -45,7 +45,7 @@ const galleryData = {
       "/business-16.png",
       "/cocktail-14.jpg",
       "/business-14.jpg",
-      "/business-13.png"
+      "/business-13.png",
     ]
   },
   standing: {
@@ -58,7 +58,7 @@ const galleryData = {
       "/business-1.jpeg",
       "/business-11.jpeg",
       "/business-11.pneg",
-      "/business-9.jpeg"
+      "/business-9.jpeg",
     ]
   },
   private: {
@@ -68,7 +68,7 @@ const galleryData = {
       images.servicePrivate,
       "/private-5.jpeg",
       "/private-3.jpeg",
-      "/private-2.jpeg"
+      "/private-2.jpeg",
     ]
   }
 };
