@@ -219,7 +219,7 @@ const Gallery = ({ onViewChange }) => (
 
 const DetailView = ({ viewId, onViewChange }) => {
   const data = detailPages[viewId];
-  useEffect(() => { window.scrollTo(0, 0); },[viewId]);
+  useEffect(() => { window.scrollTo(0, 0); }, [viewId]);
 
   return (
     <div className="min-h-screen bg-zinc-950 pt-32 pb-24 px-6 md:px-12 animate-[fadeIn_0.5s_ease-out]">
@@ -289,7 +289,7 @@ const Contact = () => {
 
 const App = () => {
   const [isScrolled, setIsScrolled] = useState(false);
-  const[currentView, setCurrentView] = useState("home"); 
+  const[currentView, setCurrentView] = useState("home"); // home, cocktail, standing, private, gallery
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
@@ -301,6 +301,7 @@ const App = () => {
     <div className="min-h-screen bg-zinc-950 text-stone-300 font-sans selection:bg-amber-900 selection:text-white">
       <Navbar isScrolled={isScrolled} currentView={currentView} onViewChange={setCurrentView} />
       
+      {/* ▼ 今どの画面を見ているかで、表示する中身を切り替える魔法 ▼ */}
       {currentView === "home" ? (
         <>
           <Hero />
@@ -319,7 +320,8 @@ const App = () => {
         <img src={CONFIG.logoImage} alt={CONFIG.brandName} className="h-8 md:h-12 mx-auto mb-6 object-contain" />
         <div className="flex justify-center items-center space-x-6 mb-8 text-stone-500">
           <a href="#contact" className="hover:text-white transition-colors"><Mail size={18} /></a>
-          <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors"><Instagram size={18} /></a>
+          {/* インスタのリンクを変えられます */}
+          <a href="https://www.instagram.com/あなたのアカウント名" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors"><Instagram size={18} /></a>
         </div>
         <p className="text-stone-700 text-[10px] tracking-widest uppercase">&copy; {new Date().getFullYear()} {CONFIG.brandName} Catering.</p>
       </footer>
