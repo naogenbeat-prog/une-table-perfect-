@@ -1,4 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
+
+const services = [
+  { key: "cocktail", title: "Cocktail Party", sub: "カクテルパーティー", desc: "カジュアルな会合を盛り上げる、彩り豊かな演出。フィンガーフードで会話も弾む特別な空間。", img: "https://images.unsplash.com/photo-1555244162-803834f70033?auto=format&fit=crop&w=800&q=80" },
+  { key: "standing", title: "Standing Reception", sub: "スタンディングレセプション", desc: "大切なビジネスシーンに適した洗練されたスタイル。ブランドイメージを高める立食形式をご提供。", img: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=800&q=80" },
+  { key: "private", title: "Private Dining", sub: "プライベートダイニング", desc: "オーダーメイドのレストラン。すべてにこだわった特別な空間で、プライベートな贅沢を。", img: "https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&w=800&q=80" },
+];
 
 export default function App() {
   const [selectedPlan, setSelectedPlan] = useState("");
@@ -9,77 +15,50 @@ export default function App() {
   };
 
   return (
-    <div style={{ fontFamily: "serif", background: "#fdfcf9", color: "#1a1510", minHeight: "100vh" }}>
+    <div style={{ fontFamily: "serif", background: "#1a1510", color: "#f8f5f0", minHeight: "100vh" }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital@0;1&family=Noto+Serif+JP:wght@200;300&display=swap');
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        .card:hover { transform: translateY(-10px); transition: 0.3s; }
+        .service-card { position: relative; height: 600px; overflow: hidden; cursor: pointer; border: 1px solid #333; }
+        .overlay { 
+          position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+          background: linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.8) 100%);
+          display: flex; flex-direction: column; justify-content: space-between; padding: 60px 30px; 
+        }
+        .yellow-line { width: 3px; height: 60px; background: #b8860b; margin-right: 20px; }
       `}</style>
 
-      {/* Hero */}
-      <section style={{ height: "60vh", background: "linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1555244162-803834f70033?auto=format&fit=crop&w=1600&q=80') center/cover", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff" }}>
+      <section style={{ height: "30vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
         <h1 style={{ fontSize: "3rem", fontStyle: "italic", letterSpacing: "0.2em" }}>UNE TABLE</h1>
       </section>
 
-      {/* Plans */}
-      <section style={{ padding: "80px 8vw" }}>
-        <h2 style={{ textAlign: "center", color: "#b8860b", marginBottom: "50px", fontSize: "2rem" }}>Select Plan</h2>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "40px" }}>
-          {["スタンダードプラン", "プレミアムプラン", "エグゼクティブプラン"].map((plan) => (
-            <div key={plan} className="card" style={{ background: "#fff", borderRadius: "15px", overflow: "hidden", boxShadow: "0 10px 30px rgba(0,0,0,0.05)" }}>
-              <div style={{ height: "200px", background: "#eee" }}></div>
-              <div style={{ padding: "30px" }}>
-                <h3 style={{ marginBottom: "15px" }}>{plan}</h3>
-                <p style={{ fontSize: "14px", color: "#666", marginBottom: "25px" }}>最高のクオリティをお約束します。</p>
-                <button 
-                  onClick={() => handleSelectPlan(plan)}
-                  style={{ width: "100%", padding: "12px", background: "#1a1510", color: "#fff", border: "none", cursor: "pointer", fontSize: "12px", letterSpacing: "0.1em" }}
-                >
-                  SELECT PLAN
-                </button>
+      <section style={{ padding: "0 5vw 100px" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "20px" }}>
+          {services.map((s) => (
+            <div key={s.key} className="service-card" onClick={() => handleSelectPlan(s.sub)}>
+              <img src={s.img} style={{ width: "100%", height: "100%", objectFit: "cover", filter: "grayscale(100%)" }} />
+              <div className="overlay">
+                <div style={{ display: "flex", alignItems: "flex-start" }}>
+                  <div className="yellow-line"></div>
+                  <h3 style={{ fontSize: "2.2rem", lineHeight: "1.1" }}>{s.title}</h3>
+                </div>
+                <div style={{ maxWidth: "260px" }}>
+                  <p style={{ fontSize: "13px", lineHeight: "1.8", color: "#c4b8a8" }}>{s.desc}</p>
+                </div>
               </div>
             </div>
           ))}
         </div>
       </section>
 
-      {/* Contact Form */}
-      <section id="contact" style={{ padding: "100px 8vw", background: "#f4f1ec" }}>
-        <div style={{ maxWidth: "1000px", margin: "0 auto", background: "#fff", padding: "60px", borderRadius: "20px" }}>
-          <h2 style={{ textAlign: "center", marginBottom: "50px" }}>Contact</h2>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "40px" }}>
-            
-            {/* Left Column */}
-            <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-              <div>
-                <label style={{ fontSize: "12px", color: "#8a7a6a" }}>PLAN</label>
-                <select 
-                  value={selectedPlan} 
-                  onChange={(e) => setSelectedPlan(e.target.value)}
-                  style={{ width: "100%", padding: "15px", border: "none", borderBottom: "1px solid #ddd", background: "#fdfcf9" }}
-                >
-                  <option value="">プランを選択してください</option>
-                  <option value="スタンダードプラン">スタンダードプラン</option>
-                  <option value="プレミアムプラン">プレミアムプラン</option>
-                  <option value="エグゼクティブプラン">エグゼクティブプラン</option>
-                </select>
-              </div>
-              <div>
-                <label style={{ fontSize: "12px", color: "#8a7a6a" }}>NAME</label>
-                <input type="text" style={{ width: "100%", padding: "15px", border: "none", borderBottom: "1px solid #ddd" }} />
-              </div>
-            </div>
-
-            {/* Right Column */}
-            <div>
-              <label style={{ fontSize: "12px", color: "#8a7a6a" }}>MESSAGE</label>
-              <textarea style={{ width: "100%", height: "150px", padding: "15px", border: "none", borderBottom: "1px solid #ddd", background: "#fdfcf9", resize: "none" }} />
-            </div>
-
-            <button style={{ gridColumn: "span 2", padding: "20px", background: "#1a1510", color: "#fff", border: "none", cursor: "pointer", letterSpacing: "0.2em" }}>
-              SEND INQUIRY
-            </button>
-          </div>
+      <section id="contact" style={{ padding: "100px 5vw", background: "#111" }}>
+        <div style={{ maxWidth: "800px", margin: "0 auto" }}>
+          <h2 style={{ textAlign: "center", fontStyle: "italic", marginBottom: "40px", color: "#b8860b" }}>Reservation</h2>
+          <select value={selectedPlan} onChange={(e) => setSelectedPlan(e.target.value)} style={{ width: "100%", padding: "15px", background: "transparent", color: "#fff", borderBottom: "1px solid #333" }}>
+            <option value="" style={{color: "#000"}}>ご希望を選択</option>
+            <option value="カクテルパーティー" style={{color: "#000"}}>Cocktail Party</option>
+            <option value="スタンディングレセプション" style={{color: "#000"}}>Standing Reception</option>
+            <option value="プライベートダイニング" style={{color: "#000"}}>Private Dining</option>
+          </select>
         </div>
       </section>
     </div>
