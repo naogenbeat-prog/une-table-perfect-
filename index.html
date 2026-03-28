@@ -1,34 +1,71 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ja">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>UNE TABLE - Catering</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- ▼ 3種類のGoogleフォントを読み込む ▼ -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Noto+Sans+JP:wght@300;400&family=Noto+Serif+JP:wght@300;400&display=swap" rel="stylesheet">
-    
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- ▼ クラス名（font-〇〇）で使い分けられるようにする設定 ▼ -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>オーダーメイド・ケータリング | UNE TABLE</title>
+    <style>
+        body { margin: 0; font-family: "Helvetica Neue", Arial, sans-serif; color: #333; background-color: #fdfdfd; line-height: 1.8; scroll-behavior: smooth; }
+        .hero { height: 60vh; background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1555244162-803834f70033?auto=format&fit=crop&w=1600&q=80'); background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; color: #fff; text-align: center; }
+        .hero-content h1 { font-size: clamp(2rem, 5vw, 3rem); letter-spacing: 0.1em; }
+        .section { max-width: 1100px; margin: 60px auto; padding: 0 20px; text-align: center; }
+        h2 { font-size: 2rem; color: #b8860b; margin-bottom: 40px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
+        .card { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.1); display: flex; flex-direction: column; text-align: left; }
+        .card-img { width: 100%; height: 200px; object-fit: cover; }
+        .card-body { padding: 20px; flex-grow: 1; }
+        .select-btn { display: block; width: 100%; padding: 12px; background: #333; color: #fff; border: none; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .select-btn:hover { background: #b8860b; }
+        #contact { background-color: #f9f6f2; padding: 60px 20px; }
+        .form-container { max-width: 800px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 10px; }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .full-width { grid-column: span 2; }
+        label { font-size: 0.8rem; font-weight: bold; color: #6a5a4a; }
+        input, select, textarea { padding: 10px; border: 1px solid #ddd; width: 100%; box-sizing: border-box; }
+        .submit-btn { grid-column: span 2; background: #b8860b; color: #fff; border: none; padding: 15px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        @media (max-width: 600px) { .form-grid { grid-template-columns: 1fr; } .full-width { grid-column: span 1; } .submit-btn { grid-column: span 1; } }
+    </style>
+</head>
+<body>
+    <section class="hero"><div class="hero-content"><h1>オーダーメイドのケータリング</h1><p>UNE TABLE</p></div></section>
+    <section class="section">
+        <h2>Select Plan</h2>
+        <div class="grid">
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1530101978247-2c78493045ec?auto=format&fit=crop&w=600&q=80" class="card-img">
+                <div class="card-body"><h3>Standard</h3><p>基本のプラン</p></div>
+                <button class="select-btn" onclick="selectPlan('スタンダードプラン')">このプランを選択</button>
+            </div>
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&w=600&q=80" class="card-img">
+                <div class="card-body"><h3>Premium</h3><p>高級食材プラン</p></div>
+                <button class="select-btn" onclick="selectPlan('プレミアムプラン')">このプランを選択</button>
+            </div>
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=600&q=80" class="card-img">
+                <div class="card-body"><h3>Executive</h3><p>最高峰プラン</p></div>
+                <button class="select-btn" onclick="selectPlan('エグゼクティブプラン')">このプランを選択</button>
+            </div>
+        </div>
+    </section>
+    <section id="contact">
+        <div class="section">
+            <h2>Contact</h2>
+            <div class="form-container">
+                <div class="form-grid">
+                    <div class="form-group full-width"><label>お名前</label><input type="text"></div>
+                    <div class="form-group"><label>ご希望のプラン</label><select id="plan-select"><option value="">選択してください</option><option value="スタンダードプラン">スタンダードプラン</option><option value="プレミアムプラン">プレミアムプラン</option><option value="エグゼクティブプラン">エグゼクティブプラン</option></select></div>
+                    <div class="form-group"><label>メッセージ</label><textarea id="message"></textarea></div>
+                    <button class="submit-btn">問い合わせる</button>
+                </div>
+            </div>
+        </div>
+    </section>
     <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            fontFamily: {
-              serif: ['"Noto Serif JP"', 'serif'],        // font-serif（明朝体：ベース）
-              sans: ['"Noto Sans JP"', 'sans-serif'],     // font-sans（ゴシック体：説明文用）
-              brand: ['"Cormorant Garamond"', 'serif'],   // font-brand（英字のおしゃれフォント）
-            }
-          }
+        function selectPlan(name) {
+            document.getElementById('plan-select').value = name;
+            document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
         }
-      }
     </script>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+</body>
 </html>
