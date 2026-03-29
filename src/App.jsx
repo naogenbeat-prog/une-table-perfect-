@@ -12,7 +12,7 @@ const CONFIG = {
 const images = {
   concept1: "/business-2.png",
   serviceWedding: "/cocktail-2.png",
-  serviceCorporate: "/cocktail-7.png",
+  serviceCorporate: "/cocktail-3.png",
   servicePrivate: "/private-4.jpg",
   gallery:[
     "/business-4.jpg",
