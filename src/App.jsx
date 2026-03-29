@@ -10,14 +10,14 @@ const CONFIG = {
 };
 
 const images = {
-  concept1: "/business-2.png",
+  concept1: "/business-16.png",
   serviceWedding: "/cocktail-2.png",
   serviceCorporate: "/cocktail-3.png",
   servicePrivate: "/private-4.jpg",
   gallery:[
     "/business-4.jpg",
     "/business-1.jpeg",
-    "/concept-img.png",
+    "/roastbeef.jpeg",
     "/cocktail-3.png",
     "/business-9.jpeg",
     "/private-5.jpeg",
