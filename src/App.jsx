@@ -14,7 +14,6 @@ const images = {
   serviceWedding: "/cocktail-2.png",
   serviceCorporate: "/cocktail-7.png",
   servicePrivate: "/private-4.jpg",
-  // メインギャラリー（画像リストから正確に抽出）
   gallery:[
     "/business-4.jpg",
     "/business-1.jpeg",
@@ -25,43 +24,21 @@ const images = {
   ],
 };
 
-// 各詳細ページ（画像リストの拡張子に厳密に合わせました）
 const galleryData = {
   cocktail: {
     title: "Cocktail party",
     desc: <>カジュアルな会合を盛り上げる、彩り豊かな演出。<br />フィンガーフードで会話も弾む特別な空間を演出します。</>,
-    photos:[
-      "/cocktail-2.png",
-      "/cocktail-3.png",
-      "/business-16.png",
-      "/cocktail-14.jpg",
-      "/business-14.jpg",
-      "/business-13.png",
-    ]
+    photos:["/cocktail-2.png", "/cocktail-3.png", "/business-16.png", "/cocktail-14.jpg", "/business-14.jpg", "/business-13.png"]
   },
   standing: {
     title: "Standing reception",
     desc: <>大切なビジネスシーンに適した効率的ディスプレイ。<br />ブランドイメージを高める洗練された立食スタイルを提供します。</>,
-    photos:[
-      "/cocktail-7.png",
-      "/business-12.jpg",
-      "/business-4.jpg",
-      "/business-1.jpeg",
-      "/business-11.jpeg",
-      "/business-9.jpeg",
-    ]
+    photos:["/cocktail-7.png", "/business-12.jpg", "/business-4.jpg", "/business-1.jpeg", "/business-11.jpeg", "/business-9.jpeg"]
   },
   private: {
     title: "Private Dining",
     desc: <>オーダーメイドのレストラン。<br />すべてにこだわった特別な空間で、プライベートな贅沢をお楽しみください。</>,
-    photos:[
-      "/private-4.jpg",
-      "/private-5.jpeg",
-      "/private-3.jpg",
-      "/private-2.jpg",
-      "/private-1.png",
-      "/IMG_3120.JPG"
-    ]
+    photos:["/private-4.jpg", "/private-5.jpeg", "/private-3.jpg", "/private-2.jpg", "/private-1.png", "/IMG_3120.JPG"]
   }
 };
 
@@ -100,9 +77,15 @@ const Hero = () => (
       <img src={CONFIG.heroImage} className="w-full h-full object-cover scale-105" />
       <div className="absolute inset-0 bg-gradient-to-b from-zinc-950/60 via-zinc-950/40 to-zinc-950"></div>
     </div>
-    <div className="relative z-10 flex flex-col h-full px-4 max-w-4xl mx-auto pt-32 text-center">
+    <div className="relative z-10 flex flex-col h-full px-4 max-w-4xl mx-auto pt-32 md:pt-40 text-center">
       <div className="flex-1 flex flex-col justify-center items-center">
-        <h1 className="font-serif text-4xl md:text-6xl text-white font-light leading-tight drop-shadow-2xl">華やかな装いを<br />あなただけの空間へ。</h1>
+        <h1 className="font-serif text-4xl md:text-6xl text-white font-light leading-tight drop-shadow-2xl -translate-y-16">華やかな装いを<br />あなただけの空間へ。</h1>
+      </div>
+      <div className="pb-32">
+        <p className="text-xl text-stone-300 font-light mb-8 max-w-2xl mx-auto leading-loose tracking-wide">
+          厳選された旬の食材を使用し、目にも楽しい彩りを添えて。<br className="hidden md:block" />
+          特別な日を彩る最高峰のケータリングをお届け致します。
+        </p>
       </div>
     </div>
   </section>
@@ -117,7 +100,10 @@ const Concept = () => (
     <div className="w-full md:w-1/2">
       <h3 className="text-amber-500 tracking-[0.2em] text-xs mb-8 uppercase">CONCEPT</h3>
       <h2 className="text-4xl md:text-5xl text-white font-light mb-10 leading-snug">感動の一瞬を<br />永遠の思い出に</h2>
-      <p className="leading-loose text-stone-400 font-light mb-8">UNE TABLE（ユヌ・ターブル）は、フランス語で「一つのテーブル」を意味します。大切なビジネスシーン、かけがえのない時間に最高のおもてなしをお約束いたします。</p>
+      <p className="text-white mb-8 font-light text-base md:text-lg">
+        {CONFIG.brandName}（ユヌ・ターブル）は、フランス語で「一つのテーブル」を意味します。私たちは、厳選された食材を確かな技術で、目にも美しい一皿へと昇華させます。
+      </p>
+      <p className="text-white leading-loose font-light text-base md:text-lg">企業様のレセプションパーティーから、各団体様の大切な懇親会。「一つのテーブル」を囲むかけがえのない時間に、究極のおもてなしをお約束いたします。</p>
     </div>
   </section>
 );
@@ -147,6 +133,7 @@ const MenuSection = ({ onSelectPlan }) => (
   <section id="menu" className="py-24 bg-zinc-950 px-6">
     <div className="max-w-7xl mx-auto">
       <div className="text-center mb-20">
+        <h3 className="text-amber-500 tracking-[0.2em] text-sm uppercase mb-4">Our Menu</h3>
         <h2 className="text-3xl md:text-5xl text-white font-light mb-6 tracking-wider">スタンダードプラン</h2>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -157,8 +144,8 @@ const MenuSection = ({ onSelectPlan }) => (
        ].map((plan, i) => (
           <div key={i} className="group p-10 border border-zinc-800 bg-zinc-900/30 hover:border-amber-500/50 transition-all">
             <h3 className="text-3xl text-white mb-4 font-light">{plan.name}</h3>
-            <p className="text-xl text-stone-400 mb-6">{plan.price} / person</p>
-            <ul className="space-y-3 mb-10 text-xs text-stone-400 border-t border-zinc-800 pt-8">
+            <p className="text-xl text-stone-400 mb-6 font-sans">{plan.price} / person</p>
+            <ul className="space-y-3 mb-10 text-xs tracking-widest text-stone-400 border-t border-zinc-800 pt-8">
               {plan.items.map((item) => <li key={item} className="flex items-center"><ChevronRight size={12} className="mr-2 text-amber-500" /> {item}</li>)}
             </ul>
             <button onClick={() => onSelectPlan(plan.name)} className="w-full py-4 border border-zinc-700 text-xs tracking-[0.2em] uppercase hover:bg-white hover:text-black transition-all">Select Plan</button>
@@ -173,7 +160,7 @@ const Testimonials = () => (
   <section className="py-24 bg-zinc-900/50 px-6">
     <div className="max-w-5xl mx-auto text-center">
       <Quote className="mx-auto text-amber-500/20 mb-8" size={60} />
-      <p className="text-xl md:text-2xl text-stone-300 italic font-light leading-relaxed mb-8">"創業記念のパーティーで利用しました。料理の美しさはもちろん、全員ソムリエの資格をお持ちでサービングの所作も完璧でした。"</p>
+      <p className="text-xl md:text-2xl text-stone-300 italic font-light leading-relaxed mb-8">"創業記念のパーティーで利用しました。料理の美しさはもちろん、<br />全員ソムリエの資格をお持ちでサービングの所作も完璧でした。"</p>
       <div className="flex justify-center gap-1 mb-4">
         {[...Array(5)].map((_, i) => <Star key={i} size={16} className="fill-amber-500 text-amber-500" />)}
       </div>
@@ -208,10 +195,7 @@ const Contact = ({ selectedPlan, onPlanChange }) => {
       await fetch("https://api.web3forms.com/submit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          access_key: "f62692b3-e35a-46dc-8cfb-39afaab1ee76",
-          plan: selectedPlan, ...formData,
-        }),
+        body: JSON.stringify({ access_key: "f62692b3-e35a-46dc-8cfb-39afaab1ee76", plan: selectedPlan, ...formData }),
       });
       setStatus("success");
     } catch (e) { setStatus("error"); }
@@ -222,7 +206,7 @@ const Contact = ({ selectedPlan, onPlanChange }) => {
         <h2 className="text-center text-3xl md:text-5xl text-white font-light mb-16">ご予約・お問い合わせ</h2>
         <div className="bg-zinc-900/50 p-8 md:p-14 border border-zinc-800">
           {status === "success" ? (
-            <div className="text-center text-amber-500">Thank You. 送信完了しました。</div>
+            <div className="text-center text-amber-500 py-12">Thank You. 送信完了しました。</div>
           ) : (
             <form className="space-y-8" onSubmit={handleSubmit}>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
