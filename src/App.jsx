@@ -1,26 +1,35 @@
 import React, { useState, useEffect } from "react";
 import { Menu, X, ChevronRight, Star, Quote, Mail, ChevronLeft } from "lucide-react";
 
-// --- 設定エリア（画像ファイル名をリストと100%一致させました） ---
+// ▼ 自作Instagramアイコン ▼
+const Instagram = ({ size = 24, className = "" }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <rect width="20" height="20" x="2" y="2" rx="5" ry="5"/>
+    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+    <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/>
+  </svg>
+);
+
+// --- 設定エリア（リスト画像と100%一致） ---
 const CONFIG = {
   brandName: "UNE TABLE",
   tagline: "華やかな装いを あなただけの空間へ ",
-  heroImage:  "/hero-bg.jpg", // jpgであることを確認
-  logoImage: "/logo.png",     // pngであることを確認
+  heroImage:  "/hero-bg.jpg",
+  logoImage: "/logo.png",
 };
 
 const images = {
-  concept1: "/business-16.png",    // pngであることを確認
-  serviceWedding: "/cocktail-3.png", // pngであることを確認
-  serviceCorporate: "/cocktail-7.png", // pngであることを確認
-  servicePrivate: "/private-4.jpg",   // jpgであることを確認
+  concept1: "/business-16.png",
+  serviceWedding: "/cocktail-3.png",
+  serviceCorporate: "/cocktail-7.png",
+  servicePrivate: "/private-4.jpg",
   gallery:[
-    "/business-4.jpg",    // jpg
-    "/business-1.jpeg",   // jpeg
-    "/roastbeef.jpeg",    // jpeg
-    "/cocktail-3.png",    // png
-    "/business-9.jpeg",   // jpeg
-    "/private-5.jpeg",    // jpeg
+    "/business-4.jpg",
+    "/business-1.jpeg",
+    "/roastbeef.jpeg",
+    "/cocktail-3.png",
+    "/business-9.jpeg",
+    "/private-5.jpeg",
   ],
 };
 
@@ -38,15 +47,9 @@ const galleryData = {
   private: { 
     title: "Private Dining", 
     desc: <>オーダーメイドのレストラン。<br />すべてにこだわった特別な空間で、プライベートな贅沢をお楽しみください。</>, 
-    photos:["/private-4.jpg", "/private-5.jpeg", "/private-3.jpg", "/private-2.jpg", "/private-1.png", "/IMG_3120.JPG"] // .JPGは大文字
+    photos:["/private-4.jpg", "/private-5.jpeg", "/private-3.jpg", "/private-2.jpg", "/private-1.png", "/IMG_3120.JPG"] 
   }
 };
-
-const Instagram = ({ size = 24 }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/>
-  </svg>
-);
 
 const Navbar = ({ isScrolled, currentView, onViewChange }) => {
   const handleNavClick = (e, target) => {
@@ -174,13 +177,13 @@ const App = () => {
         </div>
       </section>
 
-      {/* Services */}
+      {/* Services (Photo Top, Text Bottom Layout) */}
       <section id="services" className="py-24 bg-zinc-900 px-6">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12">
           {[
             { id: "cocktail", title: "Cocktail Party", img: images.serviceWedding, desc: "カジュアルな会合を盛り上げる、", highlight: "彩り豊かな演出" },
             { id: "standing", title: "Standing Reception", img: images.serviceCorporate, desc: "大切なビジネスシーンに適した", highlight: "効率的ディスプレイ" },
-            { id: "private", title: "Private Dining", img: images.servicePrivate, desc: "オーダーメイドのレストラン", highlight: "贅沢な特別な空間" },
+            { id: "private", title: "Private", img: images.servicePrivate, desc: "オーダーメイドのレストラン", highlight: "贅沢な特別な空間" },
           ].map((s, i) => (
             <div key={i} onClick={() => handleViewChange(s.id)} className="group cursor-pointer">
               <div className="aspect-[3/4] overflow-hidden mb-8 shadow-xl">
@@ -220,13 +223,13 @@ const App = () => {
         <cite className="text-amber-500 tracking-widest uppercase text-xs not-italic">- 東京都 S.K様 (Private Dinner)</cite>
       </section>
 
-      {/* Gallery */}
+      {/* Gallery (3 Column Grid) */}
       <section id="gallery" className="py-24 px-4 max-w-screen-2xl mx-auto bg-zinc-950">
         <div className="text-center mb-20"><h3 className="text-amber-500 tracking-[0.2em] text-sm uppercase mb-6">Gallery</h3><h2 className="text-3xl md:text-5xl text-white font-light tracking-wide">「テーブル」の記録</h2></div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">{images.gallery.map((img, idx) => (<div key={idx} className="relative overflow-hidden group aspect-square bg-zinc-900 shadow-2xl"><img src={img} className="w-full h-full object-cover transition-transform duration-[2000ms] hover:scale-110 opacity-90 hover:opacity-100" alt="" /></div>))}</div>
       </section>
 
-      {/* Contact */}
+      {/* Contact Form */}
       <section id="contact" className="py-24 bg-zinc-950">
         <div className="max-w-4xl mx-auto px-6">
           <h2 className="text-center text-3xl md:text-5xl text-white font-light mb-16">ご予約・お問い合わせ</h2>
@@ -251,18 +254,18 @@ const App = () => {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="py-20 bg-zinc-950 text-center border-t border-zinc-900">
+      {/* Footer (Original Order: Mail then Instagram) */}
+      <footer className="py-16 bg-zinc-950 text-center border-t border-zinc-900">
         <img src={CONFIG.logoImage} className="h-[180px] mx-auto mb-10 object-contain" />
-        <div className="flex justify-center space-x-12 mb-10 text-stone-500">
-          <a href="https://www.instagram.com/unetable_catering" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
-            <Instagram size={48} />
-          </a>
+        <div className="flex justify-center space-x-8 mb-10 text-stone-500">
           <a href="#contact" className="hover:text-white transition-colors">
-            <Mail size={48} />
+            <Mail size={32} />
+          </a>
+          <a href="https://www.instagram.com/unetable_catering" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
+            <Instagram size={32} />
           </a>
         </div>
-        <p className="text-stone-700 text-[10px] tracking-[0.2em] uppercase">&copy; 2024 {CONFIG.brandName} Catering. All Rights Reserved.</p>
+        <p className="text-stone-700 text-[10px] tracking-widest uppercase">&copy; 2024 UNE TABLE Catering.</p>
       </footer>
       
       <style dangerouslySetInnerHTML={{ __html: `@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } } html { scroll-behavior: smooth; }`}} />
