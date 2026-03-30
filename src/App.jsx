@@ -65,8 +65,8 @@ const App = () => {
   const[isScrolled, setIsScrolled] = useState(false);
   const[currentView, setCurrentView] = useState("home");
   const[selectedPlan, setSelectedPlan] = useState("");
-  const[status, setStatus] = useState("idle");
   const[formData, setFormData] = useState({ name: "", email: "", message: "" });
+  const[status, setStatus] = useState("idle");
 
   useEffect(() => {
     const handlePopState = () => setCurrentView("home");
@@ -105,7 +105,7 @@ const App = () => {
         body: JSON.stringify({ access_key: "f62692b3-e35a-46dc-8cfb-39afaab1ee76", plan: selectedPlan, ...formData }),
       });
       setStatus("success");
-    } catch (e) { setStatus("error"); }
+    } catch (error) { setStatus("error"); }
   };
 
   if (currentView !== "home") {
@@ -132,22 +132,14 @@ const App = () => {
   return (
     <div className="min-h-screen bg-zinc-950 text-stone-300 font-serif selection:bg-amber-900 selection:text-white">
       <Navbar isScrolled={isScrolled} currentView={currentView} onViewChange={handleViewChange} />
-      
-      {/* Hero */}
       <section className="relative h-screen overflow-hidden flex flex-col justify-center items-center">
-        <div className="absolute inset-0 z-0">
-          <img src={CONFIG.heroImage} className="w-full h-full object-cover scale-105" />
-          <div className="absolute inset-0 bg-gradient-to-b from-zinc-950/60 via-zinc-950/40 to-zinc-950"></div>
-        </div>
+        <div className="absolute inset-0 z-0"><img src={CONFIG.heroImage} className="w-full h-full object-cover scale-105" /><div className="absolute inset-0 bg-gradient-to-b from-zinc-950/60 via-zinc-950/40 to-zinc-950"></div></div>
         <div className="relative z-10 text-center px-4">
-          <h1 className="font-serif text-4xl md:text-6xl text-white font-light leading-tight drop-shadow-2xl">
-            華やかな装いを<br />あなただけの空間へ。
-          </h1>
+          <h1 className="font-serif text-4xl md:text-6xl text-white font-light leading-tight drop-shadow-2xl">華やかな装いを<br />あなただけの空間へ。</h1>
           <div className="mt-20"><p className="text-xl font-light max-w-2xl mx-auto leading-loose tracking-wide">厳選された旬の食材を使用し、目にも楽しい彩りを添えて。<br className="hidden md:block" />特別な日を彩る最高峰のケータリングをお届け致します。</p></div>
         </div>
       </section>
 
-      {/* Concept */}
       <section id="concept" className="py-24 md:py-40 px-6 max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-20">
         <div className="w-full md:w-1/2 relative group"><img src={images.concept1} className="w-full h-[600px] object-cover shadow-2xl transition-transform duration-[2000ms] group-hover:scale-105" /><div className="absolute -bottom-6 -right-6 w-full h-full border border-amber-500/20 -z-10"></div></div>
         <div className="w-full md:w-1/2">
@@ -158,13 +150,12 @@ const App = () => {
         </div>
       </section>
 
-      {/* Services */}
       <section id="services" className="py-24 bg-zinc-900 px-6">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12">
           {[
             { id: "cocktail", title: "Cocktail Party", img: images.serviceWedding, desc: "カジュアルな会合を盛り上げる、", highlight: "彩り豊かな演出" },
             { id: "standing", title: "Standing Reception", img: images.serviceCorporate, desc: "大切なビジネスシーンに適した", highlight: "効率的ディスプレイ" },
-            { id: "private", title: "Private Dining", img: images.servicePrivate, desc: "オーダーメイドのレストラン", highlight: "贅沢な特別な空間" },
+            { id: "private", title: "Private", img: images.servicePrivate, desc: "オーダーメイドのレストラン", highlight: "贅沢な特別な空間" },
           ].map((s, i) => (
             <div key={i} onClick={() => handleViewChange(s.id)} className="group cursor-pointer">
               <div className="aspect-[3/4] overflow-hidden mb-8 shadow-xl"><img src={s.img} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="" /></div>
@@ -180,7 +171,6 @@ const App = () => {
         </div>
       </section>
 
-      {/* Menu */}
       <section id="menu" className="py-24 bg-zinc-950 px-6">
         <div className="max-w-7xl mx-auto text-center mb-20"><h3 className="text-amber-500 tracking-[0.2em] text-sm uppercase mb-4">Our Menu</h3><h2 className="text-3xl md:text-5xl text-white font-light mb-6 tracking-wider">スタンダードプラン</h2></div>
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -194,7 +184,6 @@ const App = () => {
         </div>
       </section>
 
-      {/* Testimonials */}
       <section className="py-24 bg-zinc-900/50 px-6 border-y border-zinc-800 text-center">
         <Quote className="mx-auto text-amber-500/20 mb-8" size={60} />
         <p className="text-xl md:text-2xl text-stone-300 italic font-light leading-relaxed mb-8">"創業記念のパーティーで利用しました。料理の美しさはもちろん、<br />全員ソムリエの資格をお持ちでサービングの所作も完璧でした。"</p>
@@ -202,13 +191,11 @@ const App = () => {
         <cite className="text-amber-500 tracking-widest uppercase text-xs not-italic">- 東京都 S.K様 (Private Dinner)</cite>
       </section>
 
-      {/* Gallery */}
       <section id="gallery" className="py-24 px-4 max-w-screen-2xl mx-auto bg-zinc-950">
         <div className="text-center mb-20"><h3 className="text-amber-500 tracking-[0.2em] text-sm uppercase mb-6">Gallery</h3><h2 className="text-3xl md:text-5xl text-white font-light tracking-wide">「テーブル」の記録</h2></div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">{images.gallery.map((img, idx) => (<div key={idx} className="relative overflow-hidden group aspect-square bg-zinc-900 shadow-2xl"><img src={img} className="w-full h-full object-cover transition-transform duration-[2000ms] hover:scale-110 opacity-90 hover:opacity-100" alt="" /></div>))}</div>
       </section>
 
-      {/* Contact */}
       <section id="contact" className="py-24 bg-zinc-950">
         <div className="max-w-4xl mx-auto px-6">
           <h2 className="text-center text-3xl md:text-5xl text-white font-light mb-16">ご予約・お問い合わせ</h2>
@@ -233,7 +220,6 @@ const App = () => {
         </div>
       </section>
 
-      {/* Footer */}
       <footer className="py-16 bg-zinc-950 text-center border-t border-zinc-900">
         <img src={CONFIG.logoImage} className="h-[180px] mx-auto mb-10 object-contain" />
         <div className="flex justify-center space-x-8 mb-10 text-stone-500">
@@ -242,7 +228,6 @@ const App = () => {
         </div>
         <p className="text-stone-700 text-[10px] tracking-widest uppercase">&copy; 2024 UNE TABLE Catering. All Rights Reserved.</p>
       </footer>
-      
       <style dangerouslySetInnerHTML={{ __html: `@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } } html { scroll-behavior: smooth; }`}} />
     </div>
   );
