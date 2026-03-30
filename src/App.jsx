@@ -1,33 +1,45 @@
 import React, { useState, useEffect } from "react";
 import { Menu, X, ChevronRight, Star, Quote, Mail, ChevronLeft } from "lucide-react";
 
-// --- 設定エリア ---
+// --- 設定エリア（画像ファイル名をリストと100%一致させました） ---
 const CONFIG = {
   brandName: "UNE TABLE",
   tagline: "華やかな装いを あなただけの空間へ ",
-  heroImage:  "/hero-bg.jpg",
-  logoImage: "/logo.png",
+  heroImage:  "/hero-bg.jpg", // jpgであることを確認
+  logoImage: "/logo.png",     // pngであることを確認
 };
 
 const images = {
-  concept1: "/business-16.png",
-  serviceWedding: "/cocktail-3.png",
-  serviceCorporate: "/cocktail-7.png",
-  servicePrivate: "/private-4.jpg",
+  concept1: "/business-16.png",    // pngであることを確認
+  serviceWedding: "/cocktail-3.png", // pngであることを確認
+  serviceCorporate: "/cocktail-7.png", // pngであることを確認
+  servicePrivate: "/private-4.jpg",   // jpgであることを確認
   gallery:[
-    "/business-4.jpg",
-    "/business-1.jpeg",
-    "/roastbeef.jpeg",
-    "/cocktail-3.png",
-    "/business-9.jpeg",
-    "/private-5.jpeg",
+    "/business-4.jpg",    // jpg
+    "/business-1.jpeg",   // jpeg
+    "/roastbeef.jpeg",    // jpeg
+    "/cocktail-3.png",    // png
+    "/business-9.jpeg",   // jpeg
+    "/private-5.jpeg",    // jpeg
   ],
 };
 
 const galleryData = {
-  cocktail: { title: "Cocktail party", desc: <>カジュアルな会合を盛り上げる、彩り豊かな演出。<br />フィンガーフードで会話も弾む特別な空間を演出します。</>, photos:["/cocktail-2.png", "/cocktail-3.png", "/business-16.png", "/cocktail-14.jpg", "/business-14.jpg", "/business-13.png"] },
-  standing: { title: "Standing reception", desc: <>大切なビジネスシーンに適した効率的ディスプレイ。<br />ブランドイメージを高める洗練された立食スタイルを提供します。</>, photos:["/cocktail-7.png", "/business-12.jpg", "/business-4.jpg", "/business-1.jpeg", "/business-11.jpeg", "/business-9.jpeg"] },
-  private: { title: "Private Dining", desc: <>オーダーメイドのレストラン。<br />すべてにこだわった特別な空間で、プライベートな贅沢をお楽しみください。</>, photos:["/private-4.jpg", "/private-5.jpeg", "/private-3.jpg", "/private-2.jpg", "/private-1.png", "/IMG_3120.JPG"] }
+  cocktail: { 
+    title: "Cocktail party", 
+    desc: <>カジュアルな会合を盛り上げる、彩り豊かな演出。<br />フィンガーフードで会話も弾む特別な空間を演出します。</>, 
+    photos:["/cocktail-2.png", "/cocktail-3.png", "/business-16.png", "/cocktail-14.jpg", "/business-14.jpg", "/business-13.png"] 
+  },
+  standing: { 
+    title: "Standing reception", 
+    desc: <>大切なビジネスシーンに適した効率的ディスプレイ。<br />ブランドイメージを高める洗練された立食スタイルを提供します。</>, 
+    photos:["/cocktail-7.png", "/business-12.jpg", "/business-4.jpg", "/business-1.jpeg", "/business-11.jpeg", "/business-9.jpeg"] 
+  },
+  private: { 
+    title: "Private Dining", 
+    desc: <>オーダーメイドのレストラン。<br />すべてにこだわった特別な空間で、プライベートな贅沢をお楽しみください。</>, 
+    photos:["/private-4.jpg", "/private-5.jpeg", "/private-3.jpg", "/private-2.jpg", "/private-1.png", "/IMG_3120.JPG"] // .JPGは大文字
+  }
 };
 
 const Instagram = ({ size = 24 }) => (
@@ -130,10 +142,15 @@ const App = () => {
       <Navbar isScrolled={isScrolled} currentView={currentView} onViewChange={handleViewChange} />
       
       {/* Hero */}
-      <section className="relative h-screen overflow-hidden">
-        <div className="absolute inset-0 z-0"><img src={CONFIG.heroImage} className="w-full h-full object-cover scale-105" /><div className="absolute inset-0 bg-gradient-to-b from-zinc-950/60 via-zinc-950/40 to-zinc-950"></div></div>
-        <div className="relative z-10 flex flex-col h-full px-4 max-w-4xl mx-auto pt-32 text-center justify-center items-center">
-          <h1 className="font-serif text-4xl md:text-6xl text-white font-light leading-tight drop-shadow-2xl">華やかな装いを<br />あなただけの空間へ。</h1>
+      <section className="relative h-screen overflow-hidden flex flex-col justify-center items-center">
+        <div className="absolute inset-0 z-0">
+          <img src={CONFIG.heroImage} className="w-full h-full object-cover scale-105" />
+          <div className="absolute inset-0 bg-gradient-to-b from-zinc-950/60 via-zinc-950/40 to-zinc-950"></div>
+        </div>
+        <div className="relative z-10 text-center px-4">
+          <h1 className="font-serif text-4xl md:text-6xl text-white font-light leading-tight drop-shadow-2xl">
+            華やかな装いを<br />あなただけの空間へ。
+          </h1>
           <div className="mt-20">
             <p className="text-xl font-light max-w-2xl mx-auto leading-loose tracking-wide">
               厳選された旬の食材を使用し、目にも楽しい彩りを添えて。<br className="hidden md:block" />
@@ -145,7 +162,10 @@ const App = () => {
 
       {/* Concept */}
       <section id="concept" className="py-24 md:py-40 px-6 max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-20">
-        <div className="w-full md:w-1/2 relative group"><img src={images.concept1} className="w-full h-[600px] object-cover shadow-2xl transition-transform duration-[2000ms] group-hover:scale-105" /><div className="absolute -bottom-6 -right-6 w-full h-full border border-amber-500/20 -z-10"></div></div>
+        <div className="w-full md:w-1/2 relative group">
+          <img src={images.concept1} className="w-full h-[600px] object-cover shadow-2xl transition-transform duration-[2000ms] group-hover:scale-105" />
+          <div className="absolute -bottom-6 -right-6 w-full h-full border border-amber-500/20 -z-10"></div>
+        </div>
         <div className="w-full md:w-1/2">
           <div className="flex items-center gap-4 mb-8"><div className="h-[1px] w-12 bg-white"></div><h3 className="text-white tracking-[0.2em] text-sm uppercase">CONCEPT</h3></div>
           <h2 className="text-4xl md:text-5xl text-amber-500 font-light mb-10 leading-snug">感動の一瞬を<br />永遠の思い出に</h2>
@@ -163,7 +183,9 @@ const App = () => {
             { id: "private", title: "Private Dining", img: images.servicePrivate, desc: "オーダーメイドのレストラン", highlight: "贅沢な特別な空間" },
           ].map((s, i) => (
             <div key={i} onClick={() => handleViewChange(s.id)} className="group cursor-pointer">
-              <div className="aspect-[3/4] overflow-hidden mb-8 shadow-xl"><img src={s.img} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt={s.title} /></div>
+              <div className="aspect-[3/4] overflow-hidden mb-8 shadow-xl">
+                <img src={s.img} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt={s.title} />
+              </div>
               <div className="flex items-start">
                 <div className="w-[2px] h-12 bg-amber-500 mr-5 mt-1"></div>
                 <div>
@@ -229,14 +251,14 @@ const App = () => {
         </div>
       </section>
 
-      {/* Footer (アイコン順番入れ替え＆サイズ巨大化版) */}
+      {/* Footer */}
       <footer className="py-20 bg-zinc-950 text-center border-t border-zinc-900">
         <img src={CONFIG.logoImage} className="h-[180px] mx-auto mb-10 object-contain" />
         <div className="flex justify-center space-x-12 mb-10 text-stone-500">
-          <a href="https://www.instagram.com/unetable_catering" target="_blank" rel="noopener noreferrer" className="hover:text-amber-500 transition-colors">
+          <a href="https://www.instagram.com/unetable_catering" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
             <Instagram size={48} />
           </a>
-          <a href="#contact" className="hover:text-amber-500 transition-colors">
+          <a href="#contact" className="hover:text-white transition-colors">
             <Mail size={48} />
           </a>
         </div>
