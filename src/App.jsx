@@ -24,10 +24,9 @@ const images = {
   ],
 };
 
-// 詳細データのID（cocktail, standing, private）をサービスカードのIDと完全に一致させました
 const galleryData = {
-  cocktail: { title: "Cocktail Party", desc: "カジュアルな会合を盛り上げる、彩り豊かな演出。フィンガーフードで会話も弾む特別な空間を演出します。", photos:["/cocktail-2.png", "/cocktail-3.png", "/business-16.png", "/cocktail-14.jpg", "/business-14.jpg", "/business-13.png"] },
-  standing: { title: "Standing Reception", desc: "大切なビジネスシーンに適した効率的ディスプレイ。ブランドイメージを高める洗練された立食スタイルを提供します。", photos:["/cocktail-7.png", "/business-12.jpg", "/business-4.jpg", "/business-1.jpeg", "/business-11.jpeg", "/business-9.jpeg"] },
+  cocktail: { title: "Cocktail party", desc: "カジュアルな会合を盛り上げる、彩り豊かな演出。フィンガーフードで会話も弾む特別な空間を演出します。", photos:["/cocktail-2.png", "/cocktail-3.png", "/business-16.png", "/cocktail-14.jpg", "/business-14.jpg", "/business-13.png"] },
+  standing: { title: "Standing reception", desc: "大切なビジネスシーンに適した効率的ディスプレイ。ブランドイメージを高める洗練された立食スタイルを提供します。", photos:["/cocktail-7.png", "/business-12.jpg", "/business-4.jpg", "/business-1.jpeg", "/business-11.jpeg", "/business-9.jpeg"] },
   private: { title: "Private Dining", desc: "オーダーメイドのレストラン。すべてにこだわった特別な空間で、プライベートな贅沢をお楽しみください。", photos:["/private-4.jpg", "/private-5.jpeg", "/private-3.jpg", "/private-2.jpg", "/private-1.png", "/IMG_3120.JPG"] }
 };
 
@@ -49,7 +48,7 @@ const Navbar = ({ isScrolled, currentView, onViewChange }) => {
     <nav className={`fixed w-full z-50 transition-all duration-700 ${isScrolled || currentView !== "home" ? "bg-zinc-950/95 backdrop-blur-md py-3 md:py-4 border-b border-zinc-800" : "bg-transparent py-4 md:py-6"}`}>
       <div className="w-full px-4 md:px-12 flex flex-col md:flex-row justify-center md:justify-start items-center gap-2 md:gap-16">
         <div onClick={() => onViewChange("home")} className="text-xl md:text-2xl text-white tracking-[0.3em] font-light cursor-pointer uppercase">{CONFIG.brandName}</div>
-        <div className="flex space-x-4 md:space-x-10 items-center text-[11px] md:text-sm tracking-[0.1em] md:tracking-[0.2em] uppercase">
+        <div className="flex space-x-4 md:space-x-10 items-center text-[11px] md:text-sm tracking-[0.1em] uppercase">
           {["Concept", "Services", "Menu", "Gallery"].map((item) => (
             <a key={item} href={`#${item.toLowerCase()}`} onClick={(e) => handleNavClick(e, item.toLowerCase())} className="text-stone-300 hover:text-amber-500 transition-colors">{item}</a>
           ))}
@@ -67,7 +66,11 @@ const App = () => {
   const[status, setStatus] = useState("idle");
   const[formData, setFormData] = useState({ name: "", email: "", message: "" });
 
-  // ブラウザバックの制御
+  // ★重要：画面が切り替わったときに必ず一番上にスクロールさせる
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [currentView]);
+
   useEffect(() => {
     const handlePopState = () => setCurrentView("home");
     window.addEventListener("popstate", handlePopState);
@@ -85,7 +88,6 @@ const App = () => {
       window.history.pushState({ view: viewId }, "", "");
     }
     setCurrentView(viewId);
-    window.scrollTo(0, 0);
   };
 
   const handlePlanSelect = (name) => {
@@ -109,10 +111,9 @@ const App = () => {
     } catch (error) { setStatus("error"); }
   };
 
-  // 詳細ページの表示ロジック
   if (currentView !== "home") {
     const data = galleryData[currentView];
-    if (!data) { setCurrentView("home"); return null; } // エラー回避策
+    if (!data) { setCurrentView("home"); return null; }
 
     return (
       <div className="min-h-screen bg-zinc-950 text-stone-300 pt-28 pb-24 px-6 animate-[fadeIn_0.5s_ease-out]">
@@ -125,14 +126,13 @@ const App = () => {
             <p className="text-stone-400 max-w-2xl mx-auto leading-loose">{data.desc}</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {data.photos.map((img, i) => (<img key={i} src={img} className="w-full h-80 object-cover shadow-2xl" alt="" />))}
+            {data.photos.map((img, i) => (<img key={i} src={img} className="w-full h-80 object-cover shadow-2xl animate-[fadeIn_0.8s_ease-out]" alt="" />))}
           </div>
         </div>
       </div>
     );
   }
 
-  // ホーム画面の表示
   return (
     <div className="min-h-screen bg-zinc-950 text-stone-300 font-serif selection:bg-amber-900 selection:text-white">
       <Navbar isScrolled={isScrolled} currentView={currentView} onViewChange={handleViewChange} />
@@ -155,7 +155,6 @@ const App = () => {
         </div>
       </section>
 
-      {/* サービス一覧（ご要望のカラー写真・タイトル上レイアウト） */}
       <section id="services" className="py-24 bg-zinc-900 px-6">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12">
           {[
@@ -164,9 +163,7 @@ const App = () => {
             { id: "private", title: "Private Dining", img: images.servicePrivate, desc: "オーダーメイドのレストラン", highlight: "贅沢な特別な空間" },
           ].map((s, i) => (
             <div key={i} onClick={() => handleViewChange(s.id)} className="group cursor-pointer">
-              <div className="aspect-[3/4] overflow-hidden mb-8 shadow-xl">
-                <img src={s.img} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="" />
-              </div>
+              <div className="aspect-[3/4] overflow-hidden mb-8 shadow-xl"><img src={s.img} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="" /></div>
               <div className="flex items-start">
                 <div className="w-[2px] h-12 bg-amber-500 mr-5 mt-1"></div>
                 <div>
@@ -199,13 +196,11 @@ const App = () => {
         <cite className="text-amber-500 tracking-widest uppercase text-xs not-italic">- 東京都 S.K様 (Private Dinner)</cite>
       </section>
 
-      {/* ギャラリー（均等3カラム） */}
       <section id="gallery" className="py-24 px-4 max-w-screen-2xl mx-auto bg-zinc-950">
         <div className="text-center mb-20"><h3 className="text-amber-500 tracking-[0.2em] text-sm uppercase mb-6">Gallery</h3><h2 className="text-3xl md:text-5xl text-white font-light tracking-wide">「テーブル」の記録</h2></div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">{images.gallery.map((img, idx) => (<div key={idx} className="relative overflow-hidden group aspect-square bg-zinc-900 shadow-2xl"><img src={img} className="w-full h-full object-cover transition-transform duration-[2000ms] hover:scale-110 opacity-90 hover:opacity-100" alt="" /></div>))}</div>
       </section>
 
-      {/* お問い合わせ */}
       <section id="contact" className="py-24 bg-zinc-950">
         <div className="max-w-4xl mx-auto px-6">
           <h2 className="text-center text-3xl md:text-5xl text-white font-light mb-16">ご予約・お問い合わせ</h2>
@@ -230,12 +225,18 @@ const App = () => {
         </div>
       </section>
 
-      {/* フッター */}
-      <footer className="py-16 bg-zinc-950 text-center border-t border-zinc-900">
-        <img src={CONFIG.logoImage} className="h-[180px] mx-auto mb-10 object-contain" />
-        <div className="flex justify-center space-x-8 mb-10 text-stone-500">
-          <a href="#contact" className="hover:text-white transition-colors"><Mail size={32} /></a>
-          <a href="https://www.instagram.com/unetable_catering" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors"><Instagram size={32} /></a>
+      {/* Footer (★アイコン入れ替え＆3倍巨大化版) */}
+      <footer className="py-24 bg-zinc-950 text-center border-t border-zinc-900">
+        <img src={CONFIG.logoImage} className="h-[180px] mx-auto mb-16 object-contain" />
+        <div className="flex justify-center space-x-20 mb-16 text-stone-500">
+          <a href="https://www.instagram.com/unetable_catering" target="_blank" rel="noopener noreferrer" className="hover:text-amber-500 transition-colors">
+            {/* ★インスタを左に、サイズを96に */}
+            <Instagram size={96} />
+          </a>
+          <a href="#contact" className="hover:text-white transition-colors">
+            {/* ★メールを右に、サイズを96に */}
+            <Mail size={96} />
+          </a>
         </div>
         <p className="text-stone-700 text-[10px] tracking-widest uppercase">&copy; 2024 UNE TABLE Catering. All Rights Reserved.</p>
       </footer>
