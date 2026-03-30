@@ -1,16 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Menu, X, ChevronRight, Star, Quote, Mail, ChevronLeft } from "lucide-react";
 
-// ▼ 自作Instagramアイコン ▼
-const Instagram = ({ size = 24, className = "" }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-    <rect width="20" height="20" x="2" y="2" rx="5" ry="5"/>
-    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
-    <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/>
-  </svg>
-);
-
-// --- 設定エリア（リスト画像と100%一致） ---
+// --- 設定エリア ---
 const CONFIG = {
   brandName: "UNE TABLE",
   tagline: "華やかな装いを あなただけの空間へ ",
@@ -51,28 +42,13 @@ const galleryData = {
   }
 };
 
-const Navbar = ({ isScrolled, currentView, onViewChange }) => {
-  const handleNavClick = (e, target) => {
-    if (currentView !== "home") {
-      e.preventDefault();
-      onViewChange("home");
-      setTimeout(() => { const el = document.getElementById(target); if (el) el.scrollIntoView({ behavior: 'smooth' }); }, 100);
-    }
-  };
-  return (
-    <nav className={`fixed w-full z-50 transition-all duration-700 ${isScrolled || currentView !== "home" ? "bg-zinc-950/95 backdrop-blur-md py-3 md:py-4 border-b border-zinc-800" : "bg-transparent py-4 md:py-6"}`}>
-      <div className="w-full px-4 md:px-12 flex flex-col md:flex-row justify-center md:justify-start items-center gap-2 md:gap-16">
-        <div onClick={() => onViewChange("home")} className="text-xl md:text-2xl text-white tracking-[0.3em] font-light cursor-pointer uppercase">{CONFIG.brandName}</div>
-        <div className="flex space-x-4 md:space-x-10 items-center text-[11px] md:text-sm tracking-[0.1em] md:tracking-[0.2em] uppercase mt-1 md:mt-0">
-          {["Concept", "Services", "Menu", "Gallery"].map((item) => (
-            <a key={item} href={`#${item.toLowerCase()}`} onClick={(e) => handleNavClick(e, item.toLowerCase())} className="text-stone-300 hover:text-amber-500 transition-colors whitespace-nowrap">{item}</a>
-          ))}
-          <a href="#contact" onClick={(e) => handleNavClick(e, 'contact')} className="text-amber-500 hover:text-white transition-colors whitespace-nowrap font-bold">Reservation</a>
-        </div>
-      </div>
-    </nav>
-  );
-};
+const Instagram = ({ size = 24, className = "" }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <rect width="20" height="20" x="2" y="2" rx="5" ry="5"/>
+    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+    <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/>
+  </svg>
+);
 
 const App = () => {
   const[isScrolled, setIsScrolled] = useState(false);
@@ -81,6 +57,7 @@ const App = () => {
   const[formData, setFormData] = useState({ name: "", email: "", message: "" });
   const[status, setStatus] = useState("idle");
 
+  // ★ブラウザバックの監視
   useEffect(() => {
     const handlePopState = () => setCurrentView("home");
     window.addEventListener("popstate", handlePopState);
@@ -93,6 +70,7 @@ const App = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   },[]);
 
+  // ★履歴管理
   const handleViewChange = (viewId) => {
     if (viewId !== "home") {
       window.history.pushState({ view: viewId }, "", "");
@@ -102,8 +80,10 @@ const App = () => {
 
   const handlePlanSelect = (name) => {
     setSelectedPlan(name);
-    const el = document.getElementById("contact");
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
+    setTimeout(() => {
+      const el = document.getElementById("contact");
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }, 100);
   };
 
   const handleSubmit = async (e) => {
@@ -142,42 +122,40 @@ const App = () => {
 
   return (
     <div className="min-h-screen bg-zinc-950 text-stone-300 font-serif selection:bg-amber-900 selection:text-white">
-      <Navbar isScrolled={isScrolled} currentView={currentView} onViewChange={handleViewChange} />
-      
+      {/* Navbar */}
+      <nav className={`fixed w-full z-50 transition-all duration-700 ${isScrolled ? "bg-zinc-950/95 backdrop-blur-md py-3 md:py-4 border-b border-zinc-800" : "bg-transparent py-4 md:py-6"}`}>
+        <div className="w-full px-4 md:px-12 flex flex-col md:flex-row justify-center md:justify-start items-center gap-2 md:gap-16">
+          <div onClick={() => handleViewChange("home")} className="text-xl md:text-2xl text-white tracking-[0.3em] font-light cursor-pointer uppercase">{CONFIG.brandName}</div>
+          <div className="flex space-x-4 md:space-x-10 items-center text-[11px] md:text-sm tracking-[0.1em] uppercase">
+            {["Concept", "Services", "Menu", "Gallery"].map((item) => (
+              <a key={item} href={`#${item.toLowerCase()}`} className="text-stone-300 hover:text-amber-500 transition-colors">{item}</a>
+            ))}
+            <a href="#contact" className="text-amber-500 font-bold">Reservation</a>
+          </div>
+        </div>
+      </nav>
+
       {/* Hero */}
       <section className="relative h-screen overflow-hidden flex flex-col justify-center items-center">
-        <div className="absolute inset-0 z-0">
-          <img src={CONFIG.heroImage} className="w-full h-full object-cover scale-105" />
-          <div className="absolute inset-0 bg-gradient-to-b from-zinc-950/60 via-zinc-950/40 to-zinc-950"></div>
-        </div>
+        <div className="absolute inset-0 z-0"><img src={CONFIG.heroImage} className="w-full h-full object-cover scale-105" /><div className="absolute inset-0 bg-gradient-to-b from-zinc-950/60 via-zinc-950/40 to-zinc-950"></div></div>
         <div className="relative z-10 text-center px-4">
-          <h1 className="font-serif text-4xl md:text-6xl text-white font-light leading-tight drop-shadow-2xl">
-            華やかな装いを<br />あなただけの空間へ。
-          </h1>
-          <div className="mt-20">
-            <p className="text-xl font-light max-w-2xl mx-auto leading-loose tracking-wide">
-              厳選された旬の食材を使用し、目にも楽しい彩りを添えて。<br className="hidden md:block" />
-              特別な日を彩る最高峰のケータリングをお届け致します。
-            </p>
-          </div>
+          <h1 className="font-serif text-4xl md:text-6xl text-white font-light leading-tight drop-shadow-2xl">華やかな装いを<br />あなただけの空間へ。</h1>
+          <div className="mt-20"><p className="text-xl font-light max-w-2xl mx-auto leading-loose tracking-wide">厳選された旬の食材を使用し、目にも楽しい彩りを添えて。<br className="hidden md:block" />特別な日を彩る最高峰のケータリングをお届け致します。</p></div>
         </div>
       </section>
 
       {/* Concept */}
       <section id="concept" className="py-24 md:py-40 px-6 max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-20">
-        <div className="w-full md:w-1/2 relative group">
-          <img src={images.concept1} className="w-full h-[600px] object-cover shadow-2xl transition-transform duration-[2000ms] group-hover:scale-105" />
-          <div className="absolute -bottom-6 -right-6 w-full h-full border border-amber-500/20 -z-10"></div>
-        </div>
+        <div className="w-full md:w-1/2 relative group"><img src={images.concept1} className="w-full h-[600px] object-cover shadow-2xl transition-transform duration-[2000ms] group-hover:scale-105" /><div className="absolute -bottom-6 -right-6 w-full h-full border border-amber-500/20 -z-10"></div></div>
         <div className="w-full md:w-1/2">
           <div className="flex items-center gap-4 mb-8"><div className="h-[1px] w-12 bg-white"></div><h3 className="text-white tracking-[0.2em] text-sm uppercase">CONCEPT</h3></div>
           <h2 className="text-4xl md:text-5xl text-amber-500 font-light mb-10 leading-snug">感動の一瞬を<br />永遠の思い出に</h2>
-          <p className="text-white mb-8 font-light text-base md:text-lg">{CONFIG.brandName}（ユヌ・ターブル）は、フランス語で「一つのテーブル」を意味します。私たちは、厳選された食材を確かな技術で、目にも美しい一皿へと昇華させます。</p>
-          <p className="text-white leading-loose font-light text-base md:text-lg">企業様のレセプションパーティーから、各団体様の大切な懇親会。「一つのテーブル」を囲むかけがえのない時間に、究極のおもてなしをお約束いたします。</p>
+          <p className="text-white mb-8 font-light text-base md:text-lg">私たちは、厳選された食材を確かな技術で、目にも美しい一皿へと昇華させます。</p>
+          <p className="text-white leading-loose font-light text-base md:text-lg">{CONFIG.brandName}（ユヌ・ターブル）は、フランス語で「一つのテーブル」を意味します。大切なビジネスシーンから、かけがえのない時間に、究極のおもてなしをお約束いたします。</p>
         </div>
       </section>
 
-      {/* Services (Photo Top, Text Bottom Layout) */}
+      {/* Services (Photo Top/Text Bottom Layout) */}
       <section id="services" className="py-24 bg-zinc-900 px-6">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12">
           {[
@@ -186,9 +164,7 @@ const App = () => {
             { id: "private", title: "Private", img: images.servicePrivate, desc: "オーダーメイドのレストラン", highlight: "贅沢な特別な空間" },
           ].map((s, i) => (
             <div key={i} onClick={() => handleViewChange(s.id)} className="group cursor-pointer">
-              <div className="aspect-[3/4] overflow-hidden mb-8 shadow-xl">
-                <img src={s.img} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt={s.title} />
-              </div>
+              <div className="aspect-[3/4] overflow-hidden mb-8 shadow-xl"><img src={s.img} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="" /></div>
               <div className="flex items-start">
                 <div className="w-[2px] h-12 bg-amber-500 mr-5 mt-1"></div>
                 <div>
@@ -223,18 +199,18 @@ const App = () => {
         <cite className="text-amber-500 tracking-widest uppercase text-xs not-italic">- 東京都 S.K様 (Private Dinner)</cite>
       </section>
 
-      {/* Gallery (3 Column Grid) */}
+      {/* Gallery (3-column Grid) */}
       <section id="gallery" className="py-24 px-4 max-w-screen-2xl mx-auto bg-zinc-950">
         <div className="text-center mb-20"><h3 className="text-amber-500 tracking-[0.2em] text-sm uppercase mb-6">Gallery</h3><h2 className="text-3xl md:text-5xl text-white font-light tracking-wide">「テーブル」の記録</h2></div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">{images.gallery.map((img, idx) => (<div key={idx} className="relative overflow-hidden group aspect-square bg-zinc-900 shadow-2xl"><img src={img} className="w-full h-full object-cover transition-transform duration-[2000ms] hover:scale-110 opacity-90 hover:opacity-100" alt="" /></div>))}</div>
       </section>
 
-      {/* Contact Form */}
+      {/* Contact */}
       <section id="contact" className="py-24 bg-zinc-950">
         <div className="max-w-4xl mx-auto px-6">
           <h2 className="text-center text-3xl md:text-5xl text-white font-light mb-16">ご予約・お問い合わせ</h2>
           <div className="bg-zinc-900/50 p-8 md:p-14 border border-zinc-800 shadow-2xl">
-            {status === "success" ? (<div className="text-center text-amber-500 py-12 text-xl font-light">Thank You. 送信完了しました。</div>) : (
+            {status === "success" ? (<div className="text-center text-amber-500 py-12 text-xl font-light">送信完了しました。</div>) : (
               <form className="space-y-8" onSubmit={handleSubmit}>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <input type="text" value={formData.name} onChange={(e)=>setFormData({...formData, name:e.target.value})} required placeholder="お名前" className="bg-transparent border-b border-zinc-700 text-white py-2 focus:outline-none focus:border-amber-500" />
@@ -254,18 +230,14 @@ const App = () => {
         </div>
       </section>
 
-      {/* Footer (Original Order: Mail then Instagram) */}
+      {/* Footer (Reverted to Original Order & Size 32px) */}
       <footer className="py-16 bg-zinc-950 text-center border-t border-zinc-900">
         <img src={CONFIG.logoImage} className="h-[180px] mx-auto mb-10 object-contain" />
         <div className="flex justify-center space-x-8 mb-10 text-stone-500">
-          <a href="#contact" className="hover:text-white transition-colors">
-            <Mail size={32} />
-          </a>
-          <a href="https://www.instagram.com/unetable_catering" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
-            <Instagram size={32} />
-          </a>
+          <a href="#contact" className="hover:text-white transition-colors"><Mail size={32} /></a>
+          <a href="https://www.instagram.com/unetable_catering" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors"><Instagram size={32} /></a>
         </div>
-        <p className="text-stone-700 text-[10px] tracking-widest uppercase">&copy; 2024 UNE TABLE Catering.</p>
+        <p className="text-stone-700 text-[10px] tracking-widest uppercase">&copy; 2024 UNE TABLE Catering. All Rights Reserved.</p>
       </footer>
       
       <style dangerouslySetInnerHTML={{ __html: `@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } } html { scroll-behavior: smooth; }`}} />
