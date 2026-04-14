@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Menu, X, ChevronRight, Star, Quote, Mail, ChevronLeft, Calendar, Clock, CheckCircle2, Trophy } from "lucide-react";
+import { Menu, X, ChevronRight, Star, Quote, Mail, ChevronLeft, Calendar, Clock, CheckCircle2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 // --- 設定エリア ---
@@ -60,15 +60,14 @@ const Instagram = ({ size = 24, className = "" }) => (
 const Navbar = ({ isScrolled, currentView, onViewChange }) => {
   return (
     <nav className={`fixed w-full z-50 transition-all duration-1000 ${isScrolled ? "bg-black/90 py-2 border-b border-white/5 shadow-2xl" : "bg-transparent py-8"}`}>
-      <div className="max-w-7xl mx-auto px-1 md:px-12 flex justify-center items-center text-white text-[7.5px] xs:text-[9px] md:text-[11px] uppercase font-light space-x-2 md:space-x-10">
+      <div className="max-w-7xl mx-auto px-2 md:px-12 flex justify-center items-center text-white text-[11px] md:text-[11px] uppercase font-light space-x-4 md:space-x-10">
         <a href="#concept">Concept</a><a href="#services">Services</a><a href="#simulation" className="font-bold">Simulation</a><a href="#gallery">Gallery</a>
-        <a href="#contact" className="text-amber-500 font-bold border border-amber-500/30 px-1 md:px-5 py-0.5 whitespace-nowrap">Reservation</a>
+        <a href="#contact" className="text-amber-500 font-bold border border-amber-500/30 px-2 md:px-5 py-0.5 whitespace-nowrap">Reservation</a>
       </div>
     </nav>
   );
 };
 
-// 日付を「YYYY年MM月DD日(曜)」に変換する関数
 const formatDate = (dateStr) => {
   if (!dateStr) return "";
   const d = new Date(dateStr);
@@ -149,8 +148,8 @@ const App = () => {
     e.preventDefault();
     setStatus("submitting");
     const optText = `オプション: ${formData.options.room ? '[ホール]' : ''}${formData.options.layout ? '[レイアウト]' : ''}${formData.options.cleaning ? '[清掃]' : ''}`;
-    const simText = showSimInReservation ? `【シミュレーション構成】人数: ${guestCount}名 / 単価: ¥${budget.toLocaleString()} / 飲料: ${drinkLabels[bevLevel]} / 食材: ${foodLabels[ingLevel]}` : "直接入力・未反映";
-    const fullMsg = `予約希望日: ${formData.date}\n希望時間: ${formData.startTime} 〜 ${formData.endTime}\n選択スタイル: ${selectedPlan}\n${optText}\n${simText}\n\nメッセージ:\n${formData.message}`;
+    const simText = `【シミュレーション内容】\n人数: ${guestCount}名 / 単価: ¥${budget.toLocaleString()} / 飲料: ${drinkLabels[bevLevel]} / 食材: ${foodLabels[ingLevel]}`;
+    const fullMsg = `予約希望日: ${formData.date}\n希望時間: ${formData.startTime} 〜 ${formData.endTime}\n選択スタイル: ${selectedPlan}\n${optText}\n\n${simText}\n\nメッセージ:\n${formData.message}`;
     
     try {
       await fetch("https://api.web3forms.com/submit", {
@@ -187,17 +186,6 @@ const App = () => {
         html { scroll-behavior: smooth; }
         input[type=range] { -webkit-appearance: none; background: #2a2a2a; height: 1px; width: 100%; outline: none; }
         input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; background: #d4af37; height: 18px; width: 18px; border-radius: 50%; cursor: pointer; border: 1px solid #fff; box-shadow: 0 0 10px rgba(0,0,0,0.5); }
-        
-        /* 超強力なオートコンプリート白背景防止CSS */
-        input:-webkit-autofill,
-        input:-webkit-autofill:hover, 
-        input:-webkit-autofill:focus, 
-        input:-webkit-autofill:active {
-            -webkit-background-clip: text !important;
-            -webkit-text-fill-color: white !important;
-            transition: background-color 5000s ease-in-out 0s;
-            box-shadow: inset 0 0 20px 20px transparent !important;
-        }
       `}} />
       
       <Navbar isScrolled={isScrolled} currentView={currentView} onViewChange={handleViewChange} />
@@ -210,32 +198,62 @@ const App = () => {
           </AnimatePresence>
           <div className="absolute inset-0 bg-gradient-to-b from-black/20 to-[#0a0a0a]"></div>
         </div>
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 2, delay: 1 }} className="relative z-10 w-full flex flex-col items-center text-white">
-          <h2 className="text-xl md:text-2xl tracking-[0.4em] font-light mb-24 opacity-90 uppercase">UNE TABLE</h2>
-          <h1 className="font-serif text-4xl md:text-[90px] font-light leading-tight drop-shadow-2xl italic whitespace-nowrap mt-8">華やかな装いを<br/>あなただけの空間へ。</h1>
-          <p className="mt-20 text-xl font-light text-white/90">厳選された旬の食材を使用し、目にも楽しい彩りを添えて。<br className="hidden md:block" />特別な日を彩る最高峰のケータリングをお届け致します。</p>
+        
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 2, delay: 1 }} className="relative z-10 w-full h-full flex flex-col items-center text-white">
+          <div className="hidden md:flex w-full h-full flex-col justify-center items-center">
+            <h2 className="text-2xl tracking-[0.4em] font-light mb-24 opacity-90 uppercase">UNE TABLE</h2>
+            <h1 className="font-serif text-[90px] font-light leading-tight drop-shadow-2xl italic whitespace-nowrap">華やかな装いを<br/>あなただけの空間へ。</h1>
+            <p className="mt-20 text-xl font-light text-white/90 leading-relaxed">
+              厳選された旬の食材を目にも楽しい彩りを添えて。<br />
+              特別な日に最高峰のケータリングをお届け致します。
+            </p>
+          </div>
+
+          <div className="md:hidden w-full h-full relative">
+            <div className="absolute w-full top-[15%] left-0 text-center">
+              <h2 className="text-xl tracking-[0.4em] font-light opacity-90 uppercase">UNE TABLE</h2>
+            </div>
+            <div className="absolute w-full top-[35%] left-0 text-center">
+              <h1 className="font-serif text-[40px] xs:text-[46px] leading-snug font-light drop-shadow-2xl italic whitespace-nowrap">
+                華やかな装いを<br/>あなただけの空間へ。
+              </h1>
+            </div>
+            <div className="absolute w-full bottom-[22%] left-0 text-center px-4">
+              <p className="text-sm xs:text-base leading-loose font-light text-white/90 tracking-wider">
+                厳選された旬の食材を目にも楽しい彩りを添えて。<br />
+                特別な日に最高峰のケータリングをお届け致します。
+              </p>
+            </div>
+          </div>
         </motion.div>
       </section>
 
       {/* Concept Section */}
-      <section id="concept" ref={conceptRef} className="py-12 md:py-20 px-6 max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-24">
-        <div className="w-full md:w-1/2 relative h-[500px] overflow-hidden shadow-2xl rounded-sm">
+      <section id="concept" ref={conceptRef} className="py-12 md:py-20 px-6 max-w-7xl mx-auto flex flex-col md:flex-row gap-12 md:gap-24 items-start">
+        <div className="w-full md:w-1/2 relative h-[350px] md:h-[500px] overflow-hidden shadow-2xl rounded-sm">
           {images.conceptSlide.map((img, i) => (<motion.img key={i} src={img} initial={{ opacity: 0 }} animate={{ opacity: i === slideIndex ? 1 : 0 }} transition={{ duration: 2 }} className="absolute inset-0 w-full h-full object-cover scale-105" alt="" />))}
           <div className="absolute inset-0 bg-black/10"></div>
         </div>
-        <div className="w-full md:w-1/2 text-left">
-          <h2 className="text-3xl md:text-4xl text-amber-500 font-light font-elegant italic mb-8 tracking-widest">感動の一瞬を 永遠の思い出に</h2>
-          <div className="relative h-[220px] text-white text-xl leading-relaxed flex items-center">
-            {["私たちは厳選された旬の食材を、確かな技術で目にも美しい一皿へと昇華させます。", "産地や市場から直接届く「最盛の旬」を逃さず、その魅力を最大限に引き出し、おもてなしの場に彩りを添えます。", "多種多様な銘柄に精通した有資格者が、最適なお飲み物を厳選。酒販店も営む私たちが、流通価格にてご提案させて頂きます。", "大切なひとときに、確かな安心と　深い感動を添えさせていただきます。"].map((text, idx) => (
-              <motion.p key={idx} initial={{ opacity: 0 }} animate={{ opacity: idx === currentStep ? 1 : 0 }} transition={{ duration: 1 }} className="absolute inset-x-0">{text}</motion.p>
-            ))}
+        
+        <div className="w-full md:w-1/2 flex flex-col">
+          <h2 className="text-2xl md:text-3xl text-amber-500 font-light font-elegant italic tracking-widest leading-none mb-6 md:mb-8 mt-0 text-center">感動の一瞬を 永遠の思い出に</h2>
+          <div className="relative text-white text-lg md:text-xl leading-relaxed mt-6 md:mt-10 min-h-[140px] md:min-h-[160px] text-center">
+            <AnimatePresence mode="wait">
+              {["私たちは厳選された旬の食材を、確かな技術で目にも美しい一皿へと昇華させます。", "産地や市場から直接届く「最盛の旬」を逃さず、その魅力を最大限に引き出し、おもてなしの場に彩りを添えます。", "多種多様な銘柄に精通した有資格者が、最適なお飲み物を厳選。酒販店も営む私たちが、流通価格にてご提案させて頂きます。", "大切なひとところに、確かな安心と　深い感動を添えさせていただきます。"].map((text, idx) => (
+                idx === currentStep && (
+                  <motion.p key={idx} initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -5 }} transition={{ duration: 0.8 }} className="absolute inset-x-0 top-0">{text}</motion.p>
+                )
+              ))}
+            </AnimatePresence>
           </div>
-          <p className="pt-4 border-t border-white/10 mt-4 text-white text-xl md:text-2xl font-elegant italic tracking-tight uppercase italic opacity-90">UNE TABLE（ユヌ・ターブル）は、フランス語で　「一つのテーブル」を意味します。大切なビジネスシーンから、かけがえのない瞬間に、究極のおもてなしをお約束いたします。</p>
+          <p className="pt-4 md:pt-4 border-t border-white/10 text-white text-lg md:text-2xl font-elegant italic tracking-tight uppercase opacity-90 leading-snug text-center">
+            UNE TABLE（ユヌ・ターブル）は、フランス語で　「一つのテーブル」を意味します。大切なビジネスシーンから、かけがえのない瞬間に、究極のおもてなしをお約束いたします。
+          </p>
         </div>
       </section>
 
       {/* Services Section */}
-      <section id="services" className="py-24 bg-zinc-900 px-12 max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12">
+      <section id="services" className="py-24 bg-zinc-900 px-6 md:px-12 max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12">
         {[
           { id: "cocktail", title: "Cocktail Party", img: images.serviceWedding, desc: "カジュアルな会合を盛り上げる", highlight: "彩り豊かな演出" },
           { id: "standing", title: "Banquet Style", img: images.serviceCorporate, desc: "大切なビジネスシーンに適した", highlight: "厳粛で洗練されたディスプレイ" },
@@ -252,19 +270,13 @@ const App = () => {
       </section>
 
       {/* Simulation Section */}
-      <section id="simulation" className="py-32 bg-[#080808] px-6 border-y border-white/5">
-        <div className="mb-20 text-center">
+      <section id="simulation" className="py-6 md:py-10 bg-[#080808] px-6 border-y border-white/5">
+        <div className="mb-4 text-center">
           <h2 className="text-3xl md:text-5xl text-white font-light tracking-wide italic font-elegant">Simulation</h2>
         </div>
         
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-20 items-stretch">
-          
-          {/* 左側：スライダー群 */}
-          <div className="space-y-10 bg-[#0d0d0d] p-8 md:p-12 border border-white/5 shadow-2xl relative rounded-lg">
-            <div className="flex items-center justify-between mb-8 bg-amber-500/5 p-4 border border-amber-500/20">
-              <div className="flex items-center gap-3 text-amber-500"><Trophy size={20}/> <span className="text-xs uppercase tracking-widest font-bold">Remaining Points</span></div>
-              <div className="text-3xl text-white font-elegant">{remainingPoints} <span className="text-xs text-stone-500">pts</span></div>
-            </div>
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-20 items-stretch">
+          <div className="space-y-4 md:space-y-6 bg-[#0d0d0d] p-6 md:p-12 border border-white/5 shadow-2xl relative rounded-lg">
             <div className="space-y-4">
               <div className="flex justify-between text-sm md:text-base text-stone-300 uppercase tracking-widest font-elegant font-light"><span>Guests</span><span className="text-amber-500 font-bold">{guestCount} 名様 (+{guestPoints}pt)</span></div>
               <input type="range" min="20" max="120" step="1" value={guestCount} onChange={(e) => setGuestCount(Number(e.target.value))} />
@@ -273,7 +285,13 @@ const App = () => {
               <div className="flex justify-between text-sm md:text-base text-stone-300 uppercase tracking-widest font-elegant font-light"><span>Budget</span><span className="text-amber-500 font-bold">{budget === 11500 ? '∞' : `¥ ${budget.toLocaleString()}`} (+{budgetPoints}pt)</span></div>
               <input type="range" min="4000" max="11500" step="1500" value={budget} onChange={(e) => setBudget(Number(e.target.value))} />
             </div>
-            <div className="pt-8 border-t border-white/5 space-y-10">
+
+            <div className="flex items-center justify-between py-3 bg-amber-500/5 px-4 border border-amber-500/20">
+              <div className="flex items-center gap-3 text-amber-500"><span className="text-[10px] uppercase tracking-widest font-bold">Remaining Points</span></div>
+              <div className="text-2xl text-white font-elegant">{remainingPoints} <span className="text-[10px] text-stone-500 uppercase">pts</span></div>
+            </div>
+
+            <div className="space-y-6">
               <div className="space-y-4">
                 <div className="flex justify-between text-sm md:text-base text-stone-300 uppercase tracking-widest font-elegant font-light"><span>Beverage Selection</span><span className="text-white font-bold">{drinkLabels[bevLevel]}</span></div>
                 <input type="range" min="0" max="4" step="1" value={bevLevel} onChange={(e) => { const val = Number(e.target.value); if(val + ingLevel <= totalAvailablePoints) setBevLevel(val); }} />
@@ -283,57 +301,37 @@ const App = () => {
                 <input type="range" min="0" max="4" step="1" value={ingLevel} onChange={(e) => { const val = Number(e.target.value); if(val + bevLevel <= totalAvailablePoints) setIngLevel(val); }} />
               </div>
 
-              {/* オプションチェックボックス */}
-              <div className="pt-6 border-t border-white/5 space-y-4">
-                {[
-                  { key: 'room', label: 'ホール利用' },
-                  { key: 'layout', label: 'テーブルレイアウト対応' },
-                  { key: 'cleaning', label: '清掃対応' }
-                ].map(opt => (
-                  <label key={opt.key} className="flex items-center gap-4 cursor-pointer group w-fit">
-                    <div 
-                      onClick={() => setFormData({ ...formData, options: { ...formData.options, [opt.key]: !formData.options[opt.key] } })} 
-                      className={`w-5 h-5 border flex items-center justify-center transition-all ${formData.options[opt.key] ? 'bg-amber-500 border-amber-500' : 'border-stone-700 group-hover:border-stone-500'}`}
-                    >
-                      {formData.options[opt.key] && <CheckCircle2 size={14} className="text-black" />}
-                    </div>
-                    <span className="text-xs text-stone-400 uppercase tracking-widest font-elegant">{opt.label}</span>
+              {/* オプション横並び調整 */}
+              <div className="pt-4 border-t border-white/5 flex flex-row items-center justify-between gap-1 overflow-x-hidden">
+                {[ { key: 'room', label: 'ホール利用' }, { key: 'layout', label: 'テーブルレイアウト' }, { key: 'cleaning', label: 'クリーニング' } ].map(opt => (
+                  <label key={opt.key} className="flex items-center gap-1.5 cursor-pointer group">
+                    <div onClick={() => setFormData({ ...formData, options: { ...formData.options, [opt.key]: !formData.options[opt.key] } })} className={`w-4 h-4 border flex items-center justify-center transition-all ${formData.options[opt.key] ? 'bg-amber-500 border-amber-500' : 'border-stone-700'}`}>{formData.options[opt.key] && <CheckCircle2 size={12} className="text-black" />}</div>
+                    <span className="text-[9px] md:text-[10px] text-stone-400 uppercase tracking-tighter md:tracking-widest font-elegant whitespace-nowrap">{opt.label}</span>
                   </label>
                 ))}
               </div>
             </div>
           </div>
 
-          {/* 右側：画像とテキストエリア（パディングを調整して高さを左パネルと完全に一致させる） */}
           <div className="relative overflow-hidden bg-[#111] border border-white/5 flex flex-col shadow-2xl rounded-lg h-full">
             <AnimatePresence mode="wait">
-              <motion.div key={simResult.img} initial={{ opacity: 0, scale: 1.05 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }} transition={{ duration: 1.2 }} className="h-full flex flex-col">
-                
-                {/* 画像部分：余白をすべて吸収し、下へ最大限に拡張 */}
-                <div className="relative flex-grow overflow-hidden group min-h-[250px]">
-                  <img src={simResult.img} className="w-full h-full object-cover opacity-80" alt="" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#111] via-[#111]/60 to-transparent"></div>
-                  <div className="absolute bottom-6 left-8 md:left-12 text-left">
-                    <span className="text-amber-500 text-[10px] tracking-[0.4em] uppercase font-elegant drop-shadow-md">Plan Proposal</span>
-                    <h3 className="text-3xl md:text-4xl text-white font-elegant italic mt-2 drop-shadow-lg">{simResult.name}</h3>
+              <motion.div key={simResult.img} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.8 }} className="h-full flex flex-col">
+                <div className="relative overflow-hidden h-36 md:h-48 shrink-0">
+                  <img src={simResult.img} className="w-full h-full object-cover opacity-70" alt="" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#111] via-[#111]/40 to-transparent"></div>
+                  <div className="absolute bottom-3 left-6 md:bottom-4 md:left-8">
+                    <span className="text-amber-500 text-[8px] md:text-[9px] tracking-[0.4em] uppercase font-elegant">Plan Proposal</span>
+                    <h3 className="text-xl md:text-3xl text-white font-elegant italic mt-0.5 leading-tight">{simResult.name}</h3>
                   </div>
                 </div>
 
-                {/* テキスト部分：下端のパディング(pb-12)を左パネルと揃え、中身の余白を圧縮 */}
-                <div className="px-8 pb-8 pt-6 md:px-12 md:pb-12 md:pt-8 shrink-0 flex flex-col justify-end bg-[#111]">
-                  <p className="text-stone-400 text-sm md:text-base leading-loose font-elegant italic mb-6">{simResult.desc}</p>
-                  
-                  <div className="flex justify-between items-baseline border-t border-white/10 pt-6 mb-8">
-                    <span className="text-sm text-stone-500 uppercase tracking-widest font-elegant">Est. Unit Price</span>
-                    <span className="text-3xl text-white font-elegant font-bold">{budget === 11500 ? 'ご相談ください' : `¥ ${budget.toLocaleString()}`}</span>
-                  </div>
-                  
-                  <div className="text-center space-y-4">
-                    <span className="text-[10px] text-stone-500 tracking-[0.6em] uppercase block font-elegant">Reservation</span>
-                    <button onClick={() => handlePlanSelect(simResult.name, true)} className="w-full py-4 md:py-5 bg-amber-600 hover:bg-amber-500 text-black font-bold text-[10px] tracking-[0.4em] uppercase transition-all shadow-xl">REQUEST A QUOTE</button>
+                <div className="px-6 py-3 md:px-8 md:py-6 flex flex-col flex-grow bg-[#111]">
+                  <p className="text-stone-400 text-[10px] md:text-sm leading-relaxed font-elegant italic border-b border-white/5 pb-3 md:pb-4 mb-3 md:mb-4">{simResult.desc}</p>
+                  <div className="mt-auto">
+                    {/* スマホ版行間詰め */}
+                    <button onClick={() => handlePlanSelect(simResult.name, true)} className="w-full py-2 md:py-3 bg-amber-600 hover:bg-amber-500 text-black font-bold text-[8px] md:text-[9px] tracking-[0.4em] uppercase transition-all shadow-xl leading-none">REQUEST A QUOTE</button>
                   </div>
                 </div>
-
               </motion.div>
             </AnimatePresence>
           </div>
@@ -347,32 +345,27 @@ const App = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <AnimatePresence>{displayedTableImages.map((img) => (<motion.div key={img} initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="relative aspect-square bg-zinc-900 shadow-2xl overflow-hidden group"><img src={img} className="w-full h-full object-cover transition-transform duration-[2000ms] hover:scale-110 opacity-90 hover:opacity-100" alt="" /></motion.div>))}</AnimatePresence>
           </div>
-          {!showAllTable && <button onClick={() => setShowAllTable(true)} className="mt-20 px-16 py-5 border border-zinc-700 text-stone-500 text-xs tracking-[0.5em] uppercase hover:text-white hover:border-white transition-all font-elegant italic font-light">View More</button>}
+          {!showAllTable && <button onClick={() => setShowAllTable(true)} className="mt-20 px-16 py-5 border border-zinc-700 bg-white/5 text-stone-400 text-xs tracking-[0.5em] uppercase hover:text-white hover:border-white transition-all font-elegant italic font-light shadow-lg">View More</button>}
         </div>
         <div className="text-center">
-          <h2 className="text-3xl md:text-5xl text-white font-light tracking-wide italic mb-16 font-elegant">「一皿」の想い出</h2>
+          <h2 className="text-3xl md:text-5xl text-white font-light tracking-wide italic mb-16 font-elegant">「一皿」の記憶</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <AnimatePresence>{displayedDishImages.map((img) => (<motion.div key={img} initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="relative aspect-square bg-zinc-900 shadow-2xl overflow-hidden group"><img src={img} className="w-full h-full object-cover transition-transform duration-[2000ms] hover:scale-110 opacity-90 hover:opacity-100" alt="" /></motion.div>))}</AnimatePresence>
           </div>
-          {!showAllDish && <button onClick={() => setShowAllDish(true)} className="mt-20 px-16 py-5 border border-zinc-700 text-stone-500 text-xs tracking-[0.5em] uppercase hover:text-white hover:border-white transition-all font-elegant italic font-light">View More</button>}
+          {!showAllDish && <button onClick={() => setShowAllDish(true)} className="mt-20 px-16 py-5 border border-zinc-700 bg-white/5 text-stone-400 text-xs tracking-[0.5em] uppercase hover:text-white hover:border-white transition-all font-elegant italic font-light shadow-lg">View More</button>}
         </div>
       </section>
 
       {/* Contact Section */}
       <section id="contact" className="py-16 bg-black px-6 text-center border-t border-white/5 relative">
         <h2 className="text-2xl text-white font-elegant italic mb-2 tracking-[0.3em]">Reservation</h2>
-        <p className="text-[14px] md:text-lg text-amber-500 mb-10 italic font-medium tracking-widest font-elegant">
-          ※ご紹介・以前ご利用された方限定のご案内とさせて頂きます。
-        </p>
-        
+        <p className="text-[14px] md:text-lg text-amber-500 mb-10 italic font-medium tracking-widest font-elegant">※ご紹介・以前ご利用された方限定のご案内とさせて頂きます。</p>
         <div className="max-w-4xl mx-auto bg-zinc-900/20 p-6 md:p-10 border border-zinc-800/40 shadow-2xl text-left">
           {status === "success" ? (
             <div className="text-center text-amber-500 py-6 text-lg font-light font-elegant tracking-widest">Thank You. 送信完了しました。</div>
           ) : (
             <form className="space-y-6" onSubmit={handleSubmit}>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
-                
-                {/* 左カラム：名前・メール・オプション */}
                 <div className="space-y-6">
                   <div>
                     <label className="text-amber-500 text-[10px] uppercase tracking-widest mb-1 block font-elegant">Name</label>
@@ -382,43 +375,24 @@ const App = () => {
                     <label className="text-amber-500 text-[10px] uppercase tracking-widest mb-1 block font-elegant">Email</label>
                     <input type="email" onChange={(e)=>setFormData({...formData, email:e.target.value})} required className="bg-transparent border-b border-zinc-800 text-white w-full py-1 outline-none focus:border-amber-500 text-base font-elegant transition-colors" />
                   </div>
-                  
-                  {/* オプション横並び */}
                   <div className="flex items-center justify-between pt-2">
-                    {[ { key: 'room', label: 'ホール利用' }, { key: 'layout', label: 'テーブルレイアウト対応' }, { key: 'cleaning', label: '清掃対応' }].map(opt => (
+                    {[ { key: 'room', label: 'ホール利用' }, { key: 'layout', label: 'テーブルレイアウト' }, { key: 'cleaning', label: 'クリーニング' }].map(opt => (
                       <label key={opt.key} className="flex items-center gap-2 cursor-pointer group">
-                        <div onClick={()=>setFormData({...formData, options: {...formData.options, [opt.key]: !formData.options[opt.key]}})} className={`w-3.5 h-3.5 border flex items-center justify-center transition-all ${formData.options[opt.key] ? 'bg-amber-500 border-amber-500' : 'border-stone-800 group-hover:border-stone-600'}`}>
-                          {formData.options[opt.key] && <CheckCircle2 size={10} className="text-black" />}
-                        </div>
+                        <div onClick={()=>setFormData({...formData, options: {...formData.options, [opt.key]: !formData.options[opt.key]}})} className={`w-3.5 h-3.5 border flex items-center justify-center transition-all ${formData.options[opt.key] ? 'bg-amber-500 border-amber-500' : 'border-stone-800'}`}>{formData.options[opt.key] && <CheckCircle2 size={10} className="text-black" />}</div>
                         <span className="text-[10px] text-stone-500 font-elegant whitespace-nowrap tracking-tighter">{opt.label}</span>
                       </label>
                     ))}
                   </div>
                 </div>
-
-                {/* 右カラム：Date・Time・Plan */}
                 <div className="space-y-6">
-                  
-                  {/* Date（カレンダーアイコン右寄せ・年月日と曜日表示） */}
                   <div>
                     <label className="text-amber-500 text-[10px] uppercase tracking-widest mb-1 block font-elegant">Date</label>
                     <div className="relative flex items-center justify-end gap-3 border-b border-zinc-800 py-1 transition-colors group">
-                      {formData.date ? (
-                        <span className="text-white text-lg font-elegant">{formatDate(formData.date)}</span>
-                      ) : (
-                        <span className="text-stone-600 text-lg font-elegant italic">Select Date</span>
-                      )}
+                      {formData.date ? (<span className="text-white text-lg font-elegant">{formatDate(formData.date)}</span>) : (<span className="text-stone-600 text-lg font-elegant italic">Select Date</span>)}
                       <Calendar size={18} className="text-white cursor-pointer group-hover:scale-110 transition-transform" />
-                      <input 
-                        type="date" 
-                        onChange={(e)=>setFormData({...formData, date:e.target.value})} 
-                        required 
-                        className="absolute inset-0 opacity-0 w-full h-full cursor-pointer"
-                      />
+                      <input type="date" onChange={(e)=>setFormData({...formData, date:e.target.value})} required className="absolute inset-0 opacity-0 w-full h-full cursor-pointer" />
                     </div>
                   </div>
-
-                  {/* Time Select（右寄せ・白文字・文字サイズアップ） */}
                   <div>
                     <label className="text-amber-500 text-[10px] uppercase tracking-widest mb-1 block font-elegant">Time Select</label>
                     <div className="flex items-center justify-end gap-3 border-b border-zinc-800 py-1 transition-colors">
@@ -443,62 +417,38 @@ const App = () => {
                       </select>
                     </div>
                   </div>
-
-                  {/* Plan Style（右寄せ・文字サイズアップ） */}
-                  <div>
-                    <label className="text-amber-500 text-[10px] uppercase tracking-widest mb-1 block font-elegant">Plan Style</label>
-                    <select 
-                      value={selectedPlan} 
-                      onChange={(e) => setSelectedPlan(e.target.value)} 
-                      required
-                      className="w-full bg-transparent border-b border-zinc-800 text-white py-1 outline-none appearance-none font-elegant text-lg cursor-pointer focus:border-amber-500 transition-colors text-right"
-                    >
-                      <option value="" className="bg-zinc-900 text-stone-500">スタイルを選択してください</option>
-                      <option value="立食スタイル" className="bg-zinc-900 text-white">立食スタイル</option>
-                      <option value="立食・着席スタイル" className="bg-zinc-900 text-white">立食・着席スタイル</option>
-                      <option value="着席スタイル" className="bg-zinc-900 text-white">着席スタイル</option>
-                    </select>
-                  </div>
                 </div>
               </div>
-
-              {/* シミュレーション結果表示エリア（デフォルトは未反映表示） */}
-              <div className="mt-8 bg-amber-500/5 border border-amber-500/20 p-4 rounded-sm flex flex-col md:flex-row justify-between items-center gap-4">
-                <span className="text-[10px] text-amber-500 uppercase tracking-[0.4em] font-bold font-elegant">Simulation Status</span>
-                {showSimInReservation ? (
-                  <div className="flex flex-wrap justify-center items-center gap-x-3 gap-y-2 text-base md:text-lg text-white font-elegant font-light">
-                    <span className="whitespace-nowrap">{guestCount}名様</span>
-                    <span className="text-stone-700">/</span>
-                    <span className="whitespace-nowrap">¥{budget === 11500 ? 'Custom' : budget.toLocaleString()}</span>
-                    <span className="text-stone-700">/</span>
-                    <span className="text-white font-normal whitespace-nowrap">Beverage {drinkLabels[bevLevel]}</span>
-                    <span className="text-stone-700">/</span>
-                    <span className="text-white font-normal whitespace-nowrap">Ingredient {foodLabels[ingLevel]}</span>
-                  </div>
-                ) : (
-                  <span className="text-stone-500 text-sm font-elegant italic tracking-widest">Not Selected (未反映)</span>
-                )}
+              <div className="pt-4 relative">
+                <label className="text-amber-500 text-[10px] uppercase tracking-widest mb-1 block font-elegant">Message / Request</label>
+                <textarea onChange={(e)=>setFormData({...formData, message:e.target.value})} className="bg-transparent border-b border-zinc-800 text-white w-full py-2 outline-none focus:border-amber-500 text-base font-elegant transition-colors h-24 resize-none" placeholder="プランの詳細、アレルギー等ございましたらご記入ください"></textarea>
+                
+                <div className="flex flex-wrap gap-x-4 gap-y-1 mt-2 text-[10px] uppercase tracking-widest font-elegant text-stone-500 opacity-80">
+                  <span className="flex gap-1.5">Guests:<b className="text-stone-300 font-normal">{guestCount}P</b></span>
+                  <span className="flex gap-1.5">Budget:<b className="text-stone-300 font-normal">¥{budget.toLocaleString()}</b></span>
+                  <span className="flex gap-1.5">Beverage:<b className="text-stone-300 font-normal">{drinkLabels[bevLevel]}</b></span>
+                  <span className="flex gap-1.5">Ingredient:<b className="text-stone-300 font-normal">{foodLabels[ingLevel]}</b></span>
+                </div>
               </div>
-
-              <textarea onChange={(e)=>setFormData({...formData, message:e.target.value})} required placeholder="ご紹介者様・ご相談内容をご記入ください" className="w-full bg-transparent border-b border-zinc-800 h-24 outline-none focus:border-amber-500 resize-none text-base font-elegant py-4 mt-4 transition-colors"></textarea>
-              
-              <button type="submit" disabled={status === "submitting"} className="w-full py-5 bg-amber-600 hover:bg-amber-500 text-white font-bold tracking-[0.4em] uppercase shadow-lg font-elegant transition-all text-xs mt-6">
-                {status === "submitting" ? "送信中..." : "SEND MESSAGE"}
-              </button>
+              <div className="text-center pt-8">
+                <button type="submit" disabled={status === "submitting"} className="px-20 py-4 bg-amber-600 hover:bg-amber-500 text-black font-bold text-[10px] tracking-[0.4em] uppercase transition-all shadow-xl disabled:opacity-50">{status === "submitting" ? "Sending..." : "Submit Reservation"}</button>
+              </div>
             </form>
           )}
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="py-24 bg-zinc-950 text-center border-t border-zinc-900">
-        <img src={CONFIG.logoImage} className="h-[180px] mx-auto mb-2 object-contain opacity-80" alt="" />
-        <div className="text-xl md:text-2xl text-stone-400 tracking-[0.5em] uppercase font-light mb-32 font-elegant">since 2019</div>
-        <div className="flex justify-center space-x-24 mb-24">
-          <a href="https://www.instagram.com/unetable_catering" target="_blank" rel="noopener noreferrer" className="hover:scale-110 transition-transform duration-700"><Instagram size={96} /></a>
-          <a href="#contact" className="hover:scale-110 transition-transform duration-700"><Mail size={96} /></a>
+      {/* Footer: ロゴ拡大(h-24) & 密着調整 */}
+      <footer className="pt-4 pb-20 bg-black text-center text-[10px] tracking-[0.3em] text-stone-600 uppercase font-elegant">
+        <div className="flex justify-center mb-2">
+          <img src={CONFIG.logoImage} className="h-24 opacity-80 filter grayscale brightness-150" alt={CONFIG.brandName} />
         </div>
-        <p className="text-stone-700 text-[10px] tracking-[0.2em] uppercase font-elegant">&copy; 2024 UNE TABLE Catering. All Rights Reserved.</p>
+        
+        <div className="flex justify-center gap-12 mb-10">
+          <a href="https://www.instagram.com/" className="hover:text-amber-500 transition-colors"><Instagram size={30} /></a>
+          <a href="mailto:contact@unetable.com" className="hover:text-amber-500 transition-colors"><Mail size={30} /></a>
+        </div>
+        <p className="opacity-30 tracking-[0.5em]">&copy; {new Date().getFullYear()} {CONFIG.brandName}. All Rights Reserved.</p>
       </footer>
     </div>
   );
