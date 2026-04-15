@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Menu, X, ChevronRight, Star, Quote, Mail, ChevronLeft, Calendar, Clock, CheckCircle2 } from "lucide-react";
+import { Menu, X, ChevronRight, Star, Quote, Mail, ChevronLeft, Calendar, Clock, CheckCircle2, Trophy, ExternalLink } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 // --- 設定エリア ---
@@ -9,9 +9,7 @@ const CONFIG = {
   heroImage:  "/cocktail-1-8-1.png",
   heroSlides: ["/cocktail-1-8-1.png", "/cocktail-15.png", "/cocktail-3.png"],
   logoImage: "/logo.png",
-  // Instagramのリンク先を変更
   instagramUrl: "https://www.instagram.com/unetable_caterring",
-  // メールの送信先を変更
   contactEmail: "naogenbeat@gmail.com"
 };
 
@@ -53,6 +51,18 @@ const budgetMap = {
 const drinkLabels = ["Standard", "Casual", "Premium", "Luxury", "Executive"];
 const foodLabels = ["Normal", "Standard", "Special", "Premium", "Private"];
 
+const formOptions = [
+  { key: 'standing', label: '立食スタイル' },
+  { key: 'seated', label: '着席スタイル' },
+  { key: 'staff', label: 'サービススタッフ' }
+];
+
+const serviceList = [
+  { id: "cocktail", title: "Cocktail Party", img: images.serviceWedding, desc: "カジュアルな会合を盛り上げる", highlight: "彩り豊かな演出" },
+  { id: "standing", title: "Banquet Style", img: images.serviceCorporate, desc: "大切なビジネスシーンに適した", highlight: "洗練されたディスプレイ" },
+  { id: "private", title: "Private Dining", img: images.servicePrivate, desc: "オーダーメイドのレストラン", highlight: "贅沢で特別な空間" }
+];
+
 const Instagram = ({ size = 24, className = "" }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
     <rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/>
@@ -80,12 +90,17 @@ const formatDate = (dateStr) => {
 const App = () => {
   const[isScrolled, setIsScrolled] = useState(false);
   const[currentView, setCurrentView] = useState("home");
-  const[selectedPlan, setSelectedPlan] = useState("");
   const[status, setStatus] = useState("idle");
-  const[formData, setFormData] = useState({ name: "", email: "", message: "", date: "", startTime: "", endTime: "", options: { room: false, layout: false, cleaning: false } });
+  const[formData, setFormData] = useState({ 
+    name: "", email: "", message: "", date: "", startTime: "", endTime: "", 
+    options: { standing: false, seated: false, room: false, staff: false } 
+  });
   
   const [slideIndex, setSlideIndex] = useState(0);
   const [heroIndex, setHeroIndex] = useState(0);
+  const [serviceSlideIndex, setServiceSlideIndex] = useState(0); 
+  const [galleryTableIndex, setGalleryTableIndex] = useState(0); 
+  const [galleryDishIndex, setGalleryDishIndex] = useState(0); 
   const [showAllTable, setShowAllTable] = useState(false);
   const [showAllDish, setShowAllDish] = useState(false);
   
@@ -119,12 +134,20 @@ const App = () => {
     window.scrollTo(0, 0);
     const handlePopState = () => setCurrentView("home");
     window.addEventListener("popstate", handlePopState);
+    
     const heroTimer = setInterval(() => { setHeroIndex((p) => (p + 1) % 3); }, 5000);
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
     window.addEventListener("scroll", handleScroll);
+    
     const observer = new IntersectionObserver(([entry]) => { if (entry.isIntersecting) setIsConceptInView(true); }, { threshold: 0.2 });
     if (conceptRef.current) observer.observe(conceptRef.current);
-    return () => { window.removeEventListener("popstate", handlePopState); window.removeEventListener("scroll", handleScroll); clearInterval(heroTimer); if (conceptRef.current) observer.disconnect(); };
+    
+    return () => { 
+      window.removeEventListener("popstate", handlePopState); 
+      window.removeEventListener("scroll", handleScroll); 
+      clearInterval(heroTimer); 
+      if (conceptRef.current) observer.disconnect(); 
+    };
   }, [currentView]);
 
   useEffect(() => {
@@ -136,11 +159,24 @@ const App = () => {
     return () => clearInterval(slideTimer);
   }, [isConceptInView, currentView]);
 
+  useEffect(() => {
+    if (currentView === "home" && typeof window !== 'undefined' && window.innerWidth < 768) {
+      const serviceTimer = setInterval(() => { setServiceSlideIndex((p) => (p + 1) % 3); }, 5000);
+      const gTableTimer = setInterval(() => { setGalleryTableIndex((p) => (p + 1) % images.galleryTable.length); }, 3000);
+      const gDishTimer = setInterval(() => { setGalleryDishIndex((p) => (p + 1) % images.galleryDish.length); }, 3000);
+      
+      return () => {
+        clearInterval(serviceTimer);
+        clearInterval(gTableTimer);
+        clearInterval(gDishTimer);
+      };
+    }
+  }, [currentView]);
+
   const currentStep = Math.floor(slideIndex / 2);
   const handleViewChange = (v) => { if (v !== "home") window.history.pushState({}, "", ""); setCurrentView(v); };
-  const handlePlanSelect = (name, isFromSim = false) => {
-    setSelectedPlan(name);
-    setShowSimInReservation(isFromSim);
+  const handlePlanSelect = () => {
+    setShowSimInReservation(true);
     setTimeout(() => { document.getElementById("contact")?.scrollIntoView({ behavior: 'smooth' }); }, 100);
   };
 
@@ -149,9 +185,15 @@ const App = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setStatus("submitting");
-    const optText = `オプション: ${formData.options.room ? '[ホール]' : ''}${formData.options.layout ? '[レイアウト]' : ''}${formData.options.cleaning ? '[清掃]' : ''}`;
-    const simText = `【シミュレーション内容】\n人数: ${guestCount}名 / 単価: ¥${budget.toLocaleString()} / 飲料: ${drinkLabels[bevLevel]} / 食材: ${foodLabels[ingLevel]}`;
-    const fullMsg = `予約希望日: ${formData.date}\n希望時間: ${formData.startTime} 〜 ${formData.endTime}\n選択スタイル: ${selectedPlan}\n${optText}\n\n${simText}\n\nメッセージ:\n${formData.message}`;
+    
+    const activeOptions = [
+      ...formOptions,
+      { key: 'room', label: 'ホール利用' }
+    ].filter(opt => formData.options[opt.key]).map(opt => `[${opt.label}]`).join('');
+    
+    const optText = `オプション: ${activeOptions || 'なし'}`;
+    const simText = showSimInReservation ? `【シミュレーション内容】\n人数: ${guestCount}名 / 単価: ¥${budget.toLocaleString()} / 飲料: ${drinkLabels[bevLevel]} / 食材: ${foodLabels[ingLevel]}` : "直接入力・未反映";
+    const fullMsg = `予約希望日: ${formData.date}\n希望時間: ${formData.startTime} 〜 ${formData.endTime}\n${optText}\n\n${simText}\n\nメッセージ:\n${formData.message}`;
     
     try {
       await fetch("https://api.web3forms.com/submit", {
@@ -179,12 +221,12 @@ const App = () => {
   if (currentView !== "home") {
     const data = galleryData[currentView];
     return (
-      <div className="min-h-screen bg-[#0a0a0a] text-stone-300 pt-28 pb-24 px-6 animate-[fadeIn_0.5s_ease-out]">
+      <div className="min-h-screen bg-[#0a0a0a] text-stone-300 pt-16 md:pt-28 pb-24 px-6 animate-[fadeIn_0.5s_ease-out]">
         <div className="max-w-7xl mx-auto text-center">
-          <button onClick={() => window.history.back()} className="text-amber-500 mb-12 flex items-center gap-2 uppercase text-xs tracking-widest"><ChevronLeft size={16} className="mr-2" /> Back</button>
-          <h2 className="font-brand text-4xl text-amber-500 mb-6 italic tracking-widest font-elegant">{data?.title}</h2>
-          <p className="text-stone-400 max-w-2xl mx-auto leading-loose mb-16 text-xl font-elegant italic">{data?.desc}</p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">{data?.photos.map((img, i) => (<img key={i} src={img} className="w-full h-80 object-cover shadow-2xl" alt="" />))}</div>
+          <button onClick={() => window.history.back()} className="text-amber-500 mb-8 md:mb-12 flex items-center gap-2 uppercase text-[10px] md:text-xs tracking-widest"><ChevronLeft size={16} className="mr-2" /> Back</button>
+          <h2 className="font-brand text-3xl md:text-4xl text-amber-500 mb-6 italic tracking-widest font-elegant">{data?.title}</h2>
+          <p className="text-stone-400 max-w-2xl mx-auto leading-loose mb-12 md:mb-16 text-base md:text-xl font-elegant italic">{data?.desc}</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">{data?.photos.map((img, i) => (<img key={i} src={img} className="w-full h-64 md:h-80 object-cover shadow-2xl" alt="" />))}</div>
         </div>
       </div>
     );
@@ -198,6 +240,19 @@ const App = () => {
         html { scroll-behavior: smooth; }
         input[type=range] { -webkit-appearance: none; background: #2a2a2a; height: 1px; width: 100%; outline: none; }
         input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; background: #d4af37; height: 18px; width: 18px; border-radius: 50%; cursor: pointer; border: 1px solid #fff; box-shadow: 0 0 10px rgba(0,0,0,0.5); }
+        
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover, 
+        input:-webkit-autofill:focus, 
+        input:-webkit-autofill:active {
+            -webkit-box-shadow: 0 0 0 1000px #000000 inset !important;
+            -webkit-text-fill-color: #ffffff !important;
+            transition: background-color 5000s ease-in-out 0s !important;
+        }
+        
+        textarea::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
       `}} />
       
       <Navbar isScrolled={isScrolled} currentView={currentView} onViewChange={handleViewChange} />
@@ -206,9 +261,13 @@ const App = () => {
       <section className="relative h-screen overflow-hidden flex flex-col justify-center items-center text-center px-4 mb-20 md:mb-0">
         <div className="absolute inset-0 z-0">
           <AnimatePresence>
-            <motion.div key={heroIndex} initial={{ opacity: 0, scale: 1.3, filter: "brightness(1.1) blur(6px)" }} animate={{ opacity: 1, scale: 1.05, filter: "brightness(0.45) blur(0px)" }} exit={{ opacity: 0 }} transition={{ scale: { duration: 8, ease: "linear" }, opacity: { duration: 2.5 }, filter: { duration: 2.5 } }} className="absolute inset-0"><img src={CONFIG.heroSlides[heroIndex]} className="w-full h-full object-cover" alt="" /><div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]" /></motion.div>
+            <motion.div key={heroIndex} initial={{ opacity: 0, scale: 1.3, filter: "brightness(1.1) blur(6px)" }} animate={{ opacity: 1, scale: 1.05, filter: "brightness(0.45) blur(0px)" }} exit={{ opacity: 0 }} transition={{ scale: { duration: 8, ease: "linear" }, opacity: { duration: 2.5 }, filter: { duration: 2.5 } }} className="absolute inset-0">
+              <img src={CONFIG.heroSlides[heroIndex]} className="w-full h-full object-cover" alt="" />
+              {/* 変更: スマホ版の背景画像を明るくする (PCはそのまま) */}
+              <div className="absolute inset-0 bg-black/20 md:bg-black/40 backdrop-blur-[1px] md:backdrop-blur-[2px]" />
+            </motion.div>
           </AnimatePresence>
-          <div className="absolute inset-0 bg-gradient-to-b from-black/20 to-[#0a0a0a]"></div>
+          <div className="absolute inset-0 bg-gradient-to-b from-black/10 md:from-black/20 to-[#0a0a0a]"></div>
         </div>
         
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 2, delay: 1 }} className="relative z-10 w-full h-full flex flex-col items-center text-white">
@@ -223,7 +282,7 @@ const App = () => {
 
           <div className="md:hidden w-full h-full relative">
             <div className="absolute w-full top-[10%] left-0 text-center">
-              <h2 className="text-xl tracking-[0.4em] font-light opacity-90 uppercase">UNE TABLE</h2>
+              <h2 className="text-xl tracking-[0.4em] font-light opacity-90 uppercase text-shadow-md">UNE TABLE</h2>
             </div>
             <div className="absolute w-full top-[30%] left-0 text-center px-0">
               <h1 className="font-serif text-[38px] xs:text-[42px] leading-tight font-light drop-shadow-2xl italic tracking-tighter">
@@ -231,7 +290,7 @@ const App = () => {
               </h1>
             </div>
             <div className="absolute w-full bottom-[26%] left-0 text-center px-0">
-              <p className="text-[17px] xs:text-[18px] leading-relaxed font-light text-white/90 tracking-[-0.095em]">
+              <p className="text-[17px] xs:text-[18px] leading-relaxed font-light text-white/90 tracking-[-0.095em] text-shadow-md">
                 厳選された旬の食材を目にも楽しい彩りを添えて。<br />
                 特別な日に最高峰のケータリングをお届け致します。
               </p>
@@ -241,39 +300,63 @@ const App = () => {
       </section>
 
       {/* Concept Section */}
-      <section id="concept" ref={conceptRef} className="pt-20 pb-20 md:py-32 px-6 max-w-7xl mx-auto flex flex-col md:flex-row gap-12 md:gap-24 items-start">
-        <div className="w-full md:w-1/2 relative h-[350px] md:h-[500px] overflow-hidden shadow-2xl rounded-sm">
-          {images.conceptSlide.map((img, i) => (<motion.img key={i} src={img} initial={{ opacity: 0 }} animate={{ opacity: i === slideIndex ? 1 : 0 }} transition={{ duration: 2 }} className="absolute inset-0 w-full h-full object-cover scale-105" alt="" />))}
-          <div className="absolute inset-0 bg-black/10"></div>
-        </div>
+      <section id="concept" ref={conceptRef} className="pt-10 pb-12 md:pt-20 md:pb-32 px-4 md:px-6 max-w-7xl mx-auto flex flex-col md:flex-row gap-4 md:gap-24 items-start">
         
-        <div className="w-full md:w-1/2 flex flex-col mt-12 md:mt-24">
-          <h2 className="text-2xl md:text-3xl text-amber-500 font-light font-elegant italic tracking-widest leading-none mb-6 md:mb-8 mt-0 text-center">感動の一瞬を 永遠の思い出に</h2>
-          <div className="relative text-white text-lg md:text-xl leading-relaxed mt-6 md:mt-10 min-h-[140px] md:min-h-[160px]">
+        {/* スマホ版のみ：切り替わるテキストを画像の上に配置（2行下げるためmt-8追加） */}
+        <div className="md:hidden w-full flex flex-col items-center relative z-10 mt-8 mb-2">
+          <div className="relative text-white text-lg leading-relaxed min-h-[90px] w-full">
             <AnimatePresence mode="wait">
               {[
-                { text: "私たちは厳選された旬の食材を、確かな技術で目にも美しい一皿へと昇華させます。", align: "text-center", space: "pt-4" }, 
-                { text: "産地や市場から直接届く「最盛の旬」を逃さず、その魅力を最大限に引き出し、おもてなしの場に彩りを添えます。", align: "text-center", space: "pt-4" }, 
-                { text: "多種多様な銘柄に精通した有資格者が、最適なお飲み物を厳選致します。酒販店も営む私たちが、流通価格にてご提案させて頂きます。", align: "text-left", space: "" }, 
-                { text: "大切なひとところに、確かな安心と　深い感動を添えさせていただきます。", align: "text-center", space: "pt-4" }
+                { text: "私たちは厳選された旬の食材を、確かな技術で目にも美しい一皿へと昇華させます。", align: "text-center", space: "" }, 
+                { text: "産地や市場から直接届く「最盛の旬」を逃さず、その魅力を最大限に引き出し、おもてなしの場に彩りを添えます。", align: "text-center", space: "" }, 
+                { text: "多種多様な銘柄に精通した有資格者が最適なお飲み物を厳選。酒販店も営む私たちが流通価格にてご提案させていただきます。", align: "text-center", space: "" }, 
+                { text: <>大切なひとところに、確かな安心と深い感動を<br/>添えさせていただきます。</>, align: "text-center", space: "" }
               ].map((item, idx) => (
                 idx === currentStep && (
-                  <motion.p 
-                    key={idx} 
-                    initial={{ opacity: 0, y: 5 }} 
-                    animate={{ opacity: 1, y: 0 }} 
-                    exit={{ opacity: 0, y: -5 }} 
-                    transition={{ duration: 0.8 }} 
-                    className={`absolute inset-x-0 top-0 ${item.align} ${item.space}`}
-                  >
+                  <motion.p key={idx} initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -5 }} transition={{ duration: 0.8 }} className={`absolute inset-x-0 top-0 ${item.align} ${item.space}`}>
                     {item.text}
                   </motion.p>
                 )
               ))}
             </AnimatePresence>
           </div>
+        </div>
+
+        {/* スライド画像 */}
+        <div className="w-full md:w-1/2 relative h-[250px] md:h-[500px] overflow-hidden shadow-2xl rounded-sm">
+          {images.conceptSlide.map((img, i) => (<motion.img key={i} src={img} initial={{ opacity: 0 }} animate={{ opacity: i === slideIndex ? 1 : 0 }} transition={{ duration: 2 }} className="absolute inset-0 w-full h-full object-cover scale-105" alt="" />))}
+          <div className="absolute inset-0 bg-black/10"></div>
+        </div>
+        
+        <div className="w-full md:w-1/2 flex flex-col mt-4 md:mt-24">
           
-          <p className="mt-0 md:mt-4 pt-4 md:pt-4 border-t border-white/10 text-white text-[17px] md:text-xl font-elegant italic tracking-tight uppercase opacity-90 leading-relaxed md:leading-snug text-center">
+          {/* PC版のみ：ここにタイトルと切り替わるテキストを配置 */}
+          <div className="hidden md:block">
+            <h2 className="text-2xl md:text-3xl text-amber-500 font-light font-elegant italic tracking-widest leading-none mb-6 md:mb-8 mt-0 text-center">感動の一瞬を 永遠の思い出に</h2>
+            <div className="relative text-white text-lg md:text-xl leading-relaxed mt-6 md:mt-10 min-h-[140px] md:min-h-[160px]">
+              <AnimatePresence mode="wait">
+                {[
+                  { text: "私たちは厳選された旬の食材を、確かな技術で目にも美しい一皿へと昇華させます。", align: "text-center", space: "pt-4" }, 
+                  { text: "産地や市場から直接届く「最盛の旬」を逃さず、その魅力を最大限に引き出し、おもてなしの場に彩りを添えます。", align: "text-center", space: "pt-4" }, 
+                  { text: "多種多様な銘柄に精通した有資格者が、最適なお飲み物を厳選致します。酒販店も営む私たちが、流通価格にてご提案させていただきます。", align: "text-left", space: "" }, 
+                  { text: <>大切なひとところに、確かな安心と深い感動を<br/>添えさせていただきます。</>, align: "text-center", space: "pt-4" }
+                ].map((item, idx) => (
+                  idx === currentStep && (
+                    <motion.p key={idx} initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -5 }} transition={{ duration: 0.8 }} className={`absolute inset-x-0 top-0 ${item.align} ${item.space}`}>
+                      {item.text}
+                    </motion.p>
+                  )
+                ))}
+              </AnimatePresence>
+            </div>
+          </div>
+          
+          {/* スマホ版のみ：ここにタイトルを配置し上下に余白 */}
+          <div className="md:hidden w-full text-center my-4">
+            <h2 className="text-xl text-amber-500 font-light font-elegant italic tracking-widest leading-none">感動の一瞬を 永遠の思い出に</h2>
+          </div>
+
+          <p className="mt-0 md:mt-4 pt-3 md:pt-4 border-t border-white/10 text-white text-[14px] md:text-xl font-elegant italic tracking-tight uppercase opacity-90 leading-relaxed md:leading-snug text-center">
             <span className="block">UNE TABLE（ユヌ・ターブル）は、フランス語で</span>
             <span className="block"><span className="text-amber-500 not-italic">「一つのテーブル」</span><span>を意味します。</span></span>
             <span className="block hidden md:block">大切なビジネスシーンから、かけがえのない瞬間に,</span>
@@ -284,83 +367,144 @@ const App = () => {
       </section>
 
       {/* Services Section */}
-      <section id="services" className="py-24 md:py-16 md:-mt-12 bg-zinc-900 px-6 md:px-12 max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12">
-        {[
-          { id: "cocktail", title: "Cocktail Party", img: images.serviceWedding, desc: "カジュアルな会合を盛り上げる", highlight: "彩り豊かな演出" },
-          { id: "standing", title: "Banquet Style", img: images.serviceCorporate, desc: "大切なビジネスシーンに適した", highlight: "厳粛で洗練されたディスプレイ" },
-          { id: "private", title: "Private Dining", img: images.servicePrivate, desc: "オーダーメイド host レストラン", highlight: "贅沢な特別な空間" }
-        ].map((s, i) => (
-          <div key={i} onClick={() => handleViewChange(s.id)} className="group cursor-pointer">
-            <div className="aspect-[3/4] overflow-hidden mb-8 shadow-xl"><img src={s.img} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="" /></div>
-            <div className="flex gap-4">
-              <div className="w-[2px] h-12 bg-amber-500 mt-1"></div>
-              <div><h4 className="text-2xl text-white font-light uppercase tracking-widest font-elegant">{s.title}</h4><p className="text-stone-300 text-lg leading-relaxed font-elegant italic">{s.desc}<br /><span className="text-amber-500 font-bold not-italic">{s.highlight}</span></p></div>
+      <section id="services" className="py-24 md:py-16 md:-mt-12 bg-zinc-900 px-6 md:px-12 max-w-7xl mx-auto flex flex-col justify-center">
+        
+        {/* PC版：横並び */}
+        <div className="hidden md:grid grid-cols-3 gap-12">
+          {serviceList.map((s, i) => (
+            <div key={i} onClick={() => handleViewChange(s.id)} className="group cursor-pointer">
+              <div className="aspect-[3/4] overflow-hidden mb-8 shadow-xl"><img src={s.img} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="" /></div>
+              <div className="flex gap-4">
+                <div className="w-[2px] h-12 bg-amber-500 mt-1"></div>
+                <div><h4 className="text-2xl text-white font-light uppercase tracking-widest font-elegant">{s.title}</h4><p className="text-stone-300 text-lg leading-relaxed font-elegant italic">{s.desc}<br /><span className="text-amber-500 font-bold not-italic">{s.highlight}</span></p></div>
+              </div>
             </div>
+          ))}
+        </div>
+
+        {/* スマホ版：シネマティックなアニメーション & フォント拡大 */}
+        <div className="md:hidden relative min-h-[650px] w-full flex flex-col" onClick={() => handleViewChange(serviceList[serviceSlideIndex].id)}>
+          <div className="relative flex-grow">
+            <AnimatePresence mode="wait">
+              <motion.div 
+                key={serviceSlideIndex} 
+                initial={{ opacity: 0, scale: 0.95 }} 
+                animate={{ opacity: 1, scale: 1 }} 
+                exit={{ opacity: 0, scale: 1.05 }} 
+                transition={{ duration: 1.2, ease: "easeOut" }}
+                className="absolute inset-0 flex flex-col cursor-pointer"
+              >
+                <div className="w-full h-[460px] overflow-hidden mb-6 shadow-xl relative">
+                  <img src={serviceList[serviceSlideIndex].img} className="w-full h-full object-cover" alt="" />
+                  <div className="absolute inset-0 bg-gradient-to-b from-black/30 to-transparent"></div>
+                  <div className="absolute top-4 right-4 bg-black/60 px-4 py-1.5 rounded-full border border-white/20">
+                    <span className="text-white text-[12px] uppercase tracking-widest font-elegant flex items-center gap-1">Tap to View <ChevronRight size={14} className="text-amber-500"/></span>
+                  </div>
+                </div>
+                
+                <div className="flex gap-4 w-full px-2">
+                  <div className="w-[3px] h-16 bg-amber-500 mt-1"></div>
+                  <div className="text-left w-full">
+                    <h4 className="text-3xl text-white font-light uppercase tracking-widest font-elegant">{serviceList[serviceSlideIndex].title}</h4>
+                    <p className="text-stone-300 text-lg leading-relaxed font-elegant italic mt-2">{serviceList[serviceSlideIndex].desc}<br /><span className="text-amber-500 font-bold not-italic text-xl block mt-1">{serviceList[serviceSlideIndex].highlight}</span></p>
+                  </div>
+                </div>
+              </motion.div>
+            </AnimatePresence>
           </div>
-        ))}
+
+          <div className="w-full flex justify-center gap-3 pb-4 shrink-0">
+            {serviceList.map((_, i) => (
+              <div key={i} className={`w-2 h-2 rounded-full transition-all duration-500 ${i === serviceSlideIndex ? 'bg-amber-500 scale-125' : 'bg-zinc-700'}`}></div>
+            ))}
+          </div>
+        </div>
       </section>
 
       {/* Simulation Section */}
-      <section id="simulation" className="pt-16 pb-20 md:py-32 bg-[#080808] px-6 border-y border-white/5 relative">
-        <div className="mb-8 text-center">
+      <section id="simulation" className="pt-10 pb-12 md:pt-16 md:pb-32 bg-[#080808] px-3 md:px-6 border-y border-white/5 relative">
+        <div className="mb-6 md:mb-12 text-center">
           <h2 className="text-3xl md:text-5xl text-white font-light tracking-wide italic font-elegant">Simulation</h2>
         </div>
         
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-20 items-stretch md:py-6">
-          <div className="space-y-3 md:space-y-4 bg-[#0d0d0d] p-6 md:p-10 border border-white/5 shadow-2xl relative rounded-lg">
-            <div className="space-y-3">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-20 items-stretch">
+          <div className="space-y-3 md:space-y-6 bg-[#0d0d0d] p-5 md:p-10 border border-white/5 shadow-2xl relative rounded-lg flex flex-col justify-between">
+            <div className="space-y-1.5 md:space-y-4">
               <div className="flex justify-between text-sm md:text-base text-stone-300 uppercase tracking-widest font-elegant font-light"><span>Guests</span><span className="text-amber-500 font-bold">{guestCount} 名様 (+{guestPoints}pt)</span></div>
               <input type="range" min="20" max="120" step="1" value={guestCount} onChange={(e) => setGuestCount(Number(e.target.value))} />
             </div>
-            <div className="space-y-3">
+            <div className="space-y-1.5 md:space-y-4">
               <div className="flex justify-between text-sm md:text-base text-stone-300 uppercase tracking-widest font-elegant font-light"><span>Budget</span><span className="text-amber-500 font-bold">{budget === 11500 ? '∞' : `¥ ${budget.toLocaleString()}`} (+{budgetPoints}pt)</span></div>
               <input type="range" min="4000" max="11500" step="1500" value={budget} onChange={(e) => setBudget(Number(e.target.value))} />
             </div>
 
-            <div className="flex items-center justify-between py-1.5 bg-amber-500/5 px-4 border border-amber-500/20">
-              <div className="flex items-center gap-3 text-amber-500"><span className="text-[10px] uppercase tracking-widest font-bold">Remaining Points</span></div>
-              <div className="text-xl text-white font-elegant">{remainingPoints} <span className="text-[10px] text-stone-500 uppercase">pts</span></div>
+            <div className="flex items-center justify-between py-1.5 md:py-3 bg-amber-500/5 px-4 border border-amber-500/20 my-1 md:my-2">
+              <div className="flex items-center gap-3 text-amber-500"><span className="text-[10px] md:text-xs uppercase tracking-widest font-bold">Remaining Points</span></div>
+              <div className="text-xl md:text-2xl text-white font-elegant">{remainingPoints} <span className="text-[10px] text-stone-500 uppercase">pts</span></div>
             </div>
 
-            <div className="space-y-5">
-              <div className="space-y-3">
-                <div className="flex justify-between text-sm md:text-base text-stone-300 uppercase tracking-widest font-elegant font-light"><span>Beverage Selection</span><span className="text-white font-bold">{drinkLabels[bevLevel]}</span></div>
-                <input type="range" min="0" max="4" step="1" value={bevLevel} onChange={(e) => { const val = Number(e.target.value); if(val + ingLevel <= totalAvailablePoints) setBevLevel(val); }} />
-              </div>
-              <div className="space-y-3">
-                <div className="flex justify-between text-sm md:text-base text-stone-300 uppercase tracking-widest font-elegant font-light"><span>Ingredient Grade</span><span className="text-white font-bold">{foodLabels[ingLevel]}</span></div>
-                <input type="range" min="0" max="4" step="1" value={ingLevel} onChange={(e) => { const val = Number(e.target.value); if(val + bevLevel <= totalAvailablePoints) setIngLevel(val); }} />
-              </div>
+            <div className="space-y-1.5 md:space-y-4">
+              <div className="flex justify-between text-sm md:text-base text-stone-300 uppercase tracking-widest font-elegant font-light"><span>Beverage Selection</span><span className="text-white font-bold">{drinkLabels[bevLevel]}</span></div>
+              <input type="range" min="0" max="4" step="1" value={bevLevel} onChange={(e) => { const val = Number(e.target.value); if(val + ingLevel <= totalAvailablePoints) setBevLevel(val); }} />
+            </div>
+            <div className="space-y-1.5 md:space-y-4">
+              <div className="flex justify-between text-sm md:text-base text-stone-300 uppercase tracking-widest font-elegant font-light"><span>Ingredient Grade</span><span className="text-white font-bold">{foodLabels[ingLevel]}</span></div>
+              <input type="range" min="0" max="4" step="1" value={ingLevel} onChange={(e) => { const val = Number(e.target.value); if(val + bevLevel <= totalAvailablePoints) setIngLevel(val); }} />
+            </div>
 
-              <div className="pt-3 border-t border-white/5 flex flex-row items-center justify-between gap-1 overflow-x-hidden">
-                {[ { key: 'room', label: 'ホール利用' }, { key: 'layout', label: 'テーブルレイアウト' }, { key: 'cleaning', label: 'クリーニング' } ].map(opt => (
-                  <label key={opt.key} className="flex items-center gap-1.5 cursor-pointer group">
-                    <div onClick={() => setFormData({ ...formData, options: { ...formData.options, [opt.key]: !formData.options[opt.key] } })} className={`w-4 h-4 border flex items-center justify-center transition-all ${formData.options[opt.key] ? 'bg-amber-500 border-amber-500' : 'border-stone-700'}`}>{formData.options[opt.key] && <CheckCircle2 size={12} className="text-black" />}</div>
-                    <span className="text-[9px] md:text-[10px] text-stone-400 uppercase tracking-tighter md:tracking-widest font-elegant whitespace-nowrap">{opt.label}</span>
-                  </label>
-                ))}
+            {/* 変更: チェックボックスの縦列揃えとホールボタンの中央寄せ */}
+            <div className="pt-3 md:pt-6 border-t border-white/5 flex gap-2 md:gap-8 mt-1 items-center justify-center">
+              <div className="flex flex-col gap-2 w-1/2 items-center md:items-start md:pr-0">
+                {/* w-[110px]等で幅を固定し、文字がガタガタしないようにする */}
+                <div className="flex flex-col gap-2">
+                  {formOptions.map(opt => (
+                    <label key={opt.key} className="flex items-center gap-2 cursor-pointer group w-[110px]">
+                      <div 
+                        onClick={() => setFormData({ ...formData, options: { ...formData.options, [opt.key]: !formData.options[opt.key] } })} 
+                        className={`w-3.5 h-3.5 md:w-4 md:h-4 border flex items-center justify-center transition-all shrink-0 ${formData.options[opt.key] ? 'bg-amber-500 border-amber-500' : 'border-stone-700 group-hover:border-stone-500'}`}
+                      >
+                        {formData.options[opt.key] && <CheckCircle2 size={12} className="text-black" />}
+                      </div>
+                      <span className="text-[10px] md:text-xs text-stone-400 uppercase tracking-tighter md:tracking-widest font-elegant whitespace-nowrap">{opt.label}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+              
+              <div className="w-1/2 flex flex-col justify-center">
+                <button 
+                  type="button"
+                  onClick={() => alert("ホール利用の別ページへ遷移します（後日実装）")}
+                  className="w-full max-w-[120px] md:max-w-[140px] mx-auto flex flex-col items-center justify-center gap-1 p-2 md:p-4 border border-amber-500/30 bg-amber-500/5 hover:bg-amber-500/10 text-amber-500 transition-all rounded-sm group"
+                >
+                  <ExternalLink size={18} className="group-hover:scale-110 transition-transform" />
+                  <span className="text-[9px] md:text-xs uppercase tracking-widest font-elegant whitespace-nowrap font-bold mt-1">ホール利用</span>
+                </button>
               </div>
             </div>
           </div>
 
-          <div className="relative overflow-hidden bg-[#111] border border-white/5 flex flex-col shadow-2xl rounded-lg h-full">
+          <div className="relative overflow-hidden bg-[#111] border border-white/5 flex flex-col shadow-2xl rounded-lg h-full mt-0 md:mt-0">
             <AnimatePresence mode="wait">
               <motion.div key={simResult.img} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.8 }} className="h-full flex flex-col">
-                <div className="relative overflow-hidden h-36 md:h-[336px] shrink-0">
+                
+                <div className="relative overflow-hidden h-36 md:h-64 lg:h-[360px] shrink-0">
                   <img src={simResult.img} className="w-full h-full object-cover opacity-70" alt="" />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#111] via-[#111]/40 to-transparent"></div>
-                  <div className="absolute bottom-3 left-6 md:bottom-4 md:left-8">
+                  <div className="absolute bottom-2 left-4 md:bottom-4 md:left-8">
                     <span className="text-amber-500 text-[8px] md:text-[9px] tracking-[0.4em] uppercase font-elegant">Plan Proposal</span>
-                    <h3 className="text-xl md:text-3xl text-white font-elegant italic mt-0.5 leading-tight">{simResult.name}</h3>
+                    <h3 className="text-2xl md:text-3xl text-white font-elegant italic mt-0 leading-tight">{simResult.name}</h3>
                   </div>
                 </div>
 
-                <div className="px-6 py-3 md:px-8 md:py-4 flex flex-col flex-grow bg-[#111]">
-                  <p className="text-stone-400 text-[10px] md:text-sm leading-relaxed font-elegant italic border-b border-white/5 pb-3 md:pb-4 mb-3 md:mb-4">{simResult.desc}</p>
-                  <div className="mt-auto">
-                    <button onClick={() => handlePlanSelect(simResult.name, true)} className="w-full py-2 md:py-3 bg-amber-600 hover:bg-amber-500 text-black font-bold text-[8px] md:text-[9px] tracking-[0.4em] uppercase transition-all shadow-xl leading-none">REQUEST A QUOTE</button>
+                <div className="px-4 py-3 md:px-8 md:py-6 flex flex-col flex-grow bg-[#111] justify-between items-center text-center">
+                  <p className="text-stone-300 text-[12px] md:text-sm leading-relaxed font-elegant italic mb-2 md:mb-4">{simResult.desc}</p>
+                  
+                  <div className="mt-auto w-full max-w-xs pt-2">
+                    <button onClick={() => handlePlanSelect()} className="w-full py-3 md:py-4 bg-amber-600 hover:bg-amber-500 text-black font-bold text-[11px] md:text-[12px] tracking-[0.4em] uppercase transition-all shadow-xl leading-none">RESERVATION</button>
                   </div>
                 </div>
+
               </motion.div>
             </AnimatePresence>
           </div>
@@ -370,8 +514,10 @@ const App = () => {
       {/* Gallery Section */}
       <section id="gallery" className="mt-10 pt-16 md:mt-[-64px] md:pt-16 pb-24 md:pb-40 px-4 max-w-screen-2xl mx-auto relative">
         <div className="mb-24 text-center">
-          <h2 className="text-3xl md:text-5xl text-white font-light tracking-wide italic mb-16 font-elegant">「テーブル」の記録</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <h2 className="text-3xl md:text-5xl text-white font-light tracking-wide italic mb-10 md:mb-16 font-elegant">「テーブル」の記録</h2>
+          
+          {/* PC版：横並び静止画 */}
+          <div className="hidden md:grid grid-cols-3 gap-6">
             <AnimatePresence>
               {displays.table.map((img) => (
                 <motion.div key={img} initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="relative aspect-square bg-zinc-900 shadow-2xl overflow-hidden group">
@@ -380,14 +526,41 @@ const App = () => {
               ))}
             </AnimatePresence>
           </div>
+
+          {/* スマホ版：シネマティックなスライドショー */}
+          <div className="md:hidden relative aspect-square bg-zinc-900 shadow-2xl overflow-hidden">
+            {!showAllTable ? (
+              <AnimatePresence mode="wait">
+                <motion.div 
+                  key={galleryTableIndex} 
+                  initial={{ opacity: 0, scale: 1.1 }} 
+                  animate={{ opacity: 1, scale: 1 }} 
+                  exit={{ opacity: 0 }} 
+                  transition={{ duration: 1.5, ease: "easeOut" }}
+                  className="absolute inset-0"
+                >
+                  <img src={images.galleryTable[galleryTableIndex]} className="w-full h-full object-cover opacity-90" alt="" />
+                </motion.div>
+              </AnimatePresence>
+            ) : (
+              <div className="grid grid-cols-1 gap-4">
+                {images.galleryTable.map((img, i) => (
+                  <img key={i} src={img} className="w-full aspect-square object-cover shadow-xl" alt="" />
+                ))}
+              </div>
+            )}
+          </div>
+          
           {!showAllTable && (
             <button onClick={() => setShowAllTable(true)} className="mt-8 px-16 py-3 border border-zinc-700 bg-white/5 text-amber-500 text-xs tracking-[0.5em] uppercase hover:text-white hover:border-white transition-all font-elegant italic font-light shadow-lg">View More</button>
           )}
         </div>
         
         <div className="text-center mt-40 md:mt-56">
-          <h2 className="text-3xl md:text-5xl text-white font-light tracking-wide italic mb-16 font-elegant">「一皿」の記録</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <h2 className="text-3xl md:text-5xl text-white font-light tracking-wide italic mb-10 md:mb-16 font-elegant">「一皿」の記録</h2>
+          
+          {/* PC版：横並び静止画 */}
+          <div className="hidden md:grid grid-cols-3 gap-6">
             <AnimatePresence>
               {displays.dish.map((img) => (
                 <motion.div key={img} initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="relative aspect-square bg-zinc-900 shadow-2xl overflow-hidden group">
@@ -396,6 +569,31 @@ const App = () => {
               ))}
             </AnimatePresence>
           </div>
+
+          {/* スマホ版：シネマティックなスライドショー */}
+          <div className="md:hidden relative aspect-square bg-zinc-900 shadow-2xl overflow-hidden">
+            {!showAllDish ? (
+              <AnimatePresence mode="wait">
+                <motion.div 
+                  key={galleryDishIndex} 
+                  initial={{ opacity: 0, scale: 1.1 }} 
+                  animate={{ opacity: 1, scale: 1 }} 
+                  exit={{ opacity: 0 }} 
+                  transition={{ duration: 1.5, ease: "easeOut" }}
+                  className="absolute inset-0"
+                >
+                  <img src={images.galleryDish[galleryDishIndex]} className="w-full h-full object-cover opacity-90" alt="" />
+                </motion.div>
+              </AnimatePresence>
+            ) : (
+              <div className="grid grid-cols-1 gap-4">
+                {images.galleryDish.map((img, i) => (
+                  <img key={i} src={img} className="w-full aspect-square object-cover shadow-xl" alt="" />
+                ))}
+              </div>
+            )}
+          </div>
+
           {!showAllDish && (
             <button onClick={() => setShowAllDish(true)} className="mt-8 px-16 py-3 border border-zinc-700 bg-white/5 text-amber-500 text-xs tracking-[0.5em] uppercase hover:text-white hover:border-white transition-all font-elegant italic font-light shadow-lg">View More</button>
           )}
@@ -403,50 +601,59 @@ const App = () => {
       </section>
 
       {/* Reservation Section */}
-      <section id="contact" className="py-16 md:py-20 -mt-16 md:-mt-40 bg-black px-6 text-center border-t border-white/5 relative">
+      <section id="contact" className="py-16 md:py-20 -mt-16 md:-mt-40 bg-black px-4 md:px-6 text-center border-t border-white/5 relative">
         <h2 className="text-2xl text-white font-elegant italic mb-2 tracking-[0.3em]">Reservation</h2>
-        <p className="text-[14px] md:text-lg text-amber-500 mb-10 italic font-medium tracking-widest font-elegant leading-relaxed flex flex-col items-center justify-center">
+        <p className="text-[12px] md:text-base text-amber-500 mb-6 italic font-medium tracking-widest font-elegant leading-relaxed flex flex-col items-center justify-center">
           <span className="block md:inline">※ご紹介・以前ご利用された方限定の</span>
           <span className="block md:inline">ご案内とさせて頂きます。</span>
         </p>
 
-        <div className="max-w-4xl mx-auto bg-zinc-900/20 p-6 md:p-10 border border-zinc-800/40 shadow-2xl text-left">
+        <div className="max-w-4xl mx-auto bg-zinc-900/20 p-5 md:p-8 border border-zinc-800/40 shadow-2xl text-left">
           {status === "success" ? (
-            <div className="text-center text-amber-500 py-6 text-lg font-light font-elegant tracking-widest">Thank You. 送信完了しました。</div>
+            <div className="text-center text-amber-500 py-6 text-lg font-light font-elegant tracking-widest">お問合せありがとうございます。<br/>詳細ご連絡させて頂きます。</div>
           ) : (
-            <form className="space-y-6" onSubmit={handleSubmit}>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
-                <div className="space-y-6">
+            <form className="space-y-4" onSubmit={handleSubmit}>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4">
+                
+                <div className="space-y-4">
                   <div>
                     <label className="text-amber-500 text-[10px] uppercase tracking-widest mb-1 block font-elegant">Name</label>
-                    <input onChange={(e)=>setFormData({...formData, name:e.target.value})} required className="bg-transparent border-b border-zinc-800 text-white w-full py-1 outline-none focus:border-amber-500 text-base font-elegant transition-colors" />
+                    <input onChange={(e)=>setFormData({...formData, name:e.target.value})} required className="bg-transparent border-b border-zinc-800 text-white w-full py-1 outline-none focus:border-amber-500 text-sm md:text-base font-elegant transition-colors" />
                   </div>
                   <div>
                     <label className="text-amber-500 text-[10px] uppercase tracking-widest mb-1 block font-elegant">Email</label>
-                    <input type="email" onChange={(e)=>setFormData({...formData, email:e.target.value})} required className="bg-transparent border-b border-zinc-800 text-white w-full py-1 outline-none focus:border-amber-500 text-base font-elegant transition-colors" />
+                    <input type="email" onChange={(e)=>setFormData({...formData, email:e.target.value})} required className="bg-transparent border-b border-zinc-800 text-white w-full py-1 outline-none focus:border-amber-500 text-sm md:text-base font-elegant transition-colors" style={{ WebkitBoxShadow: "0 0 0 1000px #0a0a0a inset", WebkitTextFillColor: "#ffffff" }} />
                   </div>
-                  <div className="flex items-center justify-between pt-2">
-                    {[ { key: 'room', label: 'ホール利用' }, { key: 'layout', label: 'テーブルレイアウト' }, { key: 'cleaning', label: 'クリーニング' }].map(opt => (
-                      <label key={opt.key} className="flex items-center gap-2 cursor-pointer group">
-                        <div onClick={()=>setFormData({...formData, options: {...formData.options, [opt.key]: !formData.options[opt.key]}})} className={`w-3.5 h-3.5 border flex items-center justify-center transition-all ${formData.options[opt.key] ? 'bg-amber-500 border-amber-500' : 'border-stone-800'}`}>{formData.options[opt.key] && <CheckCircle2 size={10} className="text-black" />}</div>
-                        <span className="text-[10px] text-stone-500 font-elegant whitespace-nowrap tracking-tighter">{opt.label}</span>
-                      </label>
-                    ))}
+                  
+                  {/* 変更: センター合わせに変更 */}
+                  <div className="pt-1">
+                    <div className="flex items-center justify-center gap-x-6 gap-y-2 flex-wrap">
+                      {formOptions.map(opt => (
+                        <label key={opt.key} className="flex items-center gap-2 cursor-pointer group">
+                          <div onClick={()=>setFormData({...formData, options: {...formData.options, [opt.key]: !formData.options[opt.key]}})} className={`w-3.5 h-3.5 border flex items-center justify-center transition-all shrink-0 ${formData.options[opt.key] ? 'bg-amber-500 border-amber-500' : 'border-stone-800 group-hover:border-stone-600'}`}>
+                            {formData.options[opt.key] && <CheckCircle2 size={10} className="text-black" />}
+                          </div>
+                          <span className="text-[10px] text-stone-500 font-elegant whitespace-nowrap tracking-tighter">{opt.label}</span>
+                        </label>
+                      ))}
+                    </div>
                   </div>
                 </div>
-                <div className="space-y-6">
+                
+                <div className="space-y-4 mt-2 md:mt-0">
                   <div>
                     <label className="text-amber-500 text-[10px] uppercase tracking-widest mb-1 block font-elegant">Date</label>
                     <div className="relative flex items-center justify-end gap-3 border-b border-zinc-800 py-1 transition-colors group">
-                      {formData.date ? (<span className="text-white text-lg font-elegant">{formatDate(formData.date)}</span>) : (<span className="text-stone-600 text-lg font-elegant italic">Select Date</span>)}
-                      <Calendar size={18} className="text-white cursor-pointer group-hover:scale-110 transition-transform" />
+                      {formData.date ? (<span className="text-white text-sm md:text-base font-elegant">{formatDate(formData.date)}</span>) : (<span className="text-stone-600 text-sm md:text-base font-elegant italic">Select Date</span>)}
+                      <Calendar size={16} className="text-white cursor-pointer group-hover:scale-110 transition-transform" />
                       <input type="date" onChange={(e)=>setFormData({...formData, date:e.target.value})} required className="absolute inset-0 opacity-0 w-full h-full cursor-pointer" />
                     </div>
                   </div>
                   <div>
                     <label className="text-amber-500 text-[10px] uppercase tracking-widest mb-1 block font-elegant">Time Select</label>
                     <div className="flex items-center justify-end gap-3 border-b border-zinc-800 py-1 transition-colors">
-                      <select onChange={(e)=>setFormData({...formData, startTime:e.target.value})} required className="bg-transparent text-white outline-none font-elegant text-lg appearance-none cursor-pointer focus:text-amber-500 text-right">
+                      {/* 変更: Startを中央寄せ気味（右寄せをやめるか調整） */}
+                      <select onChange={(e)=>setFormData({...formData, startTime:e.target.value})} required className="bg-transparent text-white outline-none font-elegant text-sm md:text-base appearance-none cursor-pointer focus:text-amber-500 w-full text-center md:text-right pl-4">
                         <option value="" className="bg-zinc-900 text-stone-500">Start</option>
                         {Array.from({ length: 25 }, (_, i) => {
                           const h = Math.floor(i / 2) + 10;
@@ -455,8 +662,8 @@ const App = () => {
                           return h <= 21 ? <option key={t} value={t} className="bg-zinc-900 text-white">{t}</option> : null;
                         })}
                       </select>
-                      <span className="text-stone-600 font-elegant text-lg">~</span>
-                      <select onChange={(e)=>setFormData({...formData, endTime:e.target.value})} required className="bg-transparent text-white outline-none font-elegant text-lg appearance-none cursor-pointer focus:text-amber-500 text-right">
+                      <span className="text-stone-600 font-elegant text-sm md:text-base">~</span>
+                      <select onChange={(e)=>setFormData({...formData, endTime:e.target.value})} required className="bg-transparent text-white outline-none font-elegant text-sm md:text-base appearance-none cursor-pointer focus:text-amber-500 text-right w-full">
                         <option value="" className="bg-zinc-900 text-stone-500">End</option>
                         {Array.from({ length: 25 }, (_, i) => {
                           const h = Math.floor(i / 2) + 10;
@@ -469,12 +676,24 @@ const App = () => {
                   </div>
                 </div>
               </div>
-              <div className="pt-4 relative">
+
+              <div className="pt-2 relative">
                 <label className="text-amber-500 text-[10px] uppercase tracking-widest mb-1 block font-elegant">Message / Request</label>
-                <textarea onChange={(e)=>setFormData({...formData, message:e.target.value})} className="bg-transparent border border-zinc-800 text-white w-full p-4 outline-none focus:border-amber-500 text-base font-elegant transition-colors h-32 resize-none" />
+                <textarea 
+                  onChange={(e)=>setFormData({...formData, message:e.target.value})} 
+                  required 
+                  placeholder="サービススタッフ・コンパニオン・ワゴンサービス。アレルギーに関しても、お気軽にお問い合わせください。" 
+                  className="bg-transparent border border-zinc-800 text-white w-full p-2 md:p-3 outline-none focus:border-amber-500 text-xs md:text-sm font-elegant transition-colors h-16 md:h-20 resize-none" 
+                />
               </div>
-              <div className="text-center pt-6">
-                <button type="submit" disabled={status === "submitting"} className="px-20 py-4 bg-amber-600 hover:bg-amber-500 text-black font-bold text-[10px] tracking-[0.4em] uppercase transition-all shadow-xl disabled:opacity-50">
+
+              <div className="text-center pt-2">
+                {showSimInReservation && (
+                  <p className="text-[10px] text-amber-500 mb-2 font-elegant tracking-widest">
+                    {guestCount}名様 / ¥{budget === 11500 ? 'Custom' : budget.toLocaleString()} / Bev: {drinkLabels[bevLevel]} / Ing: {foodLabels[ingLevel]}
+                  </p>
+                )}
+                <button type="submit" disabled={status === "submitting"} className="w-full md:w-auto md:px-24 py-3 md:py-4 bg-amber-600 hover:bg-amber-500 text-black font-bold text-[10px] tracking-[0.4em] uppercase transition-all shadow-xl disabled:opacity-50">
                   {status === "submitting" ? "Sending..." : "Submit Reservation"}
                 </button>
               </div>
@@ -483,14 +702,12 @@ const App = () => {
         </div>
 
         {/* --- Footer Area --- */}
-        <div className="mt-32 border-t border-zinc-900 pt-20 pb-10 flex flex-col items-center">
-          <img src={CONFIG.logoImage} className="h-28 opacity-60 mb-8" alt="logo" />
-          <div className="flex justify-center gap-12 mb-16 items-center">
-            {/* Instagram: unetable_caterring */}
+        <div className="mt-16 md:mt-24 border-t border-zinc-900 pt-12 pb-8 flex flex-col items-center">
+          <img src={CONFIG.logoImage} className="h-20 md:h-24 opacity-60 mb-6" alt="logo" />
+          <div className="flex justify-center gap-12 mb-10 items-center">
             <a href={CONFIG.instagramUrl} target="_blank" rel="noopener noreferrer" className="hover:opacity-50 transition-opacity">
               <Instagram size={20} className="text-stone-400" />
             </a>
-            {/* Email: naogenbeat@gmail.com */}
             <a href={`mailto:${CONFIG.contactEmail}`} className="hover:opacity-50 transition-opacity">
               <Mail size={20} className="text-stone-400" />
             </a>
