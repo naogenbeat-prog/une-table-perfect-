@@ -9,6 +9,10 @@ const CONFIG = {
   heroImage:  "/cocktail-1-8-1.png",
   heroSlides: ["/cocktail-1-8-1.png", "/cocktail-15.png", "/cocktail-3.png"],
   logoImage: "/logo.png",
+  // Instagramのリンク先を変更
+  instagramUrl: "https://www.instagram.com/unetable_caterring",
+  // メールの送信先を変更
+  contactEmail: "naogenbeat@gmail.com"
 };
 
 const images = {
@@ -153,14 +157,13 @@ const App = () => {
       await fetch("https://api.web3forms.com/submit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ access_key: "f62692b3-e35a-46dc-8cfb-39afaab1ee76", name: formData.name, email: formData.email, message: fullMsg }),
+        body: JSON.stringify({ access_key: "7322504e-6b63-4750-9446-9b2d96325934", name: formData.name, email: formData.email, message: fullMsg }),
       });
       setStatus("success");
     } catch (error) { setStatus("error"); }
   };
 
   const displays = {
-    // スマホ版（<768px）は15番目の画像（インデックス14）を表示するように戻しました
     table: showAllTable ? images.galleryTable : (
         typeof window !== 'undefined' && window.innerWidth < 768 
         ? [images.galleryTable[14]] 
@@ -297,7 +300,7 @@ const App = () => {
         ))}
       </section>
 
-      {/* Simulation Section - pt-16 md:py-32 へ変更し、スマホ版のみ少し上にあげました */}
+      {/* Simulation Section */}
       <section id="simulation" className="pt-16 pb-20 md:py-32 bg-[#080808] px-6 border-y border-white/5 relative">
         <div className="mb-8 text-center">
           <h2 className="text-3xl md:text-5xl text-white font-light tracking-wide italic font-elegant">Simulation</h2>
@@ -468,44 +471,36 @@ const App = () => {
               </div>
               <div className="pt-4 relative">
                 <label className="text-amber-500 text-[10px] uppercase tracking-widest mb-1 block font-elegant">Message / Request</label>
-                <textarea onChange={(e)=>setFormData({...formData, message:e.target.value})} className="bg-transparent border-b border-zinc-800 text-white w-full py-2 outline-none focus:border-amber-500 text-base font-elegant transition-colors h-24 resize-none" placeholder="プランの詳細、アレルギー等ございましたらご記入ください"></textarea>
-                <div className="flex flex-wrap gap-x-4 gap-y-1 mt-2 text-[10px] uppercase tracking-widest font-elegant text-stone-500 opacity-80">
-                  <span className="flex gap-1.5">Guests:<b className="text-stone-300 font-normal">{guestCount}P</b></span>
-                  <span className="flex gap-1.5">Budget:<b className="text-stone-300 font-normal">¥{budget.toLocaleString()}</b></span>
-                  <span className="flex gap-1.5">Beverage:<b className="text-stone-300 font-normal">{drinkLabels[bevLevel]}</b></span>
-                  <span className="flex gap-1.5">Ingredient:<b className="text-stone-300 font-normal">{foodLabels[ingLevel]}</b></span>
-                </div>
+                <textarea onChange={(e)=>setFormData({...formData, message:e.target.value})} className="bg-transparent border border-zinc-800 text-white w-full p-4 outline-none focus:border-amber-500 text-base font-elegant transition-colors h-32 resize-none" />
               </div>
-              <div className="text-center pt-8">
-                <button type="submit" disabled={status === "submitting"} className="px-20 py-4 bg-amber-600 hover:bg-amber-500 text-black font-bold text-[10px] tracking-[0.4em] uppercase transition-all shadow-xl disabled:opacity-50">{status === "submitting" ? "Sending..." : "Submit Reservation"}</button>
+              <div className="text-center pt-6">
+                <button type="submit" disabled={status === "submitting"} className="px-20 py-4 bg-amber-600 hover:bg-amber-500 text-black font-bold text-[10px] tracking-[0.4em] uppercase transition-all shadow-xl disabled:opacity-50">
+                  {status === "submitting" ? "Sending..." : "Submit Reservation"}
+                </button>
               </div>
             </form>
           )}
         </div>
-      </section>
 
-      {/* Footer */}
-      <footer className="pt-12 pb-12 bg-black text-center text-zinc-600 relative overflow-hidden">
-        <div className="absolute inset-0 flex items-center justify-center opacity-[0.02] pointer-events-none">
-          <span className="font-brand text-[20vw] whitespace-nowrap tracking-tighter">{CONFIG.brandName}</span>
-        </div>
-        <div className="relative z-10 max-w-7xl mx-auto px-6">
-          <div className="flex flex-col items-center mb-12">
-            <img src={CONFIG.logoImage} className="h-32 opacity-90 mb-4" alt={CONFIG.brandName} />
-            <div className="w-32 border-t border-zinc-800 pt-2">
-              <span className="text-[13px] text-white tracking-[0.3em] uppercase font-elegant italic">since 2019</span>
-            </div>
+        {/* --- Footer Area --- */}
+        <div className="mt-32 border-t border-zinc-900 pt-20 pb-10 flex flex-col items-center">
+          <img src={CONFIG.logoImage} className="h-28 opacity-60 mb-8" alt="logo" />
+          <div className="flex justify-center gap-12 mb-16 items-center">
+            {/* Instagram: unetable_caterring */}
+            <a href={CONFIG.instagramUrl} target="_blank" rel="noopener noreferrer" className="hover:opacity-50 transition-opacity">
+              <Instagram size={20} className="text-stone-400" />
+            </a>
+            {/* Email: naogenbeat@gmail.com */}
+            <a href={`mailto:${CONFIG.contactEmail}`} className="hover:opacity-50 transition-opacity">
+              <Mail size={20} className="text-stone-400" />
+            </a>
           </div>
-          <div className="flex justify-center gap-16 mb-16 items-center">
-            <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" className="text-zinc-600 hover:text-amber-500 transition-colors duration-300"><Instagram size={48} strokeWidth={1} /></a>
-            <a href="mailto:contact@unetable.com" className="text-zinc-600 hover:text-amber-500 transition-colors duration-300"><Mail size={48} strokeWidth={1} /></a>
-          </div>
-          <div className="text-[10px] tracking-[0.3em] uppercase font-elegant opacity-60">
-            <p className="mb-2">&copy; {new Date().getFullYear()} {CONFIG.brandName}. All Rights Reserved.</p>
-            <p className="text-[9px] lowercase opacity-70">powered by tunesys</p>
+          <div className="text-center opacity-30 text-[9px] tracking-[0.5em] uppercase font-elegant">
+            <p className="mb-2">&copy; {new Date().getFullYear()} {CONFIG.brandName}</p>
+            <p className="lowercase tracking-widest italic">powered by tune table</p>
           </div>
         </div>
-      </footer>
+      </section>
     </div>
   );
 };
