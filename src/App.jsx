@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Menu, X, ChevronRight, Star, Quote, Mail, ChevronLeft, Calendar, Clock, CheckCircle2, Trophy, ExternalLink } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { Menu, X, ChevronRight, Star, Quote, Mail, ChevronLeft, Calendar, Clock, CheckCircle2, Trophy, ExternalLink, Check } from "lucide-react";
+import { motion, AnimatePresence, useAnimation, useDragControls } from "framer-motion";
 
 // --- 設定エリア ---
 const CONFIG = {
@@ -10,7 +10,14 @@ const CONFIG = {
   heroSlides: ["/cocktail-1-8-1.png", "/cocktail-15.png", "/cocktail-3.png"],
   logoImage: "/logo.png",
   instagramUrl: "https://www.instagram.com/unetable_caterring",
-  contactEmail: "naogenbeat@gmail.com"
+  contactEmail: "naogenbeat@gmail.com",
+  hallUrl: "https://www.smartkaigisitsu.net/properties/view/259",
+  hallSlides: [
+    "https://www.town7.net/hall/img/rote-pc-01.jpg", 
+    "https://www.town7.net/hall/img/rote-pc-02.jpg", 
+    "https://www.town7.net/hall/img/rote-pc-03.jpg", 
+    "https://www.town7.net/hall/img/rote-pc-04.jpg"
+  ]
 };
 
 const images = {
@@ -30,7 +37,7 @@ const images = {
     "/sozai-30.jpeg", "/sozai-29.png", "/sozai-25.jpeg", "/sozai-15-2.jpeg", 
     "/business-9.jpeg", "/cocktail-11.jpg", "/cocktail-12.png", "/cocktail-13.jpeg",
     "/sozai-35.jpg", "/sozai-26.jpg", "/sozai-12.png"
-  ],
+  ]
 };
 
 const galleryData = {
@@ -39,13 +46,14 @@ const galleryData = {
   private: { title: "Private Dining", desc: "オーダーメイドのレストラン。すべてにこだわった特別な空間で、最高のお料理をお楽しみください。", photos:["/private-4.jpg", "/private-19.png", "/private-3.jpg", "/sozai-17.png", "/sozai-22.png", "/private-2.jpg"] }
 };
 
+// 変更: 5500円、8500円、11500円(∞)の画像を差し替え
 const budgetMap = {
   4000: { name: "立食スタイル", img: "/cocktail-3.png", desc: "カジュアルに楽しむフィンガーフード主体のプラン。" },
-  5500: { name: "立食スタイル", img: "/cocktail-3.png", desc: "彩りとボリュームをプラスしたスタンダードな立食プラン。" },
+  5500: { name: "立食スタイル", img: "/sozai-37.png", desc: "彩りとボリュームをプラスしたスタンダードな立食プラン。" },
   7000: { name: "立食・着席スタイル", img: "/cocktail-7.png", desc: "おもてなしと満足感を両立させたスペシャリティ。" },
-  8500: { name: "立食・着席スタイル", img: "/cocktail-7.png", desc: "高級食材をふんだんに用いたハイグレードなビュッフェ。" },
+  8500: { name: "立食・着席スタイル", img: "/sozai-8.png", desc: "高級食材をふんだんに用いたハイグレードなビュッフェ。" },
   10000: { name: "着席スタイル", img: "/private-4.jpg", desc: "特別なゲストのための完全オーダーメイド・フルコース。" },
-  11500: { name: "着席スタイル", img: "/private-4.jpg", desc: "至高のサービスで綴る、最高峰の食体験。" },
+  11500: { name: "着席スタイル", img: "/sozai-17.png", desc: "至高のサービスで綴る、最高峰の食体験。" },
 };
 
 const drinkLabels = ["Standard", "Casual", "Premium", "Luxury", "Executive"];
@@ -54,7 +62,8 @@ const foodLabels = ["Normal", "Standard", "Special", "Premium", "Private"];
 const formOptions = [
   { key: 'standing', label: '立食スタイル' },
   { key: 'seated', label: '着席スタイル' },
-  { key: 'staff', label: 'サービススタッフ' }
+  { key: 'staff', label: 'サービススタッフ' },
+  { key: 'cloth', label: 'テーブルクロス' }
 ];
 
 const serviceList = [
@@ -93,7 +102,7 @@ const App = () => {
   const[status, setStatus] = useState("idle");
   const[formData, setFormData] = useState({ 
     name: "", email: "", message: "", date: "", startTime: "", endTime: "", 
-    options: { standing: false, seated: false, room: false, staff: false } 
+    options: { standing: false, seated: false, room: false, staff: false, cloth: false } 
   });
   
   const [slideIndex, setSlideIndex] = useState(0);
@@ -103,20 +112,34 @@ const App = () => {
   const [galleryDishIndex, setGalleryDishIndex] = useState(0); 
   const [showAllTable, setShowAllTable] = useState(false);
   const [showAllDish, setShowAllDish] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   
   const [guestCount, setGuestCount] = useState(20);
   const [budget, setBudget] = useState(4000);
   const [bevLevel, setBevLevel] = useState(0);
   const [ingLevel, setIngLevel] = useState(0);
   const [showSimInReservation, setShowSimInReservation] = useState(false);
+  
+  const [showHallPopup, setShowHallPopup] = useState(false);
+  const [hallSlideIndex, setHallSlideIndex] = useState(0); 
 
   const conceptRef = useRef(null);
   const [isConceptInView, setIsConceptInView] = useState(false);
+  
+  const dragControls = useDragControls();
+  const controls = useAnimation();
 
   const guestPoints = Math.floor((guestCount - 20) / 10);
   const budgetPoints = (budget - 4000) / 1500;
   const totalAvailablePoints = guestPoints + budgetPoints;
   const remainingPoints = totalAvailablePoints - (bevLevel + ingLevel);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   useEffect(() => {
     let currentBev = bevLevel;
@@ -132,7 +155,15 @@ const App = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    const handlePopState = () => setCurrentView("home");
+    const handlePopState = (e) => {
+      if (showHallPopup) {
+        document.body.classList.remove('modal-open');
+        setShowHallPopup(false);
+        window.history.pushState({}, "", ""); 
+      } else {
+        setCurrentView("home");
+      }
+    };
     window.addEventListener("popstate", handlePopState);
     
     const heroTimer = setInterval(() => { setHeroIndex((p) => (p + 1) % 3); }, 5000);
@@ -148,7 +179,7 @@ const App = () => {
       clearInterval(heroTimer); 
       if (conceptRef.current) observer.disconnect(); 
     };
-  }, [currentView]);
+  }, [currentView, showHallPopup]);
 
   useEffect(() => {
     let slideTimer;
@@ -173,11 +204,39 @@ const App = () => {
     }
   }, [currentView]);
 
+  useEffect(() => {
+    let hallTimer;
+    if (showHallPopup) {
+      hallTimer = setInterval(() => { setHallSlideIndex((p) => (p + 1) % CONFIG.hallSlides.length); }, 5000);
+    }
+    return () => clearInterval(hallTimer);
+  }, [showHallPopup]);
+
   const currentStep = Math.floor(slideIndex / 2);
   const handleViewChange = (v) => { if (v !== "home") window.history.pushState({}, "", ""); setCurrentView(v); };
   const handlePlanSelect = () => {
     setShowSimInReservation(true);
     setTimeout(() => { document.getElementById("contact")?.scrollIntoView({ behavior: 'smooth' }); }, 100);
+  };
+  
+  const openHallPopup = () => {
+    window.history.pushState({ popup: "hall" }, "", "");
+    document.body.classList.add('modal-open');
+    setShowHallPopup(true);
+  };
+
+  const closeHallPopup = () => {
+    document.body.classList.remove('modal-open');
+    setShowHallPopup(false);
+  };
+
+  const handleDragEnd = (event, info) => {
+    if (info.offset.y > 100) {
+      closeHallPopup();
+      window.history.back();
+    } else {
+      controls.start({ y: 0 });
+    }
   };
 
   const simResult = budgetMap[budget] || budgetMap[4000];
@@ -193,7 +252,9 @@ const App = () => {
     
     const optText = `オプション: ${activeOptions || 'なし'}`;
     const simText = showSimInReservation ? `【シミュレーション内容】\n人数: ${guestCount}名 / 単価: ¥${budget.toLocaleString()} / 飲料: ${drinkLabels[bevLevel]} / 食材: ${foodLabels[ingLevel]}` : "直接入力・未反映";
-    const fullMsg = `予約希望日: ${formData.date}\n希望時間: ${formData.startTime} 〜 ${formData.endTime}\n${optText}\n\n${simText}\n\nメッセージ:\n${formData.message}`;
+    const timeText = formData.startTime && formData.endTime ? `${formData.startTime} 〜 ${formData.endTime}` : "未選択";
+    
+    const fullMsg = `予約希望日: ${formData.date || "未選択"}\n希望時間: ${timeText}\n${optText}\n\n${simText}\n\nメッセージ:\n${formData.message}`;
     
     try {
       await fetch("https://api.web3forms.com/submit", {
@@ -250,9 +311,12 @@ const App = () => {
             transition: background-color 5000s ease-in-out 0s !important;
         }
         
-        textarea::placeholder {
-            color: rgba(255, 255, 255, 0.7);
-        }
+        textarea::placeholder { color: rgba(255, 255, 255, 0.7); }
+        body.modal-open { overflow: hidden; touch-action: none; }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.2); }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(212, 175, 55, 0.3); border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(212, 175, 55, 0.6); }
       `}} />
       
       <Navbar isScrolled={isScrolled} currentView={currentView} onViewChange={handleViewChange} />
@@ -261,9 +325,15 @@ const App = () => {
       <section className="relative h-screen overflow-hidden flex flex-col justify-center items-center text-center px-4 mb-20 md:mb-0">
         <div className="absolute inset-0 z-0">
           <AnimatePresence>
-            <motion.div key={heroIndex} initial={{ opacity: 0, scale: 1.3, filter: "brightness(1.1) blur(6px)" }} animate={{ opacity: 1, scale: 1.05, filter: "brightness(0.45) blur(0px)" }} exit={{ opacity: 0 }} transition={{ scale: { duration: 8, ease: "linear" }, opacity: { duration: 2.5 }, filter: { duration: 2.5 } }} className="absolute inset-0">
+            <motion.div 
+              key={heroIndex} 
+              initial={{ opacity: 0, scale: 1.3, filter: "brightness(1.1) blur(6px)" }} 
+              animate={{ opacity: 1, scale: 1.05, filter: (isMobile && heroIndex === 0) ? "brightness(0.65) blur(0px)" : "brightness(0.45) blur(0px)" }} 
+              exit={{ opacity: 0 }} 
+              transition={{ scale: { duration: 8, ease: "linear" }, opacity: { duration: 2.5 }, filter: { duration: 2.5 } }} 
+              className="absolute inset-0"
+            >
               <img src={CONFIG.heroSlides[heroIndex]} className="w-full h-full object-cover" alt="" />
-              {/* 変更: スマホ版の背景画像を明るくする (PCはそのまま) */}
               <div className="absolute inset-0 bg-black/20 md:bg-black/40 backdrop-blur-[1px] md:backdrop-blur-[2px]" />
             </motion.div>
           </AnimatePresence>
@@ -300,10 +370,9 @@ const App = () => {
       </section>
 
       {/* Concept Section */}
-      <section id="concept" ref={conceptRef} className="pt-10 pb-12 md:pt-20 md:pb-32 px-4 md:px-6 max-w-7xl mx-auto flex flex-col md:flex-row gap-4 md:gap-24 items-start">
+      <section id="concept" ref={conceptRef} className="pt-10 pb-16 md:pt-20 md:pb-32 px-4 md:px-6 max-w-7xl mx-auto flex flex-col md:flex-row gap-4 md:gap-24 items-start">
         
-        {/* スマホ版のみ：切り替わるテキストを画像の上に配置（2行下げるためmt-8追加） */}
-        <div className="md:hidden w-full flex flex-col items-center relative z-10 mt-8 mb-2">
+        <div className="md:hidden w-full flex flex-col items-center relative z-10 mt-12 mb-4">
           <div className="relative text-white text-lg leading-relaxed min-h-[90px] w-full">
             <AnimatePresence mode="wait">
               {[
@@ -322,15 +391,12 @@ const App = () => {
           </div>
         </div>
 
-        {/* スライド画像 */}
-        <div className="w-full md:w-1/2 relative h-[250px] md:h-[500px] overflow-hidden shadow-2xl rounded-sm">
+        <div className="w-full md:w-1/2 relative h-[300px] md:h-[500px] overflow-hidden shadow-2xl rounded-sm mt-[-10px] md:mt-0">
           {images.conceptSlide.map((img, i) => (<motion.img key={i} src={img} initial={{ opacity: 0 }} animate={{ opacity: i === slideIndex ? 1 : 0 }} transition={{ duration: 2 }} className="absolute inset-0 w-full h-full object-cover scale-105" alt="" />))}
           <div className="absolute inset-0 bg-black/10"></div>
         </div>
         
         <div className="w-full md:w-1/2 flex flex-col mt-4 md:mt-24">
-          
-          {/* PC版のみ：ここにタイトルと切り替わるテキストを配置 */}
           <div className="hidden md:block">
             <h2 className="text-2xl md:text-3xl text-amber-500 font-light font-elegant italic tracking-widest leading-none mb-6 md:mb-8 mt-0 text-center">感動の一瞬を 永遠の思い出に</h2>
             <div className="relative text-white text-lg md:text-xl leading-relaxed mt-6 md:mt-10 min-h-[140px] md:min-h-[160px]">
@@ -351,12 +417,11 @@ const App = () => {
             </div>
           </div>
           
-          {/* スマホ版のみ：ここにタイトルを配置し上下に余白 */}
-          <div className="md:hidden w-full text-center my-4">
-            <h2 className="text-xl text-amber-500 font-light font-elegant italic tracking-widest leading-none">感動の一瞬を 永遠の思い出に</h2>
+          <div className="md:hidden w-full text-center my-6">
+            <h2 className="text-2xl text-amber-500 font-light font-elegant italic tracking-widest leading-none">感動の一瞬を 永遠の思い出に</h2>
           </div>
 
-          <p className="mt-0 md:mt-4 pt-3 md:pt-4 border-t border-white/10 text-white text-[14px] md:text-xl font-elegant italic tracking-tight uppercase opacity-90 leading-relaxed md:leading-snug text-center">
+          <p className="mt-0 md:mt-4 pt-4 md:pt-4 border-t border-white/10 text-white text-[16px] md:text-xl font-elegant italic tracking-tight uppercase opacity-90 leading-relaxed md:leading-snug text-center">
             <span className="block">UNE TABLE（ユヌ・ターブル）は、フランス語で</span>
             <span className="block"><span className="text-amber-500 not-italic">「一つのテーブル」</span><span>を意味します。</span></span>
             <span className="block hidden md:block">大切なビジネスシーンから、かけがえのない瞬間に,</span>
@@ -369,7 +434,6 @@ const App = () => {
       {/* Services Section */}
       <section id="services" className="py-24 md:py-16 md:-mt-12 bg-zinc-900 px-6 md:px-12 max-w-7xl mx-auto flex flex-col justify-center">
         
-        {/* PC版：横並び */}
         <div className="hidden md:grid grid-cols-3 gap-12">
           {serviceList.map((s, i) => (
             <div key={i} onClick={() => handleViewChange(s.id)} className="group cursor-pointer">
@@ -382,7 +446,6 @@ const App = () => {
           ))}
         </div>
 
-        {/* スマホ版：シネマティックなアニメーション & フォント拡大 */}
         <div className="md:hidden relative min-h-[650px] w-full flex flex-col" onClick={() => handleViewChange(serviceList[serviceSlideIndex].id)}>
           <div className="relative flex-grow">
             <AnimatePresence mode="wait">
@@ -452,13 +515,11 @@ const App = () => {
               <input type="range" min="0" max="4" step="1" value={ingLevel} onChange={(e) => { const val = Number(e.target.value); if(val + bevLevel <= totalAvailablePoints) setIngLevel(val); }} />
             </div>
 
-            {/* 変更: チェックボックスの縦列揃えとホールボタンの中央寄せ */}
-            <div className="pt-3 md:pt-6 border-t border-white/5 flex gap-2 md:gap-8 mt-1 items-center justify-center">
-              <div className="flex flex-col gap-2 w-1/2 items-center md:items-start md:pr-0">
-                {/* w-[110px]等で幅を固定し、文字がガタガタしないようにする */}
-                <div className="flex flex-col gap-2">
+            <div className="pt-3 md:pt-6 border-t border-white/5 flex gap-2 md:gap-8 mt-1 items-stretch justify-center">
+              <div className="flex flex-col gap-1.5 w-5/12 items-center md:items-start justify-center">
+                <div className="flex flex-col gap-1.5 w-[110px] md:w-auto">
                   {formOptions.map(opt => (
-                    <label key={opt.key} className="flex items-center gap-2 cursor-pointer group w-[110px]">
+                    <label key={opt.key} className="flex items-center gap-2 cursor-pointer group w-fit">
                       <div 
                         onClick={() => setFormData({ ...formData, options: { ...formData.options, [opt.key]: !formData.options[opt.key] } })} 
                         className={`w-3.5 h-3.5 md:w-4 md:h-4 border flex items-center justify-center transition-all shrink-0 ${formData.options[opt.key] ? 'bg-amber-500 border-amber-500' : 'border-stone-700 group-hover:border-stone-500'}`}
@@ -471,14 +532,17 @@ const App = () => {
                 </div>
               </div>
               
-              <div className="w-1/2 flex flex-col justify-center">
+              <div className="w-7/12 flex flex-col justify-center pl-0">
                 <button 
                   type="button"
-                  onClick={() => alert("ホール利用の別ページへ遷移します（後日実装）")}
-                  className="w-full max-w-[120px] md:max-w-[140px] mx-auto flex flex-col items-center justify-center gap-1 p-2 md:p-4 border border-amber-500/30 bg-amber-500/5 hover:bg-amber-500/10 text-amber-500 transition-all rounded-sm group"
+                  onClick={openHallPopup}
+                  className="w-full h-full min-h-[50px] md:min-h-[60px] flex flex-col items-center justify-center p-2 md:p-4 border border-amber-500/30 bg-amber-500/5 hover:bg-amber-500/10 text-amber-500 transition-all rounded-sm group"
                 >
-                  <ExternalLink size={18} className="group-hover:scale-110 transition-transform" />
-                  <span className="text-[9px] md:text-xs uppercase tracking-widest font-elegant whitespace-nowrap font-bold mt-1">ホール利用</span>
+                  <div className="flex items-center gap-1.5">
+                    <ExternalLink size={16} className="group-hover:scale-110 transition-transform" />
+                    <span className="text-[11px] md:text-xs uppercase tracking-widest font-elegant whitespace-nowrap font-bold">ホール利用</span>
+                  </div>
+                  <span className="text-[8px] md:text-[9px] text-stone-400 font-elegant tracking-widest mt-1 whitespace-nowrap">会場の空き状況を確認</span>
                 </button>
               </div>
             </div>
@@ -516,7 +580,6 @@ const App = () => {
         <div className="mb-24 text-center">
           <h2 className="text-3xl md:text-5xl text-white font-light tracking-wide italic mb-10 md:mb-16 font-elegant">「テーブル」の記録</h2>
           
-          {/* PC版：横並び静止画 */}
           <div className="hidden md:grid grid-cols-3 gap-6">
             <AnimatePresence>
               {displays.table.map((img) => (
@@ -527,7 +590,6 @@ const App = () => {
             </AnimatePresence>
           </div>
 
-          {/* スマホ版：シネマティックなスライドショー */}
           <div className="md:hidden relative aspect-square bg-zinc-900 shadow-2xl overflow-hidden">
             {!showAllTable ? (
               <AnimatePresence mode="wait">
@@ -559,7 +621,6 @@ const App = () => {
         <div className="text-center mt-40 md:mt-56">
           <h2 className="text-3xl md:text-5xl text-white font-light tracking-wide italic mb-10 md:mb-16 font-elegant">「一皿」の記録</h2>
           
-          {/* PC版：横並び静止画 */}
           <div className="hidden md:grid grid-cols-3 gap-6">
             <AnimatePresence>
               {displays.dish.map((img) => (
@@ -570,7 +631,6 @@ const App = () => {
             </AnimatePresence>
           </div>
 
-          {/* スマホ版：シネマティックなスライドショー */}
           <div className="md:hidden relative aspect-square bg-zinc-900 shadow-2xl overflow-hidden">
             {!showAllDish ? (
               <AnimatePresence mode="wait">
@@ -625,22 +685,22 @@ const App = () => {
                     <input type="email" onChange={(e)=>setFormData({...formData, email:e.target.value})} required className="bg-transparent border-b border-zinc-800 text-white w-full py-1 outline-none focus:border-amber-500 text-sm md:text-base font-elegant transition-colors" style={{ WebkitBoxShadow: "0 0 0 1000px #0a0a0a inset", WebkitTextFillColor: "#ffffff" }} />
                   </div>
                   
-                  {/* 変更: センター合わせに変更 */}
+                  {/* Reservation側のオプション (1列に横並び・中央寄せ) */}
                   <div className="pt-1">
-                    <div className="flex items-center justify-center gap-x-6 gap-y-2 flex-wrap">
+                    <div className="flex flex-nowrap items-center justify-center w-full overflow-hidden px-1 gap-2 md:gap-4">
                       {formOptions.map(opt => (
-                        <label key={opt.key} className="flex items-center gap-2 cursor-pointer group">
+                        <label key={opt.key} className="flex items-center gap-1.5 cursor-pointer group whitespace-nowrap shrink-0">
                           <div onClick={()=>setFormData({...formData, options: {...formData.options, [opt.key]: !formData.options[opt.key]}})} className={`w-3.5 h-3.5 border flex items-center justify-center transition-all shrink-0 ${formData.options[opt.key] ? 'bg-amber-500 border-amber-500' : 'border-stone-800 group-hover:border-stone-600'}`}>
                             {formData.options[opt.key] && <CheckCircle2 size={10} className="text-black" />}
                           </div>
-                          <span className="text-[10px] text-stone-500 font-elegant whitespace-nowrap tracking-tighter">{opt.label}</span>
+                          <span className="text-[8px] md:text-[10px] text-stone-500 font-elegant whitespace-nowrap tracking-tighter">{opt.label}</span>
                         </label>
                       ))}
                     </div>
                   </div>
                 </div>
                 
-                <div className="space-y-4 mt-2 md:mt-0">
+                <div className="space-y-4 mt-2 md:mt-0 flex flex-col justify-between">
                   <div>
                     <label className="text-amber-500 text-[10px] uppercase tracking-widest mb-1 block font-elegant">Date</label>
                     <div className="relative flex items-center justify-end gap-3 border-b border-zinc-800 py-1 transition-colors group">
@@ -651,27 +711,29 @@ const App = () => {
                   </div>
                   <div>
                     <label className="text-amber-500 text-[10px] uppercase tracking-widest mb-1 block font-elegant">Time Select</label>
-                    <div className="flex items-center justify-end gap-3 border-b border-zinc-800 py-1 transition-colors">
-                      {/* 変更: Startを中央寄せ気味（右寄せをやめるか調整） */}
-                      <select onChange={(e)=>setFormData({...formData, startTime:e.target.value})} required className="bg-transparent text-white outline-none font-elegant text-sm md:text-base appearance-none cursor-pointer focus:text-amber-500 w-full text-center md:text-right pl-4">
-                        <option value="" className="bg-zinc-900 text-stone-500">Start</option>
-                        {Array.from({ length: 25 }, (_, i) => {
-                          const h = Math.floor(i / 2) + 10;
-                          const m = i % 2 === 0 ? "00" : "30";
-                          const t = `${h}:${m}`;
-                          return h <= 21 ? <option key={t} value={t} className="bg-zinc-900 text-white">{t}</option> : null;
-                        })}
-                      </select>
-                      <span className="text-stone-600 font-elegant text-sm md:text-base">~</span>
-                      <select onChange={(e)=>setFormData({...formData, endTime:e.target.value})} required className="bg-transparent text-white outline-none font-elegant text-sm md:text-base appearance-none cursor-pointer focus:text-amber-500 text-right w-full">
-                        <option value="" className="bg-zinc-900 text-stone-500">End</option>
-                        {Array.from({ length: 25 }, (_, i) => {
-                          const h = Math.floor(i / 2) + 10;
-                          const m = i % 2 === 0 ? "00" : "30";
-                          const t = `${h}:${m}`;
-                          return h <= 22 ? <option key={t} value={t} className="bg-zinc-900 text-white">{t}</option> : null;
-                        })}
-                      </select>
+                    {/* スマホ・PCともに美しく中央寄せ */}
+                    <div className="flex items-center justify-center md:justify-end gap-2 border-b border-zinc-800 py-1 transition-colors w-full">
+                      <div className="flex items-center justify-center w-full gap-2 md:gap-4">
+                        <select onChange={(e)=>setFormData({...formData, startTime:e.target.value})} required className="bg-transparent text-white outline-none font-elegant text-base md:text-lg appearance-none cursor-pointer focus:text-amber-500 text-center md:text-right px-2 w-24">
+                          <option value="" className="bg-zinc-900 text-stone-500">Start</option>
+                          {Array.from({ length: 25 }, (_, i) => {
+                            const h = Math.floor(i / 2) + 10;
+                            const m = i % 2 === 0 ? "00" : "30";
+                            const t = `${h}:${m}`;
+                            return h <= 21 ? <option key={t} value={t} className="bg-zinc-900 text-white">{t}</option> : null;
+                          })}
+                        </select>
+                        <span className="text-stone-600 font-elegant text-base md:text-lg mx-1">-</span>
+                        <select onChange={(e)=>setFormData({...formData, endTime:e.target.value})} required className="bg-transparent text-white outline-none font-elegant text-base md:text-lg appearance-none cursor-pointer focus:text-amber-500 text-center md:text-left px-2 w-24">
+                          <option value="" className="bg-zinc-900 text-stone-500">End</option>
+                          {Array.from({ length: 25 }, (_, i) => {
+                            const h = Math.floor(i / 2) + 10;
+                            const m = i % 2 === 0 ? "00" : "30";
+                            const t = `${h}:${m}`;
+                            return h <= 22 ? <option key={t} value={t} className="bg-zinc-900 text-white">{t}</option> : null;
+                          })}
+                        </select>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -682,8 +744,8 @@ const App = () => {
                 <textarea 
                   onChange={(e)=>setFormData({...formData, message:e.target.value})} 
                   required 
-                  placeholder="サービススタッフ・コンパニオン・ワゴンサービス。アレルギーに関しても、お気軽にお問い合わせください。" 
-                  className="bg-transparent border border-zinc-800 text-white w-full p-2 md:p-3 outline-none focus:border-amber-500 text-xs md:text-sm font-elegant transition-colors h-16 md:h-20 resize-none" 
+                  placeholder={`サービススタッフ（コンパニオン）の人数、テーブルクロスの枚数（2400×1200）、ワゴンサービス。\nアレルギーに関しても、お気軽にお問い合わせください。`}
+                  className="bg-transparent border border-zinc-800 text-white w-full p-2 md:p-3 outline-none focus:border-amber-500 text-xs md:text-sm font-elegant transition-colors h-16 md:h-24 resize-none" 
                 />
               </div>
 
@@ -703,7 +765,9 @@ const App = () => {
 
         {/* --- Footer Area --- */}
         <div className="mt-16 md:mt-24 border-t border-zinc-900 pt-12 pb-8 flex flex-col items-center">
-          <img src={CONFIG.logoImage} className="h-20 md:h-24 opacity-60 mb-6" alt="logo" />
+          <img src={CONFIG.logoImage} className="h-20 md:h-24 opacity-60 mb-2" alt="logo" />
+          <div className="text-white text-[10px] tracking-[1em] uppercase font-elegant mb-10 opacity-80 pl-2">since 2019</div>
+          
           <div className="flex justify-center gap-12 mb-10 items-center">
             <a href={CONFIG.instagramUrl} target="_blank" rel="noopener noreferrer" className="hover:opacity-50 transition-opacity">
               <Instagram size={20} className="text-stone-400" />
@@ -718,6 +782,171 @@ const App = () => {
           </div>
         </div>
       </section>
+
+      {/* --- ホール利用 ポップアップ (モーダル) --- */}
+      <AnimatePresence>
+        {showHallPopup && (
+          <motion.div 
+            initial={{ opacity: 0 }} 
+            animate={{ opacity: 1 }} 
+            exit={{ opacity: 0 }} 
+            className="fixed inset-0 z-[100] flex items-center justify-center p-0 md:p-0"
+          >
+            {/* 背景の暗闇 (PCではタップで閉じる用) */}
+            <div 
+              className="absolute inset-0 bg-black/80 backdrop-blur-md cursor-pointer"
+              onClick={closeHallPopup}
+            ></div>
+
+            {/* モーダル本体: スマホは縦長スワイプ対応、PCはフルスクリーン */}
+            <motion.div 
+              drag={isMobile ? "y" : false}
+              dragControls={dragControls}
+              dragListener={isMobile}
+              dragConstraints={{ top: 0, bottom: 0 }}
+              dragElastic={0.2}
+              onDragEnd={handleDragEnd}
+              animate={controls}
+              initial={isMobile ? { y: "100%", opacity: 0 } : { scale: 0.95, opacity: 0 }} 
+              animate={isMobile ? { y: 0, opacity: 1 } : { scale: 1, opacity: 1 }} 
+              exit={isMobile ? { y: "100%", opacity: 0 } : { scale: 0.95, opacity: 0 }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              className="relative w-full h-full bg-zinc-950 md:bg-transparent shadow-2xl overflow-hidden flex flex-col md:flex-row mt-auto md:mt-0 z-10"
+            >
+              {/* --- 全画面背景のスライドショー (PC・スマホ共通) --- */}
+              <div className="absolute inset-0 z-0">
+                <AnimatePresence mode="wait">
+                  <motion.img 
+                    key={hallSlideIndex}
+                    src={CONFIG.hallSlides[hallSlideIndex]} 
+                    initial={{ opacity: 0, scale: 1.05 }} 
+                    animate={{ opacity: 1, scale: 1 }} 
+                    exit={{ opacity: 0 }} 
+                    transition={{ duration: 1.5, ease: "easeOut" }}
+                    className="absolute inset-0 w-full h-full object-cover opacity-50 md:opacity-40" 
+                    alt="" 
+                  />
+                </AnimatePresence>
+                {/* グラスモーフィズム風の半透明黒フィルター */}
+                <div className="absolute inset-0 bg-black/70 md:bg-black/80 backdrop-blur-[2px]"></div>
+              </div>
+
+              {/* スマホ版のみ：上部のスワイプ用バー（ハンドル） */}
+              <div className="md:hidden w-full flex justify-center pt-3 pb-2 shrink-0 z-20" onPointerDown={(e) => dragControls.start(e)}>
+                <div className="w-12 h-1.5 bg-zinc-500/50 rounded-full"></div>
+              </div>
+
+              {/* 戻るボタン (共通) */}
+              <button 
+                onClick={closeHallPopup}
+                className="absolute top-4 left-4 z-30 flex items-center gap-1 bg-black/40 px-3 py-1.5 rounded-sm text-stone-300 hover:text-amber-500 transition-colors backdrop-blur-md text-xs uppercase tracking-widest font-elegant border border-white/10"
+              >
+                <ChevronLeft size={14} /> Back
+              </button>
+
+              {/* タイトル & アピールポイントエリア (PC版は左側全体を使って左上と左下に配置) */}
+              <div className="relative md:w-1/2 shrink-0 z-10 flex flex-col justify-between p-6 md:p-20">
+                
+                {/* PC版：タイトルを左上に配置 */}
+                <div className="hidden md:block relative z-10 mt-8">
+                  <span className="text-amber-500 text-[13px] tracking-[0.4em] uppercase font-elegant block mb-2 drop-shadow-md">Partner Facility</span>
+                  {/* PC版は改行させない */}
+                  <h3 className="text-[42px] whitespace-nowrap text-white font-elegant tracking-widest drop-shadow-xl leading-tight">タウンセブンホール</h3>
+                </div>
+
+                {/* PC版：左下に Exclusive Offers を配置 */}
+                <div className="hidden md:block bg-black/40 border border-white/10 p-8 rounded-sm backdrop-blur-sm mt-auto max-w-lg">
+                  <h4 className="text-amber-500 text-sm uppercase tracking-[0.3em] font-elegant mb-6 text-center">Exclusive Offers</h4>
+                  <div className="w-full flex justify-center">
+                    <div className="inline-block text-left px-2">
+                      <ul className="space-y-5">
+                        {[
+                          "ケータリング指定店としてタウンセブンと提携",
+                          "御紹介の内容により、会場使用料の特別割引に対応",
+                          "設営・復帰・清掃は、会場使用時間から除外（無料）"
+                        ].map((item, idx) => (
+                          <li key={idx} className="flex items-start gap-2.5 text-stone-300 text-base">
+                            <Check size={18} className="text-amber-500 shrink-0 mt-0.5" />
+                            <span className="leading-snug">{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                {/* スマホ版のみ：タイトルを上部に表示 */}
+                <div className="md:hidden relative z-10 mt-12 mb-4 px-2">
+                  <span className="text-amber-500 text-[11px] tracking-[0.4em] uppercase font-elegant block mb-2 drop-shadow-md">Partner Facility</span>
+                  <h3 className="text-3xl text-white font-elegant tracking-widest drop-shadow-xl leading-tight">タウンセブンホール</h3>
+                </div>
+              </div>
+
+              {/* テキスト・コンテンツエリア (PCは右側全体。要素の余白を削って1画面に収納) */}
+              <div className="flex flex-col w-full md:w-1/2 overflow-y-auto custom-scrollbar z-10 bg-black/40 backdrop-blur-md md:bg-transparent md:backdrop-blur-none justify-center">
+                <div className="p-6 md:p-20 flex-grow flex flex-col justify-center">
+                  
+                  {/* 説明文 (スマホ版は1行に収まるように改行) */}
+                  <p className="text-stone-300 text-[14px] md:text-lg leading-relaxed font-elegant italic mb-6 md:mb-12 drop-shadow-md">
+                    荻窪駅直結の好アクセス。洗練された広々とした空間で、<br className="md:hidden"/>上質なケータリングとともに、大切なレセプションや<br className="md:hidden"/>特別なパーティーを演出いたします。
+                  </p>
+
+                  <div className="space-y-4 md:space-y-6 mb-6 md:mb-8">
+                    <div className="border-l-2 border-amber-500 pl-4 md:pl-6 py-0.5 md:py-1">
+                      <h4 className="text-white text-[14px] md:text-lg tracking-widest font-elegant uppercase mb-1.5 md:mb-2">Location</h4>
+                      <p className="text-stone-400 text-[13px] md:text-base drop-shadow-md whitespace-nowrap">東京都杉並区上荻1-9-1 タウンセブンビル 8F</p>
+                    </div>
+                    <div className="border-l-2 border-amber-500 pl-4 md:pl-6 py-0.5 md:py-1">
+                      <h4 className="text-white text-[14px] md:text-lg tracking-widest font-elegant uppercase mb-1.5 md:mb-2">Capacity</h4>
+                      <p className="text-stone-400 text-[13px] md:text-base drop-shadow-md whitespace-nowrap">立食: 〜約120名 / 着席: 〜約80名様</p>
+                    </div>
+                  </div>
+
+                  {/* スマホ版のみ：Exclusive Offers をここに表示 */}
+                  <div className="md:hidden bg-black/50 border border-white/10 p-5 rounded-sm mb-4 backdrop-blur-sm">
+                    <h4 className="text-amber-500 text-[11px] uppercase tracking-[0.3em] font-elegant mb-4 text-center">Exclusive Offers</h4>
+                    <div className="w-full flex justify-center">
+                      <ul className="space-y-3 inline-block text-left px-2">
+                        {[
+                          "ケータリング指定店としてタウンセブンと提携",
+                          "御紹介の内容により、会場使用料の特別割引に対応",
+                          "設営・復帰・清掃は、会場使用時間から除外（無料）"
+                        ].map((item, idx) => (
+                          <li key={idx} className="flex items-start gap-2 text-stone-300 text-[12px]">
+                            <Check size={16} className="text-amber-500 shrink-0 mt-0.5" />
+                            <span className="leading-snug">{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+
+                  {/* PC/スマホ版共通：予約誘導テキスト */}
+                  <div className="text-center mb-6 md:mb-8 mt-auto md:mt-4">
+                    <p className="text-stone-300 text-[12px] md:text-lg md:font-bold tracking-widest leading-relaxed whitespace-nowrap drop-shadow-md">
+                      予約ページ移行後、【プラン選択】および【空き情報】<br/>よりご予約下さい。
+                    </p>
+                  </div>
+
+                  {/* 予約ボタン */}
+                  <div className="shrink-0 w-full max-w-sm mx-auto">
+                    <a 
+                      href={CONFIG.hallUrl} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-center gap-2 w-full py-4 md:py-5 bg-amber-600 hover:bg-amber-500 text-black font-bold text-[12px] md:text-sm tracking-[0.3em] uppercase transition-all shadow-2xl rounded-sm"
+                    >
+                      <ExternalLink size={18} />
+                      <span>空き状況・ご予約はこちら</span>
+                    </a>
+                  </div>
+
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
