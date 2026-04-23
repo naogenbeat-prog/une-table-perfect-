@@ -48,11 +48,11 @@ const galleryData = {
 
 const budgetMap = {
   4000: { name: "立食スタイル", img: "/cocktail-3.png", desc: "カジュアルに楽しむフィンガーフード主体のプラン。" },
-  5500: { name: "立食スタイル", img: "/cocktail-3.png", desc: "彩りとボリュームをプラスしたスタンダードな立食プラン。" },
+  5500: { name: "立食スタイル", img: "/sozai-37.png", desc: "彩りとボリュームをプラスしたスタンダードな立食プラン。" },
   7000: { name: "立食・着席スタイル", img: "/cocktail-7.png", desc: "おもてなしと満足感を両立させたスペシャリティ。" },
-  8500: { name: "立食・着席スタイル", img: "/cocktail-7.png", desc: "高級食材をふんだんに用いたハイグレードなビュッフェ。" },
+  8500: { name: "立食・着席スタイル", img: "/sozai-8.png", desc: "高級食材をふんだんに用いたハイグレードなビュッフェ。" },
   10000: { name: "着席スタイル", img: "/private-4.jpg", desc: "特別なゲストのための完全オーダーメイド・フルコース。" },
-  11500: { name: "着席スタイル", img: "/private-4.jpg", desc: "至高のサービスで綴る、最高峰の食体験。" },
+  11500: { name: "着席スタイル", img: "/sozai-17.png", desc: "至高のサービスで綴る、最高峰の食体験。" },
 };
 
 const drinkLabels = ["Standard", "Casual", "Premium", "Luxury", "Executive"];
@@ -332,7 +332,6 @@ const App = () => {
               transition={{ scale: { duration: 8, ease: "linear" }, opacity: { duration: 2.5 }, filter: { duration: 2.5 } }} 
               className="absolute inset-0"
             >
-              {/* fetchpriority="high" で一番最初の画像を爆速読み込み */}
               <img src={CONFIG.heroSlides[heroIndex]} fetchpriority={heroIndex === 0 ? "high" : "auto"} decoding="async" className="w-full h-full object-cover" alt="" />
               <div className="absolute inset-0 bg-black/20 md:bg-black/40 backdrop-blur-[1px] md:backdrop-blur-[2px]" />
             </motion.div>
@@ -553,16 +552,16 @@ const App = () => {
               <motion.div key={simResult.img} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.8 }} className="h-full flex flex-col">
                 
                 <div className="relative overflow-hidden h-36 md:h-64 lg:h-[360px] shrink-0">
-                  <img src={simResult.img} loading="lazy" decoding="async" className="w-full h-full object-cover opacity-70" alt="" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#111] via-[#111]/40 to-transparent"></div>
-                  <div className="absolute bottom-2 left-4 md:bottom-4 md:left-8">
-                    <span className="text-amber-500 text-[8px] md:text-[9px] tracking-[0.4em] uppercase font-elegant">Plan Proposal</span>
-                    <h3 className="text-2xl md:text-3xl text-white font-elegant italic mt-0 leading-tight">{simResult.name}</h3>
-                  </div>
+                  {/* 画像のテキストを下に移動させたため、画像はクリアに表示 */}
+                  <img src={simResult.img} loading="lazy" decoding="async" className="w-full h-full object-cover opacity-80" alt="" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#111] via-transparent to-transparent"></div>
                 </div>
 
-                <div className="px-4 py-3 md:px-8 md:py-6 flex flex-col flex-grow bg-[#111] justify-between items-center text-center">
-                  <p className="text-stone-300 text-[12px] md:text-sm leading-relaxed font-elegant italic mb-2 md:mb-4">{simResult.desc}</p>
+                {/* 変更: テキスト全体を黒背景の中に配置し、美しく中央寄せ */}
+                <div className="px-4 py-3 md:px-8 md:py-6 flex flex-col flex-grow bg-[#111] justify-center items-center text-center">
+                  <span className="text-amber-500 text-[8px] md:text-[9px] tracking-[0.4em] uppercase font-elegant mb-1">Plan Proposal</span>
+                  <h3 className="text-2xl md:text-3xl text-white font-elegant italic mb-3 leading-tight">{simResult.name}</h3>
+                  <p className="text-stone-300 text-[12px] md:text-sm leading-relaxed font-elegant italic mb-4">{simResult.desc}</p>
                   
                   <div className="mt-auto w-full max-w-xs pt-2">
                     <button onClick={() => handlePlanSelect()} className="w-full py-3 md:py-4 bg-amber-600 hover:bg-amber-500 text-black font-bold text-[11px] md:text-[12px] tracking-[0.4em] uppercase transition-all shadow-xl leading-none">RESERVATION</button>
@@ -685,7 +684,6 @@ const App = () => {
                     <input type="email" onChange={(e)=>setFormData({...formData, email:e.target.value})} required className="bg-transparent border-b border-zinc-800 text-white w-full py-1 outline-none focus:border-amber-500 text-sm md:text-base font-elegant transition-colors" style={{ WebkitBoxShadow: "0 0 0 1000px #0a0a0a inset", WebkitTextFillColor: "#ffffff" }} />
                   </div>
                   
-                  {/* Reservation側のオプション (1列に横並び・中央寄せ) */}
                   <div className="pt-1">
                     <div className="flex flex-nowrap items-center justify-center w-full overflow-hidden px-1 gap-2 md:gap-4">
                       {formOptions.map(opt => (
@@ -711,10 +709,10 @@ const App = () => {
                   </div>
                   <div>
                     <label className="text-amber-500 text-[10px] uppercase tracking-widest mb-1 block font-elegant">Time Select</label>
-                    {/* スマホもPCも完全に中央寄せの Start-End 配置 */}
-                    <div className="flex items-center justify-center md:justify-end gap-2 border-b border-zinc-800 py-1 transition-colors w-full">
-                      <div className="flex items-center justify-center w-full md:w-auto gap-2 md:gap-4">
-                        <select onChange={(e)=>setFormData({...formData, startTime:e.target.value})} required className="bg-transparent text-white outline-none font-elegant text-base md:text-lg appearance-none cursor-pointer focus:text-amber-500 text-center md:text-right px-2 w-20 md:w-24">
+                    {/* 変更: Start と End を中央寄せにしてフォントサイズを揃える */}
+                    <div className="flex items-center justify-center md:justify-end border-b border-zinc-800 py-1 transition-colors w-full">
+                      <div className="flex items-center w-full justify-center md:justify-end gap-2 md:gap-4 px-4 md:px-0">
+                        <select onChange={(e)=>setFormData({...formData, startTime:e.target.value})} required className="bg-transparent text-white outline-none font-elegant text-base md:text-lg appearance-none cursor-pointer focus:text-amber-500 text-center md:text-right w-20 md:w-24">
                           <option value="" className="bg-zinc-900 text-stone-500">Start</option>
                           {Array.from({ length: 25 }, (_, i) => {
                             const h = Math.floor(i / 2) + 10;
@@ -723,8 +721,8 @@ const App = () => {
                             return h <= 21 ? <option key={t} value={t} className="bg-zinc-900 text-white">{t}</option> : null;
                           })}
                         </select>
-                        <span className="text-stone-600 font-elegant text-base md:text-lg mx-1 md:mx-2">-</span>
-                        <select onChange={(e)=>setFormData({...formData, endTime:e.target.value})} required className="bg-transparent text-white outline-none font-elegant text-base md:text-lg appearance-none cursor-pointer focus:text-amber-500 text-center md:text-left px-2 w-20 md:w-24">
+                        <span className="text-stone-600 font-elegant text-base md:text-lg">-</span>
+                        <select onChange={(e)=>setFormData({...formData, endTime:e.target.value})} required className="bg-transparent text-white outline-none font-elegant text-base md:text-lg appearance-none cursor-pointer focus:text-amber-500 text-center md:text-left w-20 md:w-24">
                           <option value="" className="bg-zinc-900 text-stone-500">End</option>
                           {Array.from({ length: 25 }, (_, i) => {
                             const h = Math.floor(i / 2) + 10;
@@ -798,7 +796,7 @@ const App = () => {
               onClick={closeHallPopup}
             ></div>
 
-            {/* モーダル本体: スマホは縦長スワイプ対応、PCはフルスクリーンで横長配置 */}
+            {/* モーダル本体: スマホは縦長スワイプ、PCはフルスクリーンで中央に浮き上がるレイアウト */}
             <motion.div 
               drag={isMobile ? "y" : false}
               dragControls={dragControls}
@@ -811,7 +809,7 @@ const App = () => {
               animate={isMobile ? { y: 0, opacity: 1 } : { scale: 1, opacity: 1 }} 
               exit={isMobile ? { y: "100%", opacity: 0 } : { scale: 0.95, opacity: 0 }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="relative w-full h-full bg-zinc-950 md:bg-transparent shadow-2xl overflow-hidden flex flex-col md:flex-row mt-auto md:mt-0 z-10"
+              className="relative w-full h-full md:h-[600px] md:max-h-[85vh] md:max-w-4xl bg-zinc-950 md:bg-transparent shadow-2xl overflow-hidden md:rounded-sm flex flex-col md:flex-row mt-auto md:mt-0 z-10"
             >
               {/* --- 全画面背景のスライドショー (PC・スマホ共通) --- */}
               <div className="absolute inset-0 z-0">
@@ -828,7 +826,7 @@ const App = () => {
                   />
                 </AnimatePresence>
                 {/* グラスモーフィズム風の半透明黒フィルター */}
-                <div className="absolute inset-0 bg-black/70 md:bg-black/80 backdrop-blur-[2px]"></div>
+                <div className="absolute inset-0 bg-black/70 md:bg-black/80 backdrop-blur-sm"></div>
               </div>
 
               {/* スマホ版のみ：上部のスワイプ用バー（ハンドル） */}
@@ -844,75 +842,52 @@ const App = () => {
                 <ChevronLeft size={14} /> Back
               </button>
 
-              {/* --- PC版：左側レイアウト --- */}
-              <div className="hidden md:flex relative w-1/2 shrink-0 flex-col justify-between p-20 z-10">
-                
-                {/* 左上：タイトル */}
-                <div className="mt-8">
-                  <span className="text-amber-500 text-[13px] tracking-[0.4em] uppercase font-elegant block mb-2 drop-shadow-md">Partner Facility</span>
-                  {/* PC版は改行させない */}
-                  <h3 className="text-[42px] whitespace-nowrap text-white font-elegant tracking-widest drop-shadow-xl leading-tight">タウンセブンホール</h3>
-                </div>
-
-                {/* 左下：Exclusive Offers */}
-                <div className="bg-black/40 border border-white/10 p-8 rounded-sm backdrop-blur-sm mt-auto max-w-lg">
-                  <h4 className="text-amber-500 text-sm uppercase tracking-[0.3em] font-elegant mb-6 text-center">Exclusive Offers</h4>
-                  <div className="w-full flex justify-center">
-                    <div className="inline-block text-left px-2">
-                      <ul className="space-y-5">
-                        {[
-                          "ケータリング指定店としてタウンセブンと提携",
-                          "御紹介の内容により、会場使用料の特別割引に対応",
-                          "設営・復帰・清掃は、会場使用時間から除外（無料）"
-                        ].map((item, idx) => (
-                          <li key={idx} className="flex items-start gap-2.5 text-stone-300 text-base">
-                            <Check size={18} className="text-amber-500 shrink-0 mt-0.5" />
-                            <span className="leading-snug">{item}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
               {/* --- スマホ版のみ：上部タイトル表示 --- */}
               <div className="md:hidden relative z-10 mt-10 mb-2 px-6 pb-0">
-                <span className="text-amber-500 text-[12px] tracking-[0.4em] uppercase font-elegant block mb-2 drop-shadow-md">Partner Facility</span>
+                <span className="text-amber-500 text-[11px] tracking-[0.4em] uppercase font-elegant block mb-2 drop-shadow-md">Partner Facility</span>
                 <h3 className="text-3xl text-white font-elegant tracking-widest drop-shadow-xl leading-tight">タウンセブンホール</h3>
               </div>
 
-              {/* --- コンテンツエリア (PCは右側全体。要素の余白を削って1画面に収納) --- */}
-              <div className="flex flex-col w-full md:w-1/2 overflow-y-auto custom-scrollbar z-10 bg-black/40 backdrop-blur-md md:bg-transparent md:backdrop-blur-none justify-center">
-                <div className="px-6 py-4 md:p-20 md:pt-32 flex-grow flex flex-col justify-start">
+              {/* --- コンテンツエリア (PC版の新しい中央寄せレイアウト) --- */}
+              <div className="flex flex-col w-full h-full overflow-y-auto custom-scrollbar z-10 md:bg-black/40 md:backdrop-blur-md justify-center items-center">
+                <div className="p-6 md:p-12 w-full h-full flex flex-col justify-start md:justify-center items-center">
                   
-                  {/* 説明文 (スマホ版は1行に収まるように改行設定) */}
-                  <p className="text-stone-300 text-[15px] md:text-lg leading-relaxed font-elegant italic mb-6 md:mb-12 drop-shadow-md">
-                    荻窪駅直結の好アクセス。洗練された広々とした空間で、<br className="md:hidden"/>上質なケータリングとともに、大切なレセプションや<br className="md:hidden"/>特別なパーティーを演出いたします。
+                  {/* PC版のみ：中央上部にタイトル */}
+                  <div className="hidden md:flex flex-col items-center mb-10 text-center">
+                    <span className="text-amber-500 text-[12px] tracking-[0.4em] uppercase font-elegant block mb-3 drop-shadow-md">Partner Facility</span>
+                    <h3 className="text-[36px] text-white font-elegant tracking-widest drop-shadow-xl leading-tight">タウンセブンホール</h3>
+                  </div>
+
+                  {/* 説明文 (ご要望の通り改行) */}
+                  <p className="text-stone-300 text-[14px] md:text-base leading-relaxed font-elegant italic mb-6 md:mb-10 drop-shadow-md text-center">
+                    荻窪駅直結の好アクセス。洗練された広々とした空間で、<br />
+                    上質なケータリングとともに、大切なレセプションや<br />
+                    特別なパーティーを演出いたします。
                   </p>
 
-                  <div className="space-y-4 md:space-y-6 mb-6 md:mb-8">
-                    <div className="border-l-2 border-amber-500 pl-4 md:pl-6 py-0.5 md:py-1">
-                      <h4 className="text-white text-[14px] md:text-lg tracking-widest font-elegant uppercase mb-1.5 md:mb-2">Location</h4>
-                      <p className="text-stone-400 text-[13px] md:text-base drop-shadow-md whitespace-nowrap">東京都杉並区上荻1-9-1 タウンセブンビル 8F</p>
+                  {/* Location & Capacity */}
+                  <div className="flex flex-col md:flex-row gap-4 md:gap-12 mb-6 md:mb-10 w-full justify-center px-4 md:px-0">
+                    <div className="border-l-2 border-amber-500 pl-4 py-0.5 md:py-1">
+                      <h4 className="text-white text-[14px] md:text-sm tracking-widest font-elegant uppercase mb-1.5">Location</h4>
+                      <p className="text-stone-400 text-[13px] md:text-sm drop-shadow-md whitespace-nowrap">東京都杉並区上荻1-9-1 タウンセブンビル 8F</p>
                     </div>
-                    <div className="border-l-2 border-amber-500 pl-4 md:pl-6 py-0.5 md:py-1">
-                      <h4 className="text-white text-[14px] md:text-lg tracking-widest font-elegant uppercase mb-1.5 md:mb-2">Capacity</h4>
-                      <p className="text-stone-400 text-[13px] md:text-base drop-shadow-md whitespace-nowrap">立食: 〜約120名 / 着席: 〜約80名様</p>
+                    <div className="border-l-2 border-amber-500 pl-4 py-0.5 md:py-1">
+                      <h4 className="text-white text-[14px] md:text-sm tracking-widest font-elegant uppercase mb-1.5">Capacity</h4>
+                      <p className="text-stone-400 text-[13px] md:text-sm drop-shadow-md whitespace-nowrap">立食: 〜約120名 / 着席: 〜約80名様</p>
                     </div>
                   </div>
 
-                  {/* スマホ版のみ：Exclusive Offers をここに表示 */}
-                  <div className="md:hidden bg-black/50 border border-white/10 p-5 rounded-sm mb-4 backdrop-blur-sm">
-                    <h4 className="text-amber-500 text-[11px] uppercase tracking-[0.3em] font-elegant mb-4 text-center">Exclusive Offers</h4>
+                  {/* 当店独自のアピールポイント（✓リスト） */}
+                  <div className="w-full max-w-lg bg-black/50 border border-white/10 p-4 md:p-6 rounded-sm mb-6 md:mb-8 backdrop-blur-sm mx-auto">
+                    <h4 className="text-amber-500 text-[11px] md:text-xs uppercase tracking-[0.3em] font-elegant mb-3 text-center">Exclusive Offers</h4>
                     <div className="w-full flex justify-center">
-                      <ul className="space-y-3 inline-block text-left px-2">
+                      <ul className="space-y-2 md:space-y-3 inline-block text-left px-2">
                         {[
                           "ケータリング指定店としてタウンセブンと提携",
                           "御紹介の内容により、会場使用料の特別割引に対応",
                           "設営・復帰・清掃は、会場使用時間から除外（無料）"
                         ].map((item, idx) => (
-                          <li key={idx} className="flex items-start gap-2 text-stone-300 text-[12px]">
+                          <li key={idx} className="flex items-start gap-2 text-stone-300 text-[12px] md:text-sm">
                             <Check size={16} className="text-amber-500 shrink-0 mt-0.5" />
                             <span className="leading-snug">{item}</span>
                           </li>
@@ -921,9 +896,9 @@ const App = () => {
                     </div>
                   </div>
 
-                  {/* PC/スマホ版共通：予約誘導テキスト */}
-                  <div className="text-center mt-auto md:mt-2 mb-4 md:mb-6">
-                    <p className="text-stone-300 text-[12px] md:text-xl font-bold tracking-widest leading-relaxed whitespace-nowrap drop-shadow-md">
+                  {/* PC/スマホ版共通：テキストを大きめに、改行指定 */}
+                  <div className="text-center mt-auto md:mt-2 mb-4 md:mb-6 w-full">
+                    <p className="text-stone-300 text-[12px] md:text-base font-bold tracking-widest leading-relaxed whitespace-nowrap drop-shadow-md">
                       予約ページ移行後、【プラン選択】および【空き情報】<br/>よりご予約下さい。
                     </p>
                   </div>
@@ -934,7 +909,7 @@ const App = () => {
                       href={CONFIG.hallUrl} 
                       target="_blank" 
                       rel="noopener noreferrer"
-                      className="flex items-center justify-center gap-2 w-full py-4 md:py-6 bg-amber-600 hover:bg-amber-500 text-black font-bold text-[12px] md:text-sm tracking-[0.3em] uppercase transition-all shadow-2xl rounded-sm"
+                      className="flex items-center justify-center gap-2 w-full py-4 md:py-5 bg-amber-600 hover:bg-amber-500 text-black font-bold text-[12px] md:text-sm tracking-[0.3em] uppercase transition-all shadow-2xl rounded-sm"
                     >
                       <ExternalLink size={18} />
                       <span>空き状況・ご予約はこちら</span>
