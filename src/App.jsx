@@ -27,32 +27,46 @@ const images = {
   serviceCorporate: "/cocktail-33.png",
   servicePrivate: "/private-4.jpg",
   
-  // 変更: Gallery(テーブルの記録) の各画像にご指定のキャプションを設定
+  // Gallery (テーブルの記録)
   galleryTable:[
-    { url: "/cocktail-37.png", text: "75名様 / Banquet style / free-flow drinks / ￥6500" }, // 1枚目
-    { url: "/business-12.jpg", text: "" }, // 2枚目
-    { url: "/sozai-12.jpeg", text: "55名様 / Banquet style / free-flow drinks / ￥8000" }, // 3枚目
-    { url: "/cocktail-42.png", text: "125名様 / Cocktail party / ￥4000" }, // 4枚目
-    { url: "/business-16.png", text: "" }, // 5枚目
-    { url: "/sozai-37.png", text: "110名様 / Cocktail party / free-flow drinks / ￥5000" }, // 6枚目
-    { url: "/cocktail-1-2.png", text: "95名様 / Cocktail party / free-flow drinks / ￥5500" }, // 7枚目
-    { url: "/business-1.jpeg", text: "" }, // 8枚目
-    { url: "/cocktail-23.jpg", text: "" }, // 9枚目
-    { url: "/cocktail-7.png", text: "75名様 / Banquet style / free-flow drinks / ￥6500" }, // 10枚目
-    { url: "/cocktail-1-9.png", text: "50名様 / Banquet style / free-flow drinks / ￥6500" }, // 11枚目
-    { url: "/cocktail-2.png", text: "" }, // 12枚目
-    { url: "/cocktail-31.jpg", text: "125名様 / Cocktail party / ￥4000" }, // 13枚目
-    { url: "/cocktail-1-10.jpg", text: "65名様 / Cocktail party / free-flow drinks / ￥7000" }, // 14枚目
-    { url: "/cocktail-3.png", text: "" } // 15枚目
+    { url: "/cocktail-37.png", text: "75名様 / Banquet style / free-flow drinks / ￥6500" },
+    { url: "/business-12.jpg", text: "55名様 / Banquet style / free-flow drinks / ￥8000" },
+    { url: "/sozai-12.jpeg", text: "55名様 / Banquet style / free-flow drinks / ￥8000" },
+    { url: "/cocktail-42.png", text: "125名様 / Cocktail party / ￥4000" },
+    { url: "/business-16.png", text: "65名様 / Cocktail party / free-flow drinks / ￥7000" },
+    { url: "/sozai-37.png", text: "110名様 / Cocktail party / free-flow drinks / ￥5000" },
+    { url: "/cocktail-1-2.png", text: "95名様 / Cocktail party / free-flow drinks / ￥5500" },
+    { url: "/business-1.jpeg", text: "135名様 / Banquet style / free-flow drinks / ￥8000" },
+    { url: "/cocktail-23.jpg", text: "120名様 / Banquet style / free-flow drinks / ￥7000" },
+    { url: "/cocktail-7.png", text: "75名様 / Banquet style / free-flow drinks / ￥6500" },
+    { url: "/cocktail-1-9.png", text: "50名様 / Banquet style / free-flow drinks / ￥6500" },
+    { url: "/cocktail-2.png", text: "45名様 / Cocktail party / free-flow drinks / ￥5500" },
+    { url: "/cocktail-31.jpg", text: "125名様 / Cocktail party / ￥4000" },
+    { url: "/cocktail-1-10.jpg", text: "65名様 / Cocktail party / free-flow drinks / ￥7000" },
+    { url: "/cocktail-3.png", text: "125名様 / Cocktail party / ￥4000" }
   ],
+  
+  // Gallery (一皿の記録) - ※テキスト未指定のため空文字にしておきます（必要に応じて追加可能）
   galleryDish:[
-    "/sozai-19.jpeg", "/sozai-16.jpg", "/sozai-13.jpeg", "/sozai-23.jpeg",
-    "/sozai-30.jpeg", "/sozai-29.png", "/sozai-25.jpeg", "/sozai-15-2.jpeg", 
-    "/business-9.jpeg", "/cocktail-11.jpg", "/cocktail-12.png", "/cocktail-13.jpeg",
-    "/sozai-35.jpg", "/sozai-26.jpg", "/sozai-12.png"
+    { url: "/sozai-19.jpeg", text: "" },
+    { url: "/sozai-16.jpg", text: "" },
+    { url: "/sozai-13.jpeg", text: "" },
+    { url: "/sozai-23.jpeg", text: "" },
+    { url: "/sozai-30.jpeg", text: "" },
+    { url: "/sozai-29.png", text: "" },
+    { url: "/sozai-25.jpeg", text: "" },
+    { url: "/sozai-15-2.jpeg", text: "" },
+    { url: "/business-9.jpeg", text: "" },
+    { url: "/cocktail-11.jpg", text: "" },
+    { url: "/cocktail-12.png", text: "" },
+    { url: "/cocktail-13.jpeg", text: "" },
+    { url: "/sozai-35.jpg", text: "" },
+    { url: "/sozai-26.jpg", text: "" },
+    { url: "/sozai-12.png", text: "" }
   ]
 };
 
+// サービス詳細画面の画像リストとキャプション
 const galleryData = {
   cocktail: { 
     title: "Cocktail party", 
@@ -235,7 +249,6 @@ const App = () => {
     return () => clearInterval(slideTimer);
   }, [isConceptInView, currentView]);
 
-  // --- 変更: スマホ版の自動スライド（Serviceセクション）を4秒に変更 ---
   useEffect(() => {
     let serviceTimer, gTableTimer, gDishTimer;
     if (currentView === "home" && isMobile) {
@@ -263,7 +276,6 @@ const App = () => {
     return () => clearInterval(hallTimer);
   }, [showHallPopup]);
 
-  // --- 変更: スマホ版 Service のスワイプ処理 ---
   const handleServiceDragEnd = (e, { offset }) => {
     const swipeThreshold = 50;
     if (offset.x < -swipeThreshold) {
@@ -284,6 +296,7 @@ const App = () => {
     window.history.pushState({ popup: "hall" }, "", "");
     document.body.classList.add('modal-open');
     setShowHallPopup(true);
+    controls.start({ y: 0, opacity: 1 });
   };
 
   const closeHallPopup = () => {
@@ -340,6 +353,7 @@ const App = () => {
     )
   };
 
+  // --- サービス詳細ページ (Cocktail / Banquet / Private) ---
   if (currentView !== "home") {
     const data = galleryData[currentView];
     return (
@@ -372,6 +386,7 @@ const App = () => {
     );
   }
 
+  // --- メイン（トップ）ページ ---
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-stone-300 font-serif selection:bg-amber-900 selection:text-white overflow-x-hidden">
       <style dangerouslySetInnerHTML={{ __html: `
@@ -531,7 +546,7 @@ const App = () => {
           ))}
         </div>
 
-        {/* 変更: スマホ版スワイプ＆タップ対応スライダー */}
+        {/* スマホ版：スワイプ可能なスライダー */}
         <div className="md:hidden relative min-h-[650px] w-full flex flex-col overflow-hidden px-2">
           <div className="relative flex-grow w-full h-[460px]">
             <AnimatePresence initial={false} custom={serviceSlideIndex}>
@@ -556,10 +571,12 @@ const App = () => {
                   <img src={serviceList[serviceSlideIndex].img} loading="lazy" decoding="async" className="w-full h-full object-cover pointer-events-none" alt="" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none"></div>
                   
+                  {/* キャプション */}
                   <div className="absolute bottom-4 right-4 text-right pointer-events-none z-10">
                     <span className="text-white text-[10px] font-elegant tracking-widest drop-shadow-md">{serviceList[serviceSlideIndex].caption}</span>
                   </div>
                   
+                  {/* Tap to View ボタン */}
                   <div className="absolute top-4 right-4 bg-black/60 px-5 py-2 rounded-full border border-white/20 pointer-events-none z-10">
                     <span className="text-white text-[14px] uppercase tracking-widest font-elegant flex items-center gap-1">Tap to View <ChevronRight size={16} className="text-amber-500"/></span>
                   </div>
@@ -701,7 +718,7 @@ const App = () => {
           </div>
 
           <div className="md:hidden relative w-full overflow-hidden">
-            {/* 変更: View More 押下時の展開処理を修正 */}
+            {/* 変更: View Moreを押す前（スライドショーモード）と押した後（全展開）で共通のデータ構造を参照 */}
             {!showAllTable ? (
               <div className="relative aspect-square bg-zinc-900 shadow-2xl overflow-hidden">
                 <AnimatePresence mode="wait">
@@ -714,10 +731,12 @@ const App = () => {
                     className="absolute inset-0"
                   >
                     <img src={typeof images.galleryTable[galleryTableIndex] === 'string' ? images.galleryTable[galleryTableIndex] : images.galleryTable[galleryTableIndex].url} loading="lazy" decoding="async" className="w-full h-full object-cover opacity-90" alt="" />
+                    
+                    {/* キャプション */}
                     {typeof images.galleryTable[galleryTableIndex] !== 'string' && images.galleryTable[galleryTableIndex].text && (
                       <>
                         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none"></div>
-                        <div className="absolute bottom-4 right-4 w-full flex justify-end pointer-events-none">
+                        <div className="absolute bottom-4 right-4 w-full flex justify-end pointer-events-none z-10">
                           <span className="text-white text-[10px] font-elegant tracking-widest text-right drop-shadow-md">
                             {images.galleryTable[galleryTableIndex].text}
                           </span>
@@ -733,14 +752,17 @@ const App = () => {
                   const imgUrl = typeof img === 'string' ? img : img.url;
                   const caption = typeof img === 'string' ? "" : img.text;
                   return (
-                    <div key={i} className="relative aspect-square">
-                      <img src={imgUrl} loading="lazy" decoding="async" className="w-full h-full object-cover shadow-xl" alt="" />
+                    <div key={i} className="relative aspect-square bg-zinc-900 shadow-xl overflow-hidden">
+                      <img src={imgUrl} loading="lazy" decoding="async" className="w-full h-full object-cover" alt="" />
                       {caption && (
-                        <div className="absolute bottom-0 right-0 w-full bg-gradient-to-t from-black/80 to-transparent p-4 flex justify-end pointer-events-none">
-                          <span className="text-white text-[10px] font-elegant tracking-widest text-right drop-shadow-md">
-                            {caption}
-                          </span>
-                        </div>
+                        <>
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none"></div>
+                          <div className="absolute bottom-4 right-4 w-full flex justify-end pointer-events-none z-10">
+                            <span className="text-white text-[10px] font-elegant tracking-widest text-right drop-shadow-md">
+                              {caption}
+                            </span>
+                          </div>
+                        </>
                       )}
                     </div>
                   );
@@ -795,7 +817,7 @@ const App = () => {
                     {typeof images.galleryDish[galleryDishIndex] !== 'string' && images.galleryDish[galleryDishIndex].text && (
                       <>
                         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none"></div>
-                        <div className="absolute bottom-4 right-4 w-full flex justify-end pointer-events-none">
+                        <div className="absolute bottom-4 right-4 w-full flex justify-end pointer-events-none z-10">
                           <span className="text-white text-[10px] font-elegant tracking-widest text-right drop-shadow-md">
                             {images.galleryDish[galleryDishIndex].text}
                           </span>
@@ -816,7 +838,7 @@ const App = () => {
                       {caption && (
                         <>
                           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none"></div>
-                          <div className="absolute bottom-4 right-4 w-full flex justify-end pointer-events-none">
+                          <div className="absolute bottom-4 right-4 w-full flex justify-end pointer-events-none z-10">
                             <span className="text-white text-[10px] font-elegant tracking-widest text-right drop-shadow-md">
                               {caption}
                             </span>
@@ -887,9 +909,9 @@ const App = () => {
                   </div>
                   <div>
                     <label className="text-amber-500 text-[10px] uppercase tracking-widest mb-1 block font-elegant">Time Select</label>
-                    {/* スマホ版も確実に Start-End が中央に寄るレイアウト */}
+                    {/* スマホ・PCともに完全に中央寄せ */}
                     <div className="flex items-center justify-center md:justify-end border-b border-zinc-800 py-1 transition-colors w-full">
-                      <div className="flex items-center justify-center w-full gap-2 md:gap-4">
+                      <div className="flex items-center justify-center w-full md:w-auto gap-2 md:gap-4">
                         <select onChange={(e)=>setFormData({...formData, startTime:e.target.value})} required className="bg-transparent text-white outline-none font-elegant text-base md:text-lg appearance-none cursor-pointer focus:text-amber-500 text-center md:text-right px-2 w-20 md:w-24">
                           <option value="" className="bg-zinc-900 text-stone-500">Start</option>
                           {Array.from({ length: 25 }, (_, i) => {
@@ -899,7 +921,7 @@ const App = () => {
                             return h <= 21 ? <option key={t} value={t} className="bg-zinc-900 text-white">{t}</option> : null;
                           })}
                         </select>
-                        <span className="text-stone-600 font-elegant text-base md:text-lg">-</span>
+                        <span className="text-stone-600 font-elegant text-base md:text-lg mx-1">-</span>
                         <select onChange={(e)=>setFormData({...formData, endTime:e.target.value})} required className="bg-transparent text-white outline-none font-elegant text-base md:text-lg appearance-none cursor-pointer focus:text-amber-500 text-center md:text-left px-2 w-20 md:w-24">
                           <option value="" className="bg-zinc-900 text-stone-500">End</option>
                           {Array.from({ length: 25 }, (_, i) => {
@@ -974,7 +996,7 @@ const App = () => {
               onClick={closeHallPopup}
             ></div>
 
-            {/* モーダル本体: スマホは縦長スワイプ対応、PCはフルスクリーンで横長配置 */}
+            {/* モーダル本体: スマホは縦長スワイプ、PCはフルスクリーンで横長 */}
             <motion.div 
               drag={isMobile ? "y" : false}
               dragControls={dragControls}
@@ -1034,18 +1056,20 @@ const App = () => {
                 <div className="bg-black/40 border border-white/10 p-8 rounded-sm backdrop-blur-sm mt-auto max-w-lg">
                   <h4 className="text-amber-500 text-sm uppercase tracking-[0.3em] font-elegant mb-6 text-center">Exclusive Offers</h4>
                   <div className="w-full flex justify-center">
-                    <ul className="space-y-5 inline-block text-left px-2">
-                      {[
-                        "ケータリング指定店としてタウンセブンと提携",
-                        "御紹介の内容により、会場使用料の特別割引に対応",
-                        "設営・復帰・清掃は、会場使用時間から除外（無料）"
-                      ].map((item, idx) => (
-                        <li key={idx} className="flex items-start gap-2.5 text-stone-300 text-base">
-                          <Check size={18} className="text-amber-500 shrink-0 mt-0.5" />
-                          <span className="leading-snug">{item}</span>
-                        </li>
-                      ))}
-                    </ul>
+                    <div className="inline-block text-left px-2">
+                      <ul className="space-y-5">
+                        {[
+                          "ケータリング指定店としてタウンセブンと提携",
+                          "御紹介の内容により、会場使用料の特別割引に対応",
+                          "設営・復帰・清掃は、会場使用時間から除外（無料）"
+                        ].map((item, idx) => (
+                          <li key={idx} className="flex items-start gap-2.5 text-stone-300 text-base">
+                            <Check size={18} className="text-amber-500 shrink-0 mt-0.5" />
+                            <span className="leading-snug">{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1056,18 +1080,18 @@ const App = () => {
                 <h3 className="text-3xl text-white font-elegant tracking-widest drop-shadow-xl leading-tight">タウンセブンホール</h3>
               </div>
 
-              {/* --- コンテンツエリア (PCは右側全体) --- */}
+              {/* --- コンテンツエリア (PCは右側全体。要素の余白を削って1画面に収納) --- */}
               <div className="flex flex-col w-full md:w-1/2 overflow-y-auto custom-scrollbar z-10 bg-black/40 backdrop-blur-md md:bg-transparent md:backdrop-blur-none justify-center">
                 <div className="p-6 pb-4 md:p-20 md:pt-32 flex-grow flex flex-col justify-start md:justify-center">
                   
                   {/* 説明文 (スマホ版は1行に収まるように改行) */}
-                  <p className="text-stone-300 text-[14px] md:text-lg leading-relaxed font-elegant italic mb-6 md:mb-12 drop-shadow-md text-left md:text-center">
+                  <p className="text-stone-300 text-[14px] md:text-lg leading-relaxed font-elegant italic mb-6 md:mb-10 drop-shadow-md text-left md:text-center">
                     荻窪駅直結の好アクセス。洗練された広々とした空間で、<br className="md:hidden"/>
                     上質なケータリングとともに、大切なレセプションや<br className="md:hidden"/>
                     特別なパーティーを演出いたします。
                   </p>
 
-                  <div className="space-y-4 md:space-y-6 mb-6 md:mb-8 w-full max-w-sm mx-auto">
+                  <div className="space-y-3 md:space-y-6 mb-6 md:mb-8 w-full max-w-sm mx-auto">
                     <div className="border-l-2 border-amber-500 pl-4 md:pl-6 py-0.5 md:py-1">
                       <h4 className="text-white text-[14px] md:text-lg tracking-widest font-elegant uppercase mb-1.5 md:mb-2">Location</h4>
                       <p className="text-stone-400 text-[13px] md:text-base drop-shadow-md whitespace-nowrap">東京都杉並区上荻1-9-1 タウンセブンビル 8F</p>
