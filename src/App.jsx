@@ -46,14 +46,13 @@ const galleryData = {
   private: { title: "Private Dining", desc: "オーダーメイドのレストラン。すべてにこだわった特別な空間で、最高のお料理をお楽しみください。", photos:["/private-4.jpg", "/private-19.png", "/private-3.jpg", "/sozai-17.png", "/sozai-22.png", "/private-2.jpg"] }
 };
 
-// 変更: 5500円、8500円、11500円(∞)の画像を差し替え
 const budgetMap = {
   4000: { name: "立食スタイル", img: "/cocktail-3.png", desc: "カジュアルに楽しむフィンガーフード主体のプラン。" },
-  5500: { name: "立食スタイル", img: "/sozai-37.png", desc: "彩りとボリュームをプラスしたスタンダードな立食プラン。" },
+  5500: { name: "立食スタイル", img: "/cocktail-3.png", desc: "彩りとボリュームをプラスしたスタンダードな立食プラン。" },
   7000: { name: "立食・着席スタイル", img: "/cocktail-7.png", desc: "おもてなしと満足感を両立させたスペシャリティ。" },
-  8500: { name: "立食・着席スタイル", img: "/sozai-8.png", desc: "高級食材をふんだんに用いたハイグレードなビュッフェ。" },
+  8500: { name: "立食・着席スタイル", img: "/cocktail-7.png", desc: "高級食材をふんだんに用いたハイグレードなビュッフェ。" },
   10000: { name: "着席スタイル", img: "/private-4.jpg", desc: "特別なゲストのための完全オーダーメイド・フルコース。" },
-  11500: { name: "着席スタイル", img: "/sozai-17.png", desc: "至高のサービスで綴る、最高峰の食体験。" },
+  11500: { name: "着席スタイル", img: "/private-4.jpg", desc: "至高のサービスで綴る、最高峰の食体験。" },
 };
 
 const drinkLabels = ["Standard", "Casual", "Premium", "Luxury", "Executive"];
@@ -287,7 +286,7 @@ const App = () => {
           <button onClick={() => window.history.back()} className="text-amber-500 mb-8 md:mb-12 flex items-center gap-2 uppercase text-[10px] md:text-xs tracking-widest"><ChevronLeft size={16} className="mr-2" /> Back</button>
           <h2 className="font-brand text-3xl md:text-4xl text-amber-500 mb-6 italic tracking-widest font-elegant">{data?.title}</h2>
           <p className="text-stone-400 max-w-2xl mx-auto leading-loose mb-12 md:mb-16 text-base md:text-xl font-elegant italic">{data?.desc}</p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">{data?.photos.map((img, i) => (<img key={i} src={img} className="w-full h-64 md:h-80 object-cover shadow-2xl" alt="" />))}</div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">{data?.photos.map((img, i) => (<img key={i} loading="lazy" decoding="async" src={img} className="w-full h-64 md:h-80 object-cover shadow-2xl" alt="" />))}</div>
         </div>
       </div>
     );
@@ -333,7 +332,8 @@ const App = () => {
               transition={{ scale: { duration: 8, ease: "linear" }, opacity: { duration: 2.5 }, filter: { duration: 2.5 } }} 
               className="absolute inset-0"
             >
-              <img src={CONFIG.heroSlides[heroIndex]} className="w-full h-full object-cover" alt="" />
+              {/* fetchpriority="high" で一番最初の画像を爆速読み込み */}
+              <img src={CONFIG.heroSlides[heroIndex]} fetchpriority={heroIndex === 0 ? "high" : "auto"} decoding="async" className="w-full h-full object-cover" alt="" />
               <div className="absolute inset-0 bg-black/20 md:bg-black/40 backdrop-blur-[1px] md:backdrop-blur-[2px]" />
             </motion.div>
           </AnimatePresence>
@@ -392,7 +392,7 @@ const App = () => {
         </div>
 
         <div className="w-full md:w-1/2 relative h-[300px] md:h-[500px] overflow-hidden shadow-2xl rounded-sm mt-[-10px] md:mt-0">
-          {images.conceptSlide.map((img, i) => (<motion.img key={i} src={img} initial={{ opacity: 0 }} animate={{ opacity: i === slideIndex ? 1 : 0 }} transition={{ duration: 2 }} className="absolute inset-0 w-full h-full object-cover scale-105" alt="" />))}
+          {images.conceptSlide.map((img, i) => (<motion.img key={i} loading="lazy" decoding="async" src={img} initial={{ opacity: 0 }} animate={{ opacity: i === slideIndex ? 1 : 0 }} transition={{ duration: 2 }} className="absolute inset-0 w-full h-full object-cover scale-105" alt="" />))}
           <div className="absolute inset-0 bg-black/10"></div>
         </div>
         
@@ -437,7 +437,7 @@ const App = () => {
         <div className="hidden md:grid grid-cols-3 gap-12">
           {serviceList.map((s, i) => (
             <div key={i} onClick={() => handleViewChange(s.id)} className="group cursor-pointer">
-              <div className="aspect-[3/4] overflow-hidden mb-8 shadow-xl"><img src={s.img} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="" /></div>
+              <div className="aspect-[3/4] overflow-hidden mb-8 shadow-xl"><img src={s.img} loading="lazy" decoding="async" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="" /></div>
               <div className="flex gap-4">
                 <div className="w-[2px] h-12 bg-amber-500 mt-1"></div>
                 <div><h4 className="text-2xl text-white font-light uppercase tracking-widest font-elegant">{s.title}</h4><p className="text-stone-300 text-lg leading-relaxed font-elegant italic">{s.desc}<br /><span className="text-amber-500 font-bold not-italic">{s.highlight}</span></p></div>
@@ -458,7 +458,7 @@ const App = () => {
                 className="absolute inset-0 flex flex-col cursor-pointer"
               >
                 <div className="w-full h-[460px] overflow-hidden mb-6 shadow-xl relative">
-                  <img src={serviceList[serviceSlideIndex].img} className="w-full h-full object-cover" alt="" />
+                  <img src={serviceList[serviceSlideIndex].img} loading="lazy" decoding="async" className="w-full h-full object-cover" alt="" />
                   <div className="absolute inset-0 bg-gradient-to-b from-black/30 to-transparent"></div>
                   <div className="absolute top-4 right-4 bg-black/60 px-4 py-1.5 rounded-full border border-white/20">
                     <span className="text-white text-[12px] uppercase tracking-widest font-elegant flex items-center gap-1">Tap to View <ChevronRight size={14} className="text-amber-500"/></span>
@@ -553,7 +553,7 @@ const App = () => {
               <motion.div key={simResult.img} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.8 }} className="h-full flex flex-col">
                 
                 <div className="relative overflow-hidden h-36 md:h-64 lg:h-[360px] shrink-0">
-                  <img src={simResult.img} className="w-full h-full object-cover opacity-70" alt="" />
+                  <img src={simResult.img} loading="lazy" decoding="async" className="w-full h-full object-cover opacity-70" alt="" />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#111] via-[#111]/40 to-transparent"></div>
                   <div className="absolute bottom-2 left-4 md:bottom-4 md:left-8">
                     <span className="text-amber-500 text-[8px] md:text-[9px] tracking-[0.4em] uppercase font-elegant">Plan Proposal</span>
@@ -584,7 +584,7 @@ const App = () => {
             <AnimatePresence>
               {displays.table.map((img) => (
                 <motion.div key={img} initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="relative aspect-square bg-zinc-900 shadow-2xl overflow-hidden group">
-                  <img src={img} className="w-full h-full object-cover transition-transform duration-[2000ms] hover:scale-110 opacity-90 hover:opacity-100" alt="" />
+                  <img src={img} loading="lazy" decoding="async" className="w-full h-full object-cover transition-transform duration-[2000ms] hover:scale-110 opacity-90 hover:opacity-100" alt="" />
                 </motion.div>
               ))}
             </AnimatePresence>
@@ -601,13 +601,13 @@ const App = () => {
                   transition={{ duration: 1.5, ease: "easeOut" }}
                   className="absolute inset-0"
                 >
-                  <img src={images.galleryTable[galleryTableIndex]} className="w-full h-full object-cover opacity-90" alt="" />
+                  <img src={images.galleryTable[galleryTableIndex]} loading="lazy" decoding="async" className="w-full h-full object-cover opacity-90" alt="" />
                 </motion.div>
               </AnimatePresence>
             ) : (
               <div className="grid grid-cols-1 gap-4">
                 {images.galleryTable.map((img, i) => (
-                  <img key={i} src={img} className="w-full aspect-square object-cover shadow-xl" alt="" />
+                  <img key={i} src={img} loading="lazy" decoding="async" className="w-full aspect-square object-cover shadow-xl" alt="" />
                 ))}
               </div>
             )}
@@ -625,7 +625,7 @@ const App = () => {
             <AnimatePresence>
               {displays.dish.map((img) => (
                 <motion.div key={img} initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="relative aspect-square bg-zinc-900 shadow-2xl overflow-hidden group">
-                  <img src={img} className="w-full h-full object-cover transition-transform duration-[2000ms] hover:scale-110 opacity-90 hover:opacity-100" alt="" />
+                  <img src={img} loading="lazy" decoding="async" className="w-full h-full object-cover transition-transform duration-[2000ms] hover:scale-110 opacity-90 hover:opacity-100" alt="" />
                 </motion.div>
               ))}
             </AnimatePresence>
@@ -642,13 +642,13 @@ const App = () => {
                   transition={{ duration: 1.5, ease: "easeOut" }}
                   className="absolute inset-0"
                 >
-                  <img src={images.galleryDish[galleryDishIndex]} className="w-full h-full object-cover opacity-90" alt="" />
+                  <img src={images.galleryDish[galleryDishIndex]} loading="lazy" decoding="async" className="w-full h-full object-cover opacity-90" alt="" />
                 </motion.div>
               </AnimatePresence>
             ) : (
               <div className="grid grid-cols-1 gap-4">
                 {images.galleryDish.map((img, i) => (
-                  <img key={i} src={img} className="w-full aspect-square object-cover shadow-xl" alt="" />
+                  <img key={i} src={img} loading="lazy" decoding="async" className="w-full aspect-square object-cover shadow-xl" alt="" />
                 ))}
               </div>
             )}
@@ -711,10 +711,10 @@ const App = () => {
                   </div>
                   <div>
                     <label className="text-amber-500 text-[10px] uppercase tracking-widest mb-1 block font-elegant">Time Select</label>
-                    {/* スマホ・PCともに美しく中央寄せ */}
+                    {/* スマホもPCも完全に中央寄せの Start-End 配置 */}
                     <div className="flex items-center justify-center md:justify-end gap-2 border-b border-zinc-800 py-1 transition-colors w-full">
-                      <div className="flex items-center justify-center w-full gap-2 md:gap-4">
-                        <select onChange={(e)=>setFormData({...formData, startTime:e.target.value})} required className="bg-transparent text-white outline-none font-elegant text-base md:text-lg appearance-none cursor-pointer focus:text-amber-500 text-center md:text-right px-2 w-24">
+                      <div className="flex items-center justify-center w-full md:w-auto gap-2 md:gap-4">
+                        <select onChange={(e)=>setFormData({...formData, startTime:e.target.value})} required className="bg-transparent text-white outline-none font-elegant text-base md:text-lg appearance-none cursor-pointer focus:text-amber-500 text-center md:text-right px-2 w-20 md:w-24">
                           <option value="" className="bg-zinc-900 text-stone-500">Start</option>
                           {Array.from({ length: 25 }, (_, i) => {
                             const h = Math.floor(i / 2) + 10;
@@ -723,8 +723,8 @@ const App = () => {
                             return h <= 21 ? <option key={t} value={t} className="bg-zinc-900 text-white">{t}</option> : null;
                           })}
                         </select>
-                        <span className="text-stone-600 font-elegant text-base md:text-lg mx-1">-</span>
-                        <select onChange={(e)=>setFormData({...formData, endTime:e.target.value})} required className="bg-transparent text-white outline-none font-elegant text-base md:text-lg appearance-none cursor-pointer focus:text-amber-500 text-center md:text-left px-2 w-24">
+                        <span className="text-stone-600 font-elegant text-base md:text-lg mx-1 md:mx-2">-</span>
+                        <select onChange={(e)=>setFormData({...formData, endTime:e.target.value})} required className="bg-transparent text-white outline-none font-elegant text-base md:text-lg appearance-none cursor-pointer focus:text-amber-500 text-center md:text-left px-2 w-20 md:w-24">
                           <option value="" className="bg-zinc-900 text-stone-500">End</option>
                           {Array.from({ length: 25 }, (_, i) => {
                             const h = Math.floor(i / 2) + 10;
@@ -765,7 +765,7 @@ const App = () => {
 
         {/* --- Footer Area --- */}
         <div className="mt-16 md:mt-24 border-t border-zinc-900 pt-12 pb-8 flex flex-col items-center">
-          <img src={CONFIG.logoImage} className="h-20 md:h-24 opacity-60 mb-2" alt="logo" />
+          <img src={CONFIG.logoImage} loading="lazy" decoding="async" className="h-20 md:h-24 opacity-60 mb-2" alt="logo" />
           <div className="text-white text-[10px] tracking-[1em] uppercase font-elegant mb-10 opacity-80 pl-2">since 2019</div>
           
           <div className="flex justify-center gap-12 mb-10 items-center">
@@ -798,7 +798,7 @@ const App = () => {
               onClick={closeHallPopup}
             ></div>
 
-            {/* モーダル本体: スマホは縦長スワイプ対応、PCはフルスクリーン */}
+            {/* モーダル本体: スマホは縦長スワイプ対応、PCはフルスクリーンで横長配置 */}
             <motion.div 
               drag={isMobile ? "y" : false}
               dragControls={dragControls}
@@ -844,18 +844,18 @@ const App = () => {
                 <ChevronLeft size={14} /> Back
               </button>
 
-              {/* タイトル & アピールポイントエリア (PC版は左側全体を使って左上と左下に配置) */}
-              <div className="relative md:w-1/2 shrink-0 z-10 flex flex-col justify-between p-6 md:p-20">
+              {/* --- PC版：左側レイアウト --- */}
+              <div className="hidden md:flex relative w-1/2 shrink-0 flex-col justify-between p-20 z-10">
                 
-                {/* PC版：タイトルを左上に配置 */}
-                <div className="hidden md:block relative z-10 mt-8">
+                {/* 左上：タイトル */}
+                <div className="mt-8">
                   <span className="text-amber-500 text-[13px] tracking-[0.4em] uppercase font-elegant block mb-2 drop-shadow-md">Partner Facility</span>
                   {/* PC版は改行させない */}
                   <h3 className="text-[42px] whitespace-nowrap text-white font-elegant tracking-widest drop-shadow-xl leading-tight">タウンセブンホール</h3>
                 </div>
 
-                {/* PC版：左下に Exclusive Offers を配置 */}
-                <div className="hidden md:block bg-black/40 border border-white/10 p-8 rounded-sm backdrop-blur-sm mt-auto max-w-lg">
+                {/* 左下：Exclusive Offers */}
+                <div className="bg-black/40 border border-white/10 p-8 rounded-sm backdrop-blur-sm mt-auto max-w-lg">
                   <h4 className="text-amber-500 text-sm uppercase tracking-[0.3em] font-elegant mb-6 text-center">Exclusive Offers</h4>
                   <div className="w-full flex justify-center">
                     <div className="inline-block text-left px-2">
@@ -874,20 +874,20 @@ const App = () => {
                     </div>
                   </div>
                 </div>
-
-                {/* スマホ版のみ：タイトルを上部に表示 */}
-                <div className="md:hidden relative z-10 mt-12 mb-4 px-2">
-                  <span className="text-amber-500 text-[11px] tracking-[0.4em] uppercase font-elegant block mb-2 drop-shadow-md">Partner Facility</span>
-                  <h3 className="text-3xl text-white font-elegant tracking-widest drop-shadow-xl leading-tight">タウンセブンホール</h3>
-                </div>
               </div>
 
-              {/* テキスト・コンテンツエリア (PCは右側全体。要素の余白を削って1画面に収納) */}
+              {/* --- スマホ版のみ：上部タイトル表示 --- */}
+              <div className="md:hidden relative z-10 mt-10 mb-2 px-6 pb-0">
+                <span className="text-amber-500 text-[12px] tracking-[0.4em] uppercase font-elegant block mb-2 drop-shadow-md">Partner Facility</span>
+                <h3 className="text-3xl text-white font-elegant tracking-widest drop-shadow-xl leading-tight">タウンセブンホール</h3>
+              </div>
+
+              {/* --- コンテンツエリア (PCは右側全体。要素の余白を削って1画面に収納) --- */}
               <div className="flex flex-col w-full md:w-1/2 overflow-y-auto custom-scrollbar z-10 bg-black/40 backdrop-blur-md md:bg-transparent md:backdrop-blur-none justify-center">
-                <div className="p-6 md:p-20 flex-grow flex flex-col justify-center">
+                <div className="px-6 py-4 md:p-20 md:pt-32 flex-grow flex flex-col justify-start">
                   
-                  {/* 説明文 (スマホ版は1行に収まるように改行) */}
-                  <p className="text-stone-300 text-[14px] md:text-lg leading-relaxed font-elegant italic mb-6 md:mb-12 drop-shadow-md">
+                  {/* 説明文 (スマホ版は1行に収まるように改行設定) */}
+                  <p className="text-stone-300 text-[15px] md:text-lg leading-relaxed font-elegant italic mb-6 md:mb-12 drop-shadow-md">
                     荻窪駅直結の好アクセス。洗練された広々とした空間で、<br className="md:hidden"/>上質なケータリングとともに、大切なレセプションや<br className="md:hidden"/>特別なパーティーを演出いたします。
                   </p>
 
@@ -922,8 +922,8 @@ const App = () => {
                   </div>
 
                   {/* PC/スマホ版共通：予約誘導テキスト */}
-                  <div className="text-center mb-6 md:mb-8 mt-auto md:mt-4">
-                    <p className="text-stone-300 text-[12px] md:text-lg md:font-bold tracking-widest leading-relaxed whitespace-nowrap drop-shadow-md">
+                  <div className="text-center mt-auto md:mt-2 mb-4 md:mb-6">
+                    <p className="text-stone-300 text-[12px] md:text-xl font-bold tracking-widest leading-relaxed whitespace-nowrap drop-shadow-md">
                       予約ページ移行後、【プラン選択】および【空き情報】<br/>よりご予約下さい。
                     </p>
                   </div>
@@ -934,7 +934,7 @@ const App = () => {
                       href={CONFIG.hallUrl} 
                       target="_blank" 
                       rel="noopener noreferrer"
-                      className="flex items-center justify-center gap-2 w-full py-4 md:py-5 bg-amber-600 hover:bg-amber-500 text-black font-bold text-[12px] md:text-sm tracking-[0.3em] uppercase transition-all shadow-2xl rounded-sm"
+                      className="flex items-center justify-center gap-2 w-full py-4 md:py-6 bg-amber-600 hover:bg-amber-500 text-black font-bold text-[12px] md:text-sm tracking-[0.3em] uppercase transition-all shadow-2xl rounded-sm"
                     >
                       <ExternalLink size={18} />
                       <span>空き状況・ご予約はこちら</span>
