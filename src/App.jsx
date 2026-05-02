@@ -26,43 +26,17 @@ const images = {
   serviceWedding: "/cocktail-40.png",
   serviceCorporate: "/cocktail-33.png",
   servicePrivate: "/private-4.jpg",
-  
-  // Gallery (テーブルの記録)
   galleryTable:[
-    { url: "/cocktail-37.png", text: "75名様 / Banquet style / free-flow drinks / ￥6500" },
-    { url: "/business-12.jpg", text: "55名様 / Banquet style / free-flow drinks / ￥8000" },
-    { url: "/sozai-12.jpeg", text: "55名様 / Banquet style / free-flow drinks / ￥8000" },
-    { url: "/cocktail-42.png", text: "125名様 / Cocktail party / ￥4000" },
-    { url: "/business-16.png", text: "65名様 / Cocktail party / free-flow drinks / ￥7000" },
-    { url: "/sozai-37.png", text: "110名様 / Cocktail party / free-flow drinks / ￥5000" },
-    { url: "/cocktail-1-2.png", text: "95名様 / Cocktail party / free-flow drinks / ￥5500" },
-    { url: "/business-1.jpeg", text: "135名様 / Banquet style / free-flow drinks / ￥8000" },
-    { url: "/cocktail-23.jpg", text: "120名様 / Banquet style / free-flow drinks / ￥7000" },
-    { url: "/cocktail-7.png", text: "75名様 / Banquet style / free-flow drinks / ￥6500" },
-    { url: "/cocktail-1-9.png", text: "50名様 / Banquet style / free-flow drinks / ￥6500" },
-    { url: "/cocktail-2.png", text: "45名様 / Cocktail party / free-flow drinks / ￥5500" },
-    { url: "/cocktail-31.jpg", text: "125名様 / Cocktail party / ￥4000" },
-    { url: "/cocktail-1-10.jpg", text: "65名様 / Cocktail party / free-flow drinks / ￥7000" },
-    { url: "/cocktail-3.png", text: "125名様 / Cocktail party / ￥4000" }
+    "/cocktail-37.png", "/business-12.jpg", "/sozai-12.jpeg", "/cocktail-42.png",
+    "/business-16.png", "/sozai-37.png", "/cocktail-1-2.png", "/business-1.jpeg",
+    "/cocktail-23.jpg", "/cocktail-7.png", "/cocktail-1-9.png", "/cocktail-2.png",
+    "/cocktail-31.jpg", "/cocktail-1-10.jpg", "/cocktail-3.png"
   ],
-  
-  // Gallery (一皿の記録)
   galleryDish:[
-    { url: "/sozai-19.jpeg", text: "" },
-    { url: "/sozai-16.jpg", text: "" },
-    { url: "/sozai-13.jpeg", text: "" },
-    { url: "/sozai-23.jpeg", text: "" },
-    { url: "/sozai-30.jpeg", text: "" },
-    { url: "/sozai-29.png", text: "" },
-    { url: "/sozai-25.jpeg", text: "" },
-    { url: "/sozai-15-2.jpeg", text: "" },
-    { url: "/business-9.jpeg", text: "" },
-    { url: "/cocktail-11.jpg", text: "" },
-    { url: "/cocktail-12.png", text: "" },
-    { url: "/cocktail-13.jpeg", text: "" },
-    { url: "/sozai-35.jpg", text: "" },
-    { url: "/sozai-26.jpg", text: "" },
-    { url: "/sozai-12.png", text: "" }
+    "/sozai-19.jpeg", "/sozai-16.jpg", "/sozai-13.jpeg", "/sozai-23.jpeg",
+    "/sozai-30.jpeg", "/sozai-29.png", "/sozai-25.jpeg", "/sozai-15-2.jpeg", 
+    "/business-9.jpeg", "/cocktail-11.jpg", "/cocktail-12.png", "/cocktail-13.jpeg",
+    "/sozai-35.jpg", "/sozai-26.jpg", "/sozai-12.png"
   ]
 };
 
@@ -604,7 +578,7 @@ const App = () => {
             </div>
             <div className="space-y-1.5 md:space-y-4">
               <div className="flex justify-between text-sm md:text-base text-stone-300 uppercase tracking-widest font-elegant font-light"><span>Budget</span><span className="text-amber-500 font-bold">{budget === 11500 ? '∞' : `¥ ${budget.toLocaleString()}`} (+{budgetPoints}pt)</span></div>
-              <input type="range" min="4000" max="11500" step="1500" value={budget} onChange={(e) => setBudget(Number(e.target.value))} />
+              <input type="range" min="4000" max="11500" step="500" value={budget} onChange={(e) => setBudget(Number(e.target.value))} />
             </div>
 
             <div className="flex items-center justify-between py-1.5 md:py-3 bg-amber-500/5 px-4 border border-amber-500/20 my-1 md:my-2">
@@ -895,25 +869,15 @@ const App = () => {
                   <div>
                     <label className="text-amber-500 text-[10px] uppercase tracking-widest mb-1 block font-elegant">Time Select</label>
                     <div className="flex items-center justify-center border-b border-zinc-800 py-1 transition-colors w-full">
-                      <div className="flex items-center justify-center w-full gap-2 md:gap-4">
+                      <div className="flex items-center justify-center w-full gap-0">
                         <select onChange={(e)=>setFormData({...formData, startTime:e.target.value})} required className="bg-transparent text-white outline-none font-elegant text-base md:text-lg appearance-none cursor-pointer focus:text-amber-500 text-center w-20 md:w-24">
                           <option value="" className="bg-zinc-900 text-stone-500">Start</option>
-                          {Array.from({ length: 25 }, (_, i) => {
-                            const h = Math.floor(i / 2) + 10;
-                            const m = i % 2 === 0 ? "00" : "30";
-                            const t = `${h}:${m}`;
-                            return h <= 21 ? <option key={t} value={t} className="bg-zinc-900 text-white">{t}</option> : null;
-                          })}
+                          {Array.from({ length: 25 }, (_, i) => { const h = Math.floor(i / 2) + 10; const m = i % 2 === 0 ? "00" : "30"; const t = `${h}:${m}`; return h <= 21 ? <option key={t} value={t} className="bg-zinc-900 text-white">{t}</option> : null; })}
                         </select>
-                        <span className="text-stone-600 font-elegant text-base md:text-lg">-</span>
+                        <span className="text-stone-600 font-elegant text-base md:text-lg px-1">-</span>
                         <select onChange={(e)=>setFormData({...formData, endTime:e.target.value})} required className="bg-transparent text-white outline-none font-elegant text-base md:text-lg appearance-none cursor-pointer focus:text-amber-500 text-center w-20 md:w-24">
                           <option value="" className="bg-zinc-900 text-stone-500">End</option>
-                          {Array.from({ length: 25 }, (_, i) => {
-                            const h = Math.floor(i / 2) + 10;
-                            const m = i % 2 === 0 ? "00" : "30";
-                            const t = `${h}:${m}`;
-                            return h <= 22 ? <option key={t} value={t} className="bg-zinc-900 text-white">{t}</option> : null;
-                          })}
+                          {Array.from({ length: 25 }, (_, i) => { const h = Math.floor(i / 2) + 10; const m = i % 2 === 0 ? "00" : "30"; const t = `${h}:${m}`; return h <= 22 ? <option key={t} value={t} className="bg-zinc-900 text-white">{t}</option> : null; })}
                         </select>
                       </div>
                     </div>
@@ -965,7 +929,7 @@ const App = () => {
         </div>
       </section>
 
-      {/* --- ホール利用 ポップアップ --- */}
+      {/* --- ホール利用 ポップアップ (モーダル) --- */}
       <AnimatePresence>
         {showHallPopup && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[100] flex items-center justify-center p-0 md:p-0">
