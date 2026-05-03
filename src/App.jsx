@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import { Menu, X, ChevronRight, Star, Quote, Mail, ChevronLeft, Calendar, Clock, CheckCircle2, Trophy, ExternalLink, Check } from "lucide-react";
 import { motion, AnimatePresence, useAnimation, useDragControls } from "framer-motion";
 
@@ -26,47 +26,20 @@ const images = {
   serviceWedding: "/cocktail-40.png",
   serviceCorporate: "/cocktail-33.png",
   servicePrivate: "/private-4.jpg",
-  
-  // Gallery (テーブルの記録)
   galleryTable:[
-    { url: "/cocktail-37.png", text: "75名様 / Banquet style / free-flow drinks / ￥6500" },
-    { url: "/business-12.jpg", text: "55名様 / Banquet style / free-flow drinks / ￥8000" },
-    { url: "/sozai-12.jpeg", text: "55名様 / Banquet style / free-flow drinks / ￥8000" },
-    { url: "/cocktail-42.png", text: "125名様 / Cocktail party / ￥4000" },
-    { url: "/business-16.png", text: "65名様 / Cocktail party / free-flow drinks / ￥7000" },
-    { url: "/sozai-37.png", text: "110名様 / Cocktail party / free-flow drinks / ￥5000" },
-    { url: "/cocktail-1-2.png", text: "95名様 / Cocktail party / free-flow drinks / ￥5500" },
-    { url: "/business-1.jpeg", text: "135名様 / Banquet style / free-flow drinks / ￥8000" },
-    { url: "/cocktail-23.jpg", text: "120名様 / Banquet style / free-flow drinks / ￥7000" },
-    { url: "/cocktail-7.png", text: "75名様 / Banquet style / free-flow drinks / ￥6500" },
-    { url: "/cocktail-1-9.png", text: "50名様 / Banquet style / free-flow drinks / ￥6500" },
-    { url: "/cocktail-2.png", text: "45名様 / Cocktail party / free-flow drinks / ￥5500" },
-    { url: "/cocktail-31.jpg", text: "125名様 / Cocktail party / ￥4000" },
-    { url: "/cocktail-1-10.jpg", text: "65名様 / Cocktail party / free-flow drinks / ￥7000" },
-    { url: "/cocktail-3.png", text: "125名様 / Cocktail party / ￥4000" }
+    "/cocktail-37.png", "/business-12.jpg", "/sozai-12.jpeg", "/cocktail-42.png",
+    "/business-16.png", "/sozai-37.png", "/cocktail-1-2.png", "/business-1.jpeg",
+    "/cocktail-23.jpg", "/cocktail-7.png", "/cocktail-1-9.png", "/cocktail-2.png",
+    "/cocktail-31.jpg", "/cocktail-1-10.jpg", "/cocktail-3.png"
   ],
-  
-  // Gallery (一皿の記録)
   galleryDish:[
-    { url: "/sozai-19.jpeg", text: "" },
-    { url: "/sozai-16.jpg", text: "" },
-    { url: "/sozai-13.jpeg", text: "" },
-    { url: "/sozai-23.jpeg", text: "" },
-    { url: "/sozai-30.jpeg", text: "" },
-    { url: "/sozai-29.png", text: "" },
-    { url: "/sozai-25.jpeg", text: "" },
-    { url: "/sozai-15-2.jpeg", text: "" },
-    { url: "/business-9.jpeg", text: "" },
-    { url: "/cocktail-11.jpg", text: "" },
-    { url: "/cocktail-12.png", text: "" },
-    { url: "/cocktail-13.jpeg", text: "" },
-    { url: "/sozai-35.jpg", text: "" },
-    { url: "/sozai-26.jpg", text: "" },
-    { url: "/sozai-12.png", text: "" }
+    "/sozai-19.jpeg", "/sozai-16.jpg", "/sozai-13.jpeg", "/sozai-23.jpeg",
+    "/sozai-30.jpeg", "/sozai-29.png", "/sozai-25.jpeg", "/sozai-15-2.jpeg", 
+    "/business-9.jpeg", "/cocktail-11.jpg", "/cocktail-12.png", "/cocktail-13.jpeg",
+    "/sozai-35.jpg", "/sozai-26.jpg", "/sozai-12.png"
   ]
 };
 
-// サービス詳細画面の画像リストとキャプション
 const galleryData = {
   cocktail: { 
     title: "Cocktail party", 
@@ -189,7 +162,7 @@ const App = () => {
   const controls = useAnimation();
 
   const guestPoints = Math.floor((guestCount - 20) / 10);
-  const budgetPoints = (budget - 4000) / 1500;
+  const budgetPoints = Math.floor((budget - 4000) / 1500);
   const totalAvailablePoints = guestPoints + budgetPoints;
   const remainingPoints = totalAvailablePoints - (bevLevel + ingLevel);
 
@@ -313,7 +286,12 @@ const App = () => {
     }
   };
 
-  const simResult = budgetMap[budget] || budgetMap[4000];
+  const simResult = useMemo(() => {
+    const sortedPrices = Object.keys(budgetMap).map(Number).sort((a,b) => a - b);
+    const closestPrice = sortedPrices.find(p => budget < p) || 11500;
+    const key = budget < 4000 ? 4000 : (closestPrice === 11500 ? 11500 : sortedPrices[sortedPrices.indexOf(closestPrice)-1]);
+    return budgetMap[key];
+  }, [budget]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -393,16 +371,7 @@ const App = () => {
         html { scroll-behavior: smooth; }
         input[type=range] { -webkit-appearance: none; background: #2a2a2a; height: 1px; width: 100%; outline: none; }
         input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; background: #d4af37; height: 18px; width: 18px; border-radius: 50%; cursor: pointer; border: 1px solid #fff; box-shadow: 0 0 10px rgba(0,0,0,0.5); }
-        
-        input:-webkit-autofill,
-        input:-webkit-autofill:hover, 
-        input:-webkit-autofill:focus, 
-        input:-webkit-autofill:active {
-            -webkit-box-shadow: 0 0 0 1000px #000000 inset !important;
-            -webkit-text-fill-color: #ffffff !important;
-            transition: background-color 5000s ease-in-out 0s !important;
-        }
-        
+        input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:focus, input:-webkit-autofill:active { -webkit-box-shadow: 0 0 0 1000px #000000 inset !important; -webkit-text-fill-color: #ffffff !important; transition: background-color 5000s ease-in-out 0s !important; }
         textarea::placeholder { color: rgba(255, 255, 255, 0.7); }
         body.modal-open { overflow: hidden; touch-action: none; }
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }
@@ -425,7 +394,7 @@ const App = () => {
               transition={{ scale: { duration: 8, ease: "linear" }, opacity: { duration: 2.5 }, filter: { duration: 2.5 } }} 
               className="absolute inset-0"
             >
-              <img src={CONFIG.heroSlides[heroIndex]} fetchpriority={heroIndex === 0 ? "high" : "auto"} decoding="async" className="w-full h-full object-cover" alt="" />
+              <img src={CONFIG.heroSlides[heroIndex]} fetchpriority={heroIndex === 0 ? "high" : "auto"} decoding="async" className={`w-full h-full object-cover ${heroIndex === 0 ? "object-[50%_70%]" : "object-center"}`} alt="" />
               <div className="absolute inset-0 bg-black/20 md:bg-black/40 backdrop-blur-[1px] md:backdrop-blur-[2px]" />
             </motion.div>
           </AnimatePresence>
@@ -895,7 +864,7 @@ const App = () => {
                   <div>
                     <label className="text-amber-500 text-[10px] uppercase tracking-widest mb-1 block font-elegant">Time Select</label>
                     <div className="flex items-center justify-center border-b border-zinc-800 py-1 transition-colors w-full">
-                      <div className="flex flex-nowrap items-center justify-center w-full max-w-[200px] gap-1">
+                      <div className="flex flex-nowrap items-center justify-center w-full gap-1">
                         <select onChange={(e)=>setFormData({...formData, startTime:e.target.value})} required className="bg-transparent text-white outline-none font-elegant text-base md:text-lg appearance-none cursor-pointer focus:border-amber-500 text-center w-20">
                           <option value="" className="bg-zinc-900 text-stone-500">Start</option>
                           {Array.from({ length: 25 }, (_, i) => { const h = Math.floor(i / 2) + 10; const m = i % 2 === 0 ? "00" : "30"; const t = `${h}:${m}`; return h <= 21 ? <option key={t} value={t} className="bg-zinc-900 text-white">{t}</option> : null; })}
