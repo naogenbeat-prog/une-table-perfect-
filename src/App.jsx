@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import { Menu, X, ChevronRight, Star, Quote, Mail, ChevronLeft, Calendar, Clock, CheckCircle2, Trophy, ExternalLink, Check } from "lucide-react";
 import { motion, AnimatePresence, useAnimation, useDragControls } from "framer-motion";
 
@@ -162,7 +162,7 @@ const App = () => {
   const controls = useAnimation();
 
   const guestPoints = Math.floor((guestCount - 20) / 10);
-  const budgetPoints = Math.floor((budget - 4000) / 1500); // ここで切り捨て
+  const budgetPoints = Math.floor((budget - 4000) / 1500);
   const totalAvailablePoints = guestPoints + budgetPoints;
   const remainingPoints = totalAvailablePoints - (bevLevel + ingLevel);
 
@@ -286,7 +286,11 @@ const App = () => {
     }
   };
 
-  const simResult = budgetMap[budget] || budgetMap[4000];
+  const simResult = useMemo(() => {
+    const sortedKeys = Object.keys(budgetMap).map(Number).sort((a, b) => a - b);
+    const key = sortedKeys.find(k => budget <= k) || 11500;
+    return budgetMap[key];
+  }, [budget]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -386,7 +390,6 @@ const App = () => {
       
       <Navbar isScrolled={isScrolled} currentView={currentView} onViewChange={handleViewChange} />
       
-      {/* Hero Section */}
       <section className="relative h-screen overflow-hidden flex flex-col justify-center items-center text-center px-4 mb-20 md:mb-0">
         <div className="absolute inset-0 z-0">
           <AnimatePresence>
@@ -434,9 +437,7 @@ const App = () => {
         </motion.div>
       </section>
 
-      {/* Concept Section */}
       <section id="concept" ref={conceptRef} className="pt-10 pb-16 md:pt-20 md:pb-32 px-4 md:px-6 max-w-7xl mx-auto flex flex-col md:flex-row gap-4 md:gap-24 items-start">
-        
         <div className="md:hidden w-full flex flex-col items-center relative z-10 mt-12 mb-4">
           <div className="relative text-white text-lg leading-relaxed min-h-[90px] w-full">
             <AnimatePresence mode="wait">
@@ -555,8 +556,11 @@ const App = () => {
               </motion.div>
             </AnimatePresence>
           </div>
+
           <div className="w-full flex justify-center gap-3 pb-4 shrink-0 z-10 mt-10">
-            {serviceList.map((_, i) => (<div key={i} className={`w-2 h-2 rounded-full transition-all duration-500 ${i === serviceSlideIndex ? 'bg-amber-500 scale-125' : 'bg-zinc-700'}`}></div>))}
+            {serviceList.map((_, i) => (
+              <div key={i} className={`w-2 h-2 rounded-full transition-all duration-500 ${i === serviceSlideIndex ? 'bg-amber-500 scale-125' : 'bg-zinc-700'}`}></div>
+            ))}
           </div>
         </div>
       </section>
@@ -866,25 +870,15 @@ const App = () => {
                   <div>
                     <label className="text-amber-500 text-[10px] uppercase tracking-widest mb-1 block font-elegant">Time Select</label>
                     <div className="flex items-center justify-center border-b border-zinc-800 py-1 transition-colors w-full">
-                      <div className="flex flex-nowrap items-center justify-center w-full gap-1 px-2">
-                        <select onChange={(e)=>setFormData({...formData, startTime:e.target.value})} required className="bg-transparent text-white outline-none font-elegant text-base md:text-lg appearance-none cursor-pointer focus:text-amber-500 text-center w-20 md:w-24">
+                      <div className="flex flex-nowrap items-center justify-center w-full gap-1">
+                        <select onChange={(e)=>setFormData({...formData, startTime:e.target.value})} required className="bg-transparent text-white outline-none font-elegant text-base md:text-lg appearance-none cursor-pointer focus:border-amber-500 text-center w-20 md:w-24">
                           <option value="" className="bg-zinc-900 text-stone-500">Start</option>
-                          {Array.from({ length: 25 }, (_, i) => {
-                            const h = Math.floor(i / 2) + 10;
-                            const m = i % 2 === 0 ? "00" : "30";
-                            const t = `${h}:${m}`;
-                            return h <= 21 ? <option key={t} value={t} className="bg-zinc-900 text-white">{t}</option> : null;
-                          })}
+                          {Array.from({ length: 25 }, (_, i) => { const h = Math.floor(i / 2) + 10; const m = i % 2 === 0 ? "00" : "30"; const t = `${h}:${m}`; return h <= 21 ? <option key={t} value={t} className="bg-zinc-900 text-white">{t}</option> : null; })}
                         </select>
                         <span className="text-stone-600 font-elegant text-base md:text-lg">-</span>
-                        <select onChange={(e)=>setFormData({...formData, endTime:e.target.value})} required className="bg-transparent text-white outline-none font-elegant text-base md:text-lg appearance-none cursor-pointer focus:text-amber-500 text-center w-20 md:w-24">
+                        <select onChange={(e)=>setFormData({...formData, endTime:e.target.value})} required className="bg-transparent text-white outline-none font-elegant text-base md:text-lg appearance-none cursor-pointer focus:border-amber-500 text-center w-20 md:w-24">
                           <option value="" className="bg-zinc-900 text-stone-500">End</option>
-                          {Array.from({ length: 25 }, (_, i) => {
-                            const h = Math.floor(i / 2) + 10;
-                            const m = i % 2 === 0 ? "00" : "30";
-                            const t = `${h}:${m}`;
-                            return h <= 22 ? <option key={t} value={t} className="bg-zinc-900 text-white">{t}</option> : null;
-                          })}
+                          {Array.from({ length: 25 }, (_, i) => { const h = Math.floor(i / 2) + 10; const m = i % 2 === 0 ? "00" : "30"; const t = `${h}:${m}`; return h <= 22 ? <option key={t} value={t} className="bg-zinc-900 text-white">{t}</option> : null; })}
                         </select>
                       </div>
                     </div>
@@ -936,7 +930,7 @@ const App = () => {
         </div>
       </section>
 
-      {/* --- ホール利用 ポップアップ (モーダル) --- */}
+      {/* --- ホール利用 ポップアップ --- */}
       <AnimatePresence>
         {showHallPopup && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[100] flex items-center justify-center p-0 md:p-0">
@@ -963,7 +957,7 @@ const App = () => {
 
               <div className="flex flex-col w-full md:w-1/2 overflow-y-auto custom-scrollbar z-10 bg-black/40 backdrop-blur-md md:bg-transparent md:backdrop-blur-none justify-center">
                 <div className="p-6 pb-4 md:p-20 md:pt-32 flex-grow flex flex-col justify-start md:justify-center">
-                  <p className="text-stone-300 text-[14px] md:text-lg leading-relaxed font-elegant italic mb-6 md:mb-10 drop-shadow-md text-left md:text-center">荻窪駅直結の好アクセス。洗練された広々とした空間で、上質なケータリングとともに、大切なレセプションや特別なパーティーを演出いたします。</p>
+                  <p className="text-stone-300 text-[14px] md:text-lg leading-relaxed font-elegant italic mb-6 md:mb-10 drop-shadow-md text-left md:text-center">荻窪駅直結の好アクセス。洗練された広々とした空間で、<br/>上質なケータリングとともに、大切なレセプションや<br/>特別なパーティーを演出いたします。</p>
                   <div className="space-y-3 md:space-y-6 mb-6 md:mb-8 w-full max-w-sm mx-auto">
                     <div className="border-l-2 border-amber-500 pl-4 md:pl-6 py-0.5"><h4 className="text-white text-[14px] md:text-lg tracking-widest font-elegant uppercase mb-1.5">Location</h4><p className="text-stone-400 text-[13px] md:text-base">東京都杉並区上荻1-9-1 タウンセブンビル 8F</p></div>
                     <div className="border-l-2 border-amber-500 pl-4 md:pl-6 py-0.5"><h4 className="text-white text-[14px] md:text-lg tracking-widest font-elegant uppercase mb-1.5">Capacity</h4><p className="text-stone-400 text-[13px] md:text-base">立食: 〜約120名 / 着席: 〜約80名様</p></div>
