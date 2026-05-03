@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo } from "react";
+import React, { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import { Menu, X, ChevronRight, Star, Quote, Mail, ChevronLeft, Calendar, Clock, CheckCircle2, Trophy, ExternalLink, Check } from "lucide-react";
 import { motion, AnimatePresence, useAnimation, useDragControls } from "framer-motion";
 
@@ -287,9 +287,8 @@ const App = () => {
   };
 
   const simResult = useMemo(() => {
-    const sortedPrices = Object.keys(budgetMap).map(Number).sort((a,b) => a - b);
-    const closestPrice = sortedPrices.find(p => budget < p) || 11500;
-    const key = budget < 4000 ? 4000 : (closestPrice === 11500 ? 11500 : sortedPrices[sortedPrices.indexOf(closestPrice)-1]);
+    const prices = Object.keys(budgetMap).map(Number).sort((a,b) => a - b);
+    const key = prices.find(p => budget <= p) || 11500;
     return budgetMap[key];
   }, [budget]);
 
@@ -371,7 +370,16 @@ const App = () => {
         html { scroll-behavior: smooth; }
         input[type=range] { -webkit-appearance: none; background: #2a2a2a; height: 1px; width: 100%; outline: none; }
         input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; background: #d4af37; height: 18px; width: 18px; border-radius: 50%; cursor: pointer; border: 1px solid #fff; box-shadow: 0 0 10px rgba(0,0,0,0.5); }
-        input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:focus, input:-webkit-autofill:active { -webkit-box-shadow: 0 0 0 1000px #000000 inset !important; -webkit-text-fill-color: #ffffff !important; transition: background-color 5000s ease-in-out 0s !important; }
+        
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover, 
+        input:-webkit-autofill:focus, 
+        input:-webkit-autofill:active {
+            -webkit-box-shadow: 0 0 0 1000px #000000 inset !important;
+            -webkit-text-fill-color: #ffffff !important;
+            transition: background-color 5000s ease-in-out 0s !important;
+        }
+        
         textarea::placeholder { color: rgba(255, 255, 255, 0.7); }
         body.modal-open { overflow: hidden; touch-action: none; }
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }
@@ -865,12 +873,12 @@ const App = () => {
                     <label className="text-amber-500 text-[10px] uppercase tracking-widest mb-1 block font-elegant">Time Select</label>
                     <div className="flex items-center justify-center border-b border-zinc-800 py-1 transition-colors w-full">
                       <div className="flex flex-nowrap items-center justify-center w-full gap-1">
-                        <select onChange={(e)=>setFormData({...formData, startTime:e.target.value})} required className="bg-transparent text-white outline-none font-elegant text-base md:text-lg appearance-none cursor-pointer focus:border-amber-500 text-center w-20">
+                        <select onChange={(e)=>setFormData({...formData, startTime:e.target.value})} required className="bg-transparent text-white outline-none font-elegant text-base md:text-lg appearance-none cursor-pointer focus:border-amber-500 text-center w-20 md:w-24">
                           <option value="" className="bg-zinc-900 text-stone-500">Start</option>
                           {Array.from({ length: 25 }, (_, i) => { const h = Math.floor(i / 2) + 10; const m = i % 2 === 0 ? "00" : "30"; const t = `${h}:${m}`; return h <= 21 ? <option key={t} value={t} className="bg-zinc-900 text-white">{t}</option> : null; })}
                         </select>
                         <span className="text-stone-600 font-elegant text-base md:text-lg">-</span>
-                        <select onChange={(e)=>setFormData({...formData, endTime:e.target.value})} required className="bg-transparent text-white outline-none font-elegant text-base md:text-lg appearance-none cursor-pointer focus:border-amber-500 text-center w-20">
+                        <select onChange={(e)=>setFormData({...formData, endTime:e.target.value})} required className="bg-transparent text-white outline-none font-elegant text-base md:text-lg appearance-none cursor-pointer focus:border-amber-500 text-center w-20 md:w-24">
                           <option value="" className="bg-zinc-900 text-stone-500">End</option>
                           {Array.from({ length: 25 }, (_, i) => { const h = Math.floor(i / 2) + 10; const m = i % 2 === 0 ? "00" : "30"; const t = `${h}:${m}`; return h <= 22 ? <option key={t} value={t} className="bg-zinc-900 text-white">{t}</option> : null; })}
                         </select>
@@ -924,7 +932,7 @@ const App = () => {
         </div>
       </section>
 
-      {/* --- ホール利用 ポップアップ (モーダル) --- */}
+      {/* --- ホール利用 ポップアップ --- */}
       <AnimatePresence>
         {showHallPopup && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[100] flex items-center justify-center p-0 md:p-0">
