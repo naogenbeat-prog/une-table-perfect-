@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import { Menu, X, ChevronRight, Star, Quote, Mail, ChevronLeft, Calendar, Clock, CheckCircle2, Trophy, ExternalLink, Check } from "lucide-react";
 import { motion, AnimatePresence, useAnimation, useDragControls } from "framer-motion";
 
@@ -27,16 +27,28 @@ const images = {
   serviceCorporate: "/cocktail-33.png",
   servicePrivate: "/private-4.jpg",
   galleryTable:[
-    "/cocktail-37.png", "/business-12.jpg", "/sozai-12.jpeg", "/cocktail-42.png",
-    "/business-16.png", "/sozai-37.png", "/cocktail-1-2.png", "/business-1.jpeg",
-    "/cocktail-23.jpg", "/cocktail-7.png", "/cocktail-1-9.png", "/cocktail-2.png",
-    "/cocktail-31.jpg", "/cocktail-1-10.jpg", "/cocktail-3.png"
+    { url: "/cocktail-37.png", text: "75名様 / Banquet style / free-flow drinks / ￥6500" },
+    { url: "/business-12.jpg", text: "55名様 / Banquet style / free-flow drinks / ￥8000" },
+    { url: "/sozai-12.jpeg", text: "55名様 / Banquet style / free-flow drinks / ￥8000" },
+    { url: "/cocktail-42.png", text: "125名様 / Cocktail party / ￥4000" },
+    { url: "/business-16.png", text: "65名様 / Cocktail party / free-flow drinks / ￥7000" },
+    { url: "/sozai-37.png", text: "110名様 / Cocktail party / free-flow drinks / ￥5000" },
+    { url: "/cocktail-1-2.png", text: "95名様 / Cocktail party / free-flow drinks / ￥5500" },
+    { url: "/business-1.jpeg", text: "135名様 / Banquet style / free-flow drinks / ￥8000" },
+    { url: "/cocktail-23.jpg", text: "120名様 / Banquet style / free-flow drinks / ￥7000" },
+    { url: "/cocktail-7.png", text: "75名様 / Banquet style / free-flow drinks / ￥6500" },
+    { url: "/cocktail-1-9.png", text: "50名様 / Banquet style / free-flow drinks / ￥6500" },
+    { url: "/cocktail-2.png", text: "45名様 / Cocktail party / free-flow drinks / ￥5500" },
+    { url: "/cocktail-31.jpg", text: "125名様 / Cocktail party / ￥4000" },
+    { url: "/cocktail-1-10.jpg", text: "65名様 / Cocktail party / free-flow drinks / ￥7000" },
+    { url: "/cocktail-3.png", text: "125名様 / Cocktail party / ￥4000" }
   ],
   galleryDish:[
-    "/sozai-19.jpeg", "/sozai-16.jpg", "/sozai-13.jpeg", "/sozai-23.jpeg",
-    "/sozai-30.jpeg", "/sozai-29.png", "/sozai-25.jpeg", "/sozai-15-2.jpeg", 
-    "/business-9.jpeg", "/cocktail-11.jpg", "/cocktail-12.png", "/cocktail-13.jpeg",
-    "/sozai-35.jpg", "/sozai-26.jpg", "/sozai-12.png"
+    { url: "/sozai-19.jpeg", text: "" }, { url: "/sozai-16.jpg", text: "" }, { url: "/sozai-13.jpeg", text: "" },
+    { url: "/sozai-23.jpeg", text: "" }, { url: "/sozai-30.jpeg", text: "" }, { url: "/sozai-29.png", text: "" },
+    { url: "/sozai-25.jpeg", text: "" }, { url: "/sozai-15-2.jpeg", text: "" }, { url: "/business-9.jpeg", text: "" },
+    { url: "/cocktail-11.jpg", text: "" }, { url: "/cocktail-12.png", text: "" }, { url: "/cocktail-13.jpeg", text: "" },
+    { url: "/sozai-35.jpg", text: "" }, { url: "/sozai-26.jpg", text: "" }, { url: "/sozai-12.png", text: "" }
   ]
 };
 
@@ -104,12 +116,6 @@ const serviceList = [
   { id: "private", title: "Private Dining", img: images.servicePrivate, desc: "オーダーメイドのレストラン", highlight: "贅沢で特別な空間", caption: "12名様 / Private dining / free-flow drinks / ￥15000" }
 ];
 
-const Instagram = ({ size = 24, className = "" }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-    <rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/>
-  </svg>
-);
-
 const Navbar = ({ isScrolled, currentView, onViewChange }) => {
   return (
     <nav className={`fixed w-full z-50 transition-all duration-1000 ${isScrolled ? "bg-black/90 py-2 border-b border-white/5 shadow-2xl" : "bg-transparent py-8"}`}>
@@ -161,6 +167,7 @@ const App = () => {
   const dragControls = useDragControls();
   const controls = useAnimation();
 
+  // ポイント計算（整数切り捨て）
   const guestPoints = Math.floor((guestCount - 20) / 10);
   const budgetPoints = Math.floor((budget - 4000) / 1500);
   const totalAvailablePoints = guestPoints + budgetPoints;
@@ -286,7 +293,12 @@ const App = () => {
     }
   };
 
-  const simResult = budgetMap[budget] || budgetMap[4000];
+  // 予算に応じたプランの動的取得（最も近い下限値を取得）
+  const simResult = useMemo(() => {
+    const keys = Object.keys(budgetMap).map(Number).sort((a, b) => b - a);
+    const key = keys.find(k => budget >= k) || 4000;
+    return budgetMap[key];
+  }, [budget]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -869,12 +881,12 @@ const App = () => {
                   <div>
                     <label className="text-amber-500 text-[10px] uppercase tracking-widest mb-1 block font-elegant">Time Select</label>
                     <div className="flex items-center justify-center border-b border-zinc-800 py-1 transition-colors w-full">
-                      <div className="flex flex-nowrap items-center justify-center w-full max-w-[200px] gap-0">
+                      <div className="flex flex-nowrap items-center justify-center w-full gap-1">
                         <select onChange={(e)=>setFormData({...formData, startTime:e.target.value})} required className="bg-transparent text-white outline-none font-elegant text-base md:text-lg appearance-none cursor-pointer focus:text-amber-500 text-center w-20">
                           <option value="" className="bg-zinc-900 text-stone-500">Start</option>
                           {Array.from({ length: 25 }, (_, i) => { const h = Math.floor(i / 2) + 10; const m = i % 2 === 0 ? "00" : "30"; const t = `${h}:${m}`; return h <= 21 ? <option key={t} value={t} className="bg-zinc-900 text-white">{t}</option> : null; })}
                         </select>
-                        <span className="text-stone-600 font-elegant text-base md:text-lg px-1">-</span>
+                        <span className="text-stone-600 font-elegant text-base md:text-lg">-</span>
                         <select onChange={(e)=>setFormData({...formData, endTime:e.target.value})} required className="bg-transparent text-white outline-none font-elegant text-base md:text-lg appearance-none cursor-pointer focus:text-amber-500 text-center w-20">
                           <option value="" className="bg-zinc-900 text-stone-500">End</option>
                           {Array.from({ length: 25 }, (_, i) => { const h = Math.floor(i / 2) + 10; const m = i % 2 === 0 ? "00" : "30"; const t = `${h}:${m}`; return h <= 22 ? <option key={t} value={t} className="bg-zinc-900 text-white">{t}</option> : null; })}
