@@ -26,32 +26,17 @@ const images = {
   serviceWedding: "/cocktail-40.png",
   serviceCorporate: "/cocktail-33.png",
   servicePrivate: "/private-4.jpg",
-  
-  // Gallery (テーブルの記録) - テキスト入りデータに復元
   galleryTable:[
-    { url: "/cocktail-37.png", text: "75名様 / Banquet style / free-flow drinks / ￥6500" },
-    { url: "/business-12.jpg", text: "55名様 / Banquet style / free-flow drinks / ￥8000" },
-    { url: "/sozai-12.jpeg", text: "55名様 / Banquet style / free-flow drinks / ￥8000" },
-    { url: "/cocktail-42.png", text: "125名様 / Cocktail party / ￥4000" },
-    { url: "/business-16.png", text: "65名様 / Cocktail party / free-flow drinks / ￥7000" },
-    { url: "/sozai-37.png", text: "110名様 / Cocktail party / free-flow drinks / ￥5000" },
-    { url: "/cocktail-1-2.png", text: "95名様 / Cocktail party / free-flow drinks / ￥5500" },
-    { url: "/business-1.jpeg", text: "135名様 / Banquet style / free-flow drinks / ￥8000" },
-    { url: "/cocktail-23.jpg", text: "120名様 / Banquet style / free-flow drinks / ￥7000" },
-    { url: "/cocktail-7.png", text: "75名様 / Banquet style / free-flow drinks / ￥6500" },
-    { url: "/cocktail-1-9.png", text: "50名様 / Banquet style / free-flow drinks / ￥6500" },
-    { url: "/cocktail-2.png", text: "45名様 / Cocktail party / free-flow drinks / ￥5500" },
-    { url: "/cocktail-31.jpg", text: "125名様 / Cocktail party / ￥4000" },
-    { url: "/cocktail-1-10.jpg", text: "65名様 / Cocktail party / free-flow drinks / ￥7000" },
-    { url: "/cocktail-3.png", text: "125名様 / Cocktail party / ￥4000" }
+    "/cocktail-37.png", "/business-12.jpg", "/sozai-12.jpeg", "/cocktail-42.png",
+    "/business-16.png", "/sozai-37.png", "/cocktail-1-2.png", "/business-1.jpeg",
+    "/cocktail-23.jpg", "/cocktail-7.png", "/cocktail-1-9.png", "/cocktail-2.png",
+    "/cocktail-31.jpg", "/cocktail-1-10.jpg", "/cocktail-3.png"
   ],
-  
   galleryDish:[
-    { url: "/sozai-19.jpeg", text: "" }, { url: "/sozai-16.jpg", text: "" }, { url: "/sozai-13.jpeg", text: "" },
-    { url: "/sozai-23.jpeg", text: "" }, { url: "/sozai-30.jpeg", text: "" }, { url: "/sozai-29.png", text: "" },
-    { url: "/sozai-25.jpeg", text: "" }, { url: "/sozai-15-2.jpeg", text: "" }, { url: "/business-9.jpeg", text: "" },
-    { url: "/cocktail-11.jpg", text: "" }, { url: "/cocktail-12.png", text: "" }, { url: "/cocktail-13.jpeg", text: "" },
-    { url: "/sozai-35.jpg", text: "" }, { url: "/sozai-26.jpg", text: "" }, { url: "/sozai-12.png", text: "" }
+    "/sozai-19.jpeg", "/sozai-16.jpg", "/sozai-13.jpeg", "/sozai-23.jpeg",
+    "/sozai-30.jpeg", "/sozai-29.png", "/sozai-25.jpeg", "/sozai-15-2.jpeg", 
+    "/business-9.jpeg", "/cocktail-11.jpg", "/cocktail-12.png", "/cocktail-13.jpeg",
+    "/sozai-35.jpg", "/sozai-26.jpg", "/sozai-12.png"
   ]
 };
 
@@ -176,9 +161,8 @@ const App = () => {
   const dragControls = useDragControls();
   const controls = useAnimation();
 
-  // ポイント計算の小数点切り捨て
   const guestPoints = Math.floor((guestCount - 20) / 10);
-  const budgetPoints = Math.floor((budget - 4000) / 1500); 
+  const budgetPoints = Math.floor((budget - 4000) / 1500);
   const totalAvailablePoints = guestPoints + budgetPoints;
   const remainingPoints = totalAvailablePoints - (bevLevel + ingLevel);
 
@@ -302,16 +286,7 @@ const App = () => {
     }
   };
 
-  // --- Budgetに応じた画像の切り替えロジック（到達金額で切り替え） ---
-  const getBudgetLevel = (b) => {
-    if (b >= 11500) return 11500;
-    if (b >= 10000) return 10000;
-    if (b >= 8500) return 8500;
-    if (b >= 7000) return 7000;
-    if (b >= 5500) return 5500;
-    return 4000;
-  };
-  const simResult = budgetMap[getBudgetLevel(budget)];
+  const simResult = budgetMap[budget] || budgetMap[4000];
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -423,7 +398,7 @@ const App = () => {
               transition={{ scale: { duration: 8, ease: "linear" }, opacity: { duration: 2.5 }, filter: { duration: 2.5 } }} 
               className="absolute inset-0"
             >
-              <img src={CONFIG.heroSlides[heroIndex]} fetchpriority={heroIndex === 0 ? "high" : "auto"} decoding="async" className="w-full h-full object-cover object-[50%_70%]" alt="" />
+              <img src={CONFIG.heroSlides[heroIndex]} fetchpriority={heroIndex === 0 ? "high" : "auto"} decoding="async" className={`w-full h-full object-cover ${heroIndex === 0 ? "object-[50%_70%]" : "object-center"}`} alt="" />
               <div className="absolute inset-0 bg-black/20 md:bg-black/40 backdrop-blur-[1px] md:backdrop-blur-[2px]" />
             </motion.div>
           </AnimatePresence>
@@ -522,7 +497,7 @@ const App = () => {
       </section>
 
       {/* Services Section */}
-      <section id="services" className="py-24 md:py-16 md:-mt-12 bg-zinc-900 px-6 md:px-12 max-w-7xl mx-auto flex flex-col justify-center">
+      <section id="services" className="py-24 md:py-16 md:-mt-12 bg-[#0a0a0a] px-6 md:px-12 max-w-7xl mx-auto flex flex-col justify-center">
         
         <div className="hidden md:grid grid-cols-3 gap-12">
           {serviceList.map((s, i) => (
@@ -542,42 +517,46 @@ const App = () => {
           ))}
         </div>
 
-        <div className="md:hidden relative min-h-[650px] w-full flex flex-col" onClick={() => handleViewChange(serviceList[serviceSlideIndex].id)}>
-          <div className="relative flex-grow">
-            <AnimatePresence mode="wait">
+        <div className="md:hidden relative min-h-[650px] w-full flex flex-col overflow-hidden px-2">
+          <div className="relative flex-grow w-full h-[460px]">
+            <AnimatePresence initial={false} custom={serviceSlideIndex}>
               <motion.div 
                 key={serviceSlideIndex} 
-                initial={{ opacity: 0, scale: 0.95 }} 
-                animate={{ opacity: 1, scale: 1 }} 
-                exit={{ opacity: 0, scale: 1.05 }} 
-                transition={{ duration: 1.2, ease: "easeOut" }}
-                className="absolute inset-0 flex flex-col cursor-pointer"
+                custom={serviceSlideIndex}
+                drag="x"
+                dragConstraints={{ left: 0, right: 0 }}
+                dragElastic={1}
+                onDragEnd={handleServiceDragEnd}
+                initial={{ opacity: 0, x: 100 }} 
+                animate={{ opacity: 1, x: 0 }} 
+                exit={{ opacity: 0, x: -100 }} 
+                transition={{ duration: 0.4, ease: "easeOut" }}
+                className="absolute inset-0 flex flex-col cursor-grab active:cursor-grabbing w-full h-full"
               >
-                <div className="w-full h-[460px] overflow-hidden mb-6 shadow-xl relative">
-                  <img src={serviceList[serviceSlideIndex].img} loading="lazy" decoding="async" className="w-full h-full object-cover" alt="" />
-                  <div className="absolute inset-0 bg-gradient-to-b from-black/30 to-transparent"></div>
-                  <div className="absolute top-4 right-4 bg-black/60 px-5 py-2 rounded-full border border-white/20">
-                    <span className="text-white text-[14px] uppercase tracking-widest font-elegant flex items-center gap-1">Tap to View <ChevronRight size={16} className="text-amber-500"/></span>
-                  </div>
-                  <button 
-                    onClick={(e) => { e.stopPropagation(); handleViewChange(serviceList[serviceSlideIndex].id); }}
-                    className="absolute inset-0 w-full h-full z-20 cursor-pointer"
-                    aria-label="View Details"
-                  ></button>
+                <div 
+                  className="w-full h-[460px] overflow-hidden mb-6 shadow-xl relative"
+                  onClick={() => handleViewChange(serviceList[serviceSlideIndex].id)}
+                >
+                  <img src={serviceList[serviceSlideIndex].img} loading="lazy" decoding="async" className="w-full h-full object-cover pointer-events-none" alt="" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none"></div>
+                  
+                  {/* スライド操作ボタン (左右) */}
+                  <button onClick={(e) => { e.stopPropagation(); setServiceSlideIndex((p) => (p - 1 + serviceList.length) % serviceList.length); }} className="absolute left-2 top-1/2 -translate-y-1/2 z-20 bg-black/50 p-2 rounded-full text-white backdrop-blur-sm border border-white/20"><ChevronLeft size={20} /></button>
+                  <button onClick={(e) => { e.stopPropagation(); setServiceSlideIndex((p) => (p + 1) % serviceList.length); }} className="absolute right-2 top-1/2 -translate-y-1/2 z-20 bg-black/50 p-2 rounded-full text-white backdrop-blur-sm border border-white/20"><ChevronRight size={20} /></button>
+
+                  <div className="absolute bottom-4 right-4 text-right pointer-events-none z-10"><span className="text-white text-[10px] font-elegant tracking-widest drop-shadow-md">{serviceList[serviceSlideIndex].caption}</span></div>
+                  <div className="absolute top-4 right-4 bg-black/60 px-5 py-2 rounded-full border border-white/20 pointer-events-none z-10"><span className="text-white text-[14px] uppercase tracking-widest font-elegant flex items-center gap-1">Tap to View <ChevronRight size={16} className="text-amber-500"/></span></div>
                 </div>
                 
-                <div className="flex gap-4 w-full px-2">
+                <div className="flex gap-4 w-full px-2 pointer-events-none">
                   <div className="w-[3px] h-16 bg-amber-500 mt-1"></div>
-                  <div className="text-left w-full">
-                    <h4 className="text-3xl text-white font-light uppercase tracking-widest font-elegant">{serviceList[serviceSlideIndex].title}</h4>
-                    <p className="text-stone-300 text-lg leading-relaxed font-elegant italic mt-2">{serviceList[serviceSlideIndex].desc}<br /><span className="text-amber-500 font-bold not-italic text-xl block mt-1">{serviceList[serviceSlideIndex].highlight}</span></p>
-                  </div>
+                  <div className="text-left w-full"><h4 className="text-3xl text-white font-light uppercase tracking-widest font-elegant">{serviceList[serviceSlideIndex].title}</h4><p className="text-stone-300 text-lg leading-relaxed font-elegant italic mt-2">{serviceList[serviceSlideIndex].desc}<br /><span className="text-amber-500 font-bold not-italic text-xl block mt-1">{serviceList[serviceSlideIndex].highlight}</span></p></div>
                 </div>
               </motion.div>
             </AnimatePresence>
           </div>
 
-          <div className="w-full flex justify-center gap-3 pb-4 shrink-0 mt-10">
+          <div className="w-full flex justify-center gap-3 pb-4 shrink-0 z-10 mt-10">
             {serviceList.map((_, i) => (
               <div key={i} className={`w-2 h-2 rounded-full transition-all duration-500 ${i === serviceSlideIndex ? 'bg-amber-500 scale-125' : 'bg-zinc-700'}`}></div>
             ))}
@@ -599,7 +578,6 @@ const App = () => {
             </div>
             <div className="space-y-1.5 md:space-y-4">
               <div className="flex justify-between text-sm md:text-base text-stone-300 uppercase tracking-widest font-elegant font-light"><span>Budget</span><span className="text-amber-500 font-bold">{budget === 11500 ? '∞' : `¥ ${budget.toLocaleString()}`} (+{budgetPoints}pt)</span></div>
-              {/* 変更箇所: stepを500に変更 */}
               <input type="range" min="4000" max="11500" step="500" value={budget} onChange={(e) => setBudget(Number(e.target.value))} />
             </div>
 
@@ -890,27 +868,16 @@ const App = () => {
                   </div>
                   <div>
                     <label className="text-amber-500 text-[10px] uppercase tracking-widest mb-1 block font-elegant">Time Select</label>
-                    {/* 変更箇所: flex-nowrap で折り返しを防ぎ、中央に寄せる */}
                     <div className="flex items-center justify-center border-b border-zinc-800 py-1 transition-colors w-full">
-                      <div className="flex flex-nowrap items-center justify-center gap-2 mx-auto w-auto">
-                        <select onChange={(e)=>setFormData({...formData, startTime:e.target.value})} required className="bg-transparent text-white outline-none font-elegant text-base md:text-lg appearance-none cursor-pointer focus:text-amber-500 text-right w-16 md:w-20">
-                          <option value="" className="bg-zinc-900 text-stone-500 text-center">Start</option>
-                          {Array.from({ length: 25 }, (_, i) => {
-                            const h = Math.floor(i / 2) + 10;
-                            const m = i % 2 === 0 ? "00" : "30";
-                            const t = `${h}:${m}`;
-                            return h <= 21 ? <option key={t} value={t} className="bg-zinc-900 text-white text-center">{t}</option> : null;
-                          })}
+                      <div className="flex flex-nowrap items-center justify-center w-full gap-0">
+                        <select onChange={(e)=>setFormData({...formData, startTime:e.target.value})} required className="bg-transparent text-white outline-none font-elegant text-base md:text-lg appearance-none cursor-pointer focus:text-amber-500 text-center w-20 md:w-24">
+                          <option value="" className="bg-zinc-900 text-stone-500">Start</option>
+                          {Array.from({ length: 25 }, (_, i) => { const h = Math.floor(i / 2) + 10; const m = i % 2 === 0 ? "00" : "30"; const t = `${h}:${m}`; return h <= 21 ? <option key={t} value={t} className="bg-zinc-900 text-white">{t}</option> : null; })}
                         </select>
                         <span className="text-stone-600 font-elegant text-base md:text-lg px-2">-</span>
-                        <select onChange={(e)=>setFormData({...formData, endTime:e.target.value})} required className="bg-transparent text-white outline-none font-elegant text-base md:text-lg appearance-none cursor-pointer focus:text-amber-500 text-left w-16 md:w-20">
-                          <option value="" className="bg-zinc-900 text-stone-500 text-center">End</option>
-                          {Array.from({ length: 25 }, (_, i) => {
-                            const h = Math.floor(i / 2) + 10;
-                            const m = i % 2 === 0 ? "00" : "30";
-                            const t = `${h}:${m}`;
-                            return h <= 22 ? <option key={t} value={t} className="bg-zinc-900 text-white text-center">{t}</option> : null;
-                          })}
+                        <select onChange={(e)=>setFormData({...formData, endTime:e.target.value})} required className="bg-transparent text-white outline-none font-elegant text-base md:text-lg appearance-none cursor-pointer focus:text-amber-500 text-center w-20 md:w-24">
+                          <option value="" className="bg-zinc-900 text-stone-500">End</option>
+                          {Array.from({ length: 25 }, (_, i) => { const h = Math.floor(i / 2) + 10; const m = i % 2 === 0 ? "00" : "30"; const t = `${h}:${m}`; return h <= 22 ? <option key={t} value={t} className="bg-zinc-900 text-white">{t}</option> : null; })}
                         </select>
                       </div>
                     </div>
@@ -962,7 +929,7 @@ const App = () => {
         </div>
       </section>
 
-      {/* --- ホール利用 ポップアップ (モーダル) --- */}
+      {/* --- ホール利用 ポップアップ --- */}
       <AnimatePresence>
         {showHallPopup && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[100] flex items-center justify-center p-0 md:p-0">
@@ -989,7 +956,7 @@ const App = () => {
 
               <div className="flex flex-col w-full md:w-1/2 overflow-y-auto custom-scrollbar z-10 bg-black/40 backdrop-blur-md md:bg-transparent md:backdrop-blur-none justify-center">
                 <div className="p-6 pb-4 md:p-20 md:pt-32 flex-grow flex flex-col justify-start md:justify-center">
-                  <p className="text-stone-300 text-[14px] md:text-lg leading-relaxed font-elegant italic mb-6 md:mb-10 drop-shadow-md text-left md:text-center">荻窪駅直結の好アクセス。洗練された広々とした空間で、上質なケータリングとともに、大切なレセプションや特別なパーティーを演出いたします。</p>
+                  <p className="text-stone-300 text-[14px] md:text-lg leading-relaxed font-elegant italic mb-6 md:mb-10 drop-shadow-md text-left md:text-center">荻窪駅直結の好アクセス。洗練された広々とした空間で、<br/>上質なケータリングとともに、大切なレセプションや<br/>特別なパーティーを演出いたします。</p>
                   <div className="space-y-3 md:space-y-6 mb-6 md:mb-8 w-full max-w-sm mx-auto">
                     <div className="border-l-2 border-amber-500 pl-4 md:pl-6 py-0.5"><h4 className="text-white text-[14px] md:text-lg tracking-widest font-elegant uppercase mb-1.5">Location</h4><p className="text-stone-400 text-[13px] md:text-base">東京都杉並区上荻1-9-1 タウンセブンビル 8F</p></div>
                     <div className="border-l-2 border-amber-500 pl-4 md:pl-6 py-0.5"><h4 className="text-white text-[14px] md:text-lg tracking-widest font-elegant uppercase mb-1.5">Capacity</h4><p className="text-stone-400 text-[13px] md:text-base">立食: 〜約120名 / 着席: 〜約80名様</p></div>
