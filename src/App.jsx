@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo, useCallback } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Menu, X, ChevronRight, Star, Quote, Mail, ChevronLeft, Calendar, Clock, CheckCircle2, Trophy, ExternalLink, Check } from "lucide-react";
 import { motion, AnimatePresence, useAnimation, useDragControls } from "framer-motion";
 
@@ -27,16 +27,38 @@ const images = {
   serviceCorporate: "/cocktail-33.png",
   servicePrivate: "/private-4.jpg",
   galleryTable:[
-    "/cocktail-37.png", "/business-12.jpg", "/sozai-12.jpeg", "/cocktail-42.png",
-    "/business-16.png", "/sozai-37.png", "/cocktail-1-2.png", "/business-1.jpeg",
-    "/cocktail-23.jpg", "/cocktail-7.png", "/cocktail-1-9.png", "/cocktail-2.png",
-    "/cocktail-31.jpg", "/cocktail-1-10.jpg", "/cocktail-3.png"
+    { url: "/cocktail-37.png", text: "75名様 / Banquet style / free-flow drinks / ￥6500" },
+    { url: "/business-12.jpg", text: "55名様 / Banquet style / free-flow drinks / ￥8000" },
+    { url: "/sozai-12.jpeg", text: "55名様 / Banquet style / free-flow drinks / ￥8000" },
+    { url: "/cocktail-42.png", text: "125名様 / Cocktail party / ￥4000" },
+    { url: "/business-16.png", text: "65名様 / Cocktail party / free-flow drinks / ￥7000" },
+    { url: "/sozai-37.png", text: "110名様 / Cocktail party / free-flow drinks / ￥5000" },
+    { url: "/cocktail-1-2.png", text: "95名様 / Cocktail party / free-flow drinks / ￥5500" },
+    { url: "/business-1.jpeg", text: "135名様 / Banquet style / free-flow drinks / ￥8000" },
+    { url: "/cocktail-23.jpg", text: "120名様 / Banquet style / free-flow drinks / ￥7000" },
+    { url: "/cocktail-7.png", text: "75名様 / Banquet style / free-flow drinks / ￥6500" },
+    { url: "/cocktail-1-9.png", text: "50名様 / Banquet style / free-flow drinks / ￥6500" },
+    { url: "/cocktail-2.png", text: "45名様 / Cocktail party / free-flow drinks / ￥5500" },
+    { url: "/cocktail-31.jpg", text: "125名様 / Cocktail party / ￥4000" },
+    { url: "/cocktail-1-10.jpg", text: "65名様 / Cocktail party / free-flow drinks / ￥7000" },
+    { url: "/cocktail-3.png", text: "125名様 / Cocktail party / ￥4000" }
   ],
   galleryDish:[
-    "/sozai-19.jpeg", "/sozai-16.jpg", "/sozai-13.jpeg", "/sozai-23.jpeg",
-    "/sozai-30.jpeg", "/sozai-29.png", "/sozai-25.jpeg", "/sozai-15-2.jpeg", 
-    "/business-9.jpeg", "/cocktail-11.jpg", "/cocktail-12.png", "/cocktail-13.jpeg",
-    "/sozai-35.jpg", "/sozai-26.jpg", "/sozai-12.png"
+    { url: "/sozai-19.jpeg", text: "Appetizer" }, 
+    { url: "/sozai-16.jpg", text: "Salad" }, 
+    { url: "/sozai-13.jpeg", text: "Main" },
+    { url: "/sozai-23.jpeg", text: "Appetizer" },
+    { url: "/sozai-30.jpeg", text: "Special" },
+    { url: "/sozai-29.png", text: "Dessert" },
+    { url: "/sozai-25.jpeg", text: "Main" },
+    { url: "/sozai-15-2.jpeg", text: "Appetizer" }, 
+    { url: "/business-9.jpeg", text: "Main" }, 
+    { url: "/cocktail-11.jpg", text: "Salad" }, 
+    { url: "/cocktail-12.png", text: "Appetizer" }, 
+    { url: "/cocktail-13.jpeg", text: "Main" },
+    { url: "/sozai-35.jpg", text: "Dessert" }, 
+    { url: "/sozai-26.jpg", text: "Appetizer" }, 
+    { url: "/sozai-12.png", text: "Main" }
   ]
 };
 
@@ -103,6 +125,12 @@ const serviceList = [
   { id: "standing", title: "Banquet Style", img: images.serviceCorporate, desc: "大切なビジネスシーンに適した", highlight: "洗練されたディスプレイ", caption: "75名様 / Banquet style / free-flow drinks / ￥6500" },
   { id: "private", title: "Private Dining", img: images.servicePrivate, desc: "オーダーメイドのレストラン", highlight: "贅沢で特別な空間", caption: "12名様 / Private dining / free-flow drinks / ￥15000" }
 ];
+
+const Instagram = ({ size = 24, className = "" }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/>
+  </svg>
+);
 
 const Navbar = ({ isScrolled, currentView, onViewChange }) => {
   return (
@@ -235,14 +263,6 @@ const App = () => {
     };
   }, [currentView, isMobile, showAllTable, showAllDish]);
 
-  useEffect(() => {
-    let hallTimer;
-    if (showHallPopup) {
-      hallTimer = setInterval(() => { setHallSlideIndex((p) => (p + 1) % CONFIG.hallSlides.length); }, 5000);
-    }
-    return () => clearInterval(hallTimer);
-  }, [showHallPopup]);
-
   const handleServiceDragEnd = (e, { offset }) => {
     const swipeThreshold = 50;
     if (offset.x < -swipeThreshold) {
@@ -252,6 +272,7 @@ const App = () => {
     }
   };
 
+  const currentStep = Math.floor(slideIndex / 2);
   const handleViewChange = (v) => { if (v !== "home") window.history.pushState({}, "", ""); setCurrentView(v); };
   const handlePlanSelect = () => {
     setShowSimInReservation(true);
@@ -279,13 +300,16 @@ const App = () => {
     }
   };
 
-  // 修正：金額到達まで画像を維持するロジック
-  const simResult = useMemo(() => {
-    const prices = Object.keys(budgetMap).map(Number).sort((a, b) => a - b);
-    // その予算に達しているか確認し、最も近い下限値を取得
-    const key = prices.find(p => budget < p + 1500) || 11500;
-    return budgetMap[key];
-  }, [budget]);
+  const getSimResult = (currentBudget) => {
+    if (currentBudget >= 11500) return budgetMap[11500];
+    if (currentBudget >= 10000) return budgetMap[10000];
+    if (currentBudget >= 8500) return budgetMap[8500];
+    if (currentBudget >= 7000) return budgetMap[7000];
+    if (currentBudget >= 5500) return budgetMap[5500];
+    return budgetMap[4000];
+  };
+
+  const simResult = getSimResult(budget);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -311,17 +335,18 @@ const App = () => {
       setStatus("success");
     } catch (error) { setStatus("error"); }
   };
+
   const displays = {
     table: showAllTable ? images.galleryTable : (
         typeof window !== 'undefined' && window.innerWidth < 768 
-        ? [images.galleryTable[14]] 
-        : [images.galleryTable[4], images.galleryTable[5], images.galleryTable[14]]
-    ),
+        ? [images.galleryTable[14] || images.galleryTable[0]] 
+        : [images.galleryTable[4] || images.galleryTable[0], images.galleryTable[5] || images.galleryTable[1], images.galleryTable[14] || images.galleryTable[2]]
+    ).filter(Boolean),
     dish: showAllDish ? images.galleryDish : (
         typeof window !== 'undefined' && window.innerWidth < 768
-        ? [images.galleryDish[14]] 
-        : [images.galleryDish[4], images.galleryDish[5], images.galleryDish[14]]
-    )
+        ? [images.galleryDish[14] || images.galleryDish[0]] 
+        : [images.galleryDish[4] || images.galleryDish[0], images.galleryDish[5] || images.galleryDish[1], images.galleryDish[14] || images.galleryDish[2]]
+    ).filter(Boolean)
   };
 
   if (currentView !== "home") {
@@ -334,13 +359,20 @@ const App = () => {
           <p className="text-stone-400 max-w-2xl mx-auto leading-loose mb-12 md:mb-16 text-base md:text-xl font-elegant italic">{data?.desc}</p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
             {data?.photos.map((item, i) => {
+              if (!item) return null;
+              const imgUrl = item.url || item;
+              const caption = item.text || "";
               return (
                 <div key={i} className="relative shadow-2xl group overflow-hidden">
-                  <img loading="lazy" decoding="async" src={item.url} className="w-full h-64 md:h-80 object-cover group-hover:scale-105 transition-transform duration-1000" alt="" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none"></div>
-                  <div className="absolute bottom-3 right-4 text-right pointer-events-none">
-                    <span className="text-white text-[10px] md:text-[11px] font-elegant tracking-widest drop-shadow-md">{item.text}</span>
-                  </div>
+                  <img loading="lazy" decoding="async" src={imgUrl} className="w-full h-64 md:h-80 object-cover group-hover:scale-105 transition-transform duration-1000" alt="" />
+                  {caption && (
+                    <>
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none"></div>
+                      <div className="absolute bottom-3 right-4 text-right pointer-events-none z-10">
+                        <span className="text-white text-[10px] md:text-[11px] font-elegant tracking-widest drop-shadow-md">{caption}</span>
+                      </div>
+                    </>
+                  )}
                 </div>
               );
             })}
@@ -374,6 +406,7 @@ const App = () => {
         .custom-scrollbar::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.2); }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(212, 175, 55, 0.3); border-radius: 10px; }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(212, 175, 55, 0.6); }
+        .select-center { text-align: center; text-align-last: center; }
       `}} />
       
       <Navbar isScrolled={isScrolled} currentView={currentView} onViewChange={handleViewChange} />
@@ -532,6 +565,7 @@ const App = () => {
                   <img src={serviceList[serviceSlideIndex].img} loading="lazy" decoding="async" className="w-full h-full object-cover pointer-events-none" alt="" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none"></div>
                   
+                  {/* スライド操作ボタン (左右) */}
                   <button onClick={(e) => { e.stopPropagation(); setServiceSlideIndex((p) => (p - 1 + serviceList.length) % serviceList.length); }} className="absolute left-2 top-1/2 -translate-y-1/2 z-20 bg-black/50 p-2 rounded-full text-white backdrop-blur-sm border border-white/20"><ChevronLeft size={20} /></button>
                   <button onClick={(e) => { e.stopPropagation(); setServiceSlideIndex((p) => (p + 1) % serviceList.length); }} className="absolute right-2 top-1/2 -translate-y-1/2 z-20 bg-black/50 p-2 rounded-full text-white backdrop-blur-sm border border-white/20"><ChevronRight size={20} /></button>
 
@@ -546,11 +580,8 @@ const App = () => {
               </motion.div>
             </AnimatePresence>
           </div>
-
           <div className="w-full flex justify-center gap-3 pb-4 shrink-0 z-10 mt-10">
-            {serviceList.map((_, i) => (
-              <div key={i} className={`w-2 h-2 rounded-full transition-all duration-500 ${i === serviceSlideIndex ? 'bg-amber-500 scale-125' : 'bg-zinc-700'}`}></div>
-            ))}
+            {serviceList.map((_, i) => (<div key={i} className={`w-2 h-2 rounded-full transition-all duration-500 ${i === serviceSlideIndex ? 'bg-amber-500 scale-125' : 'bg-zinc-700'}`}></div>))}
           </div>
         </div>
       </section>
@@ -651,17 +682,18 @@ const App = () => {
           
           <div className="hidden md:grid grid-cols-3 gap-6">
             <AnimatePresence>
-              {displays.table.map((img) => {
-                const imgUrl = typeof img === 'string' ? img : img.url;
-                const caption = typeof img === 'string' ? "" : img.text;
+              {displays.table.map((img, idx) => {
+                if (!img) return null;
+                const imgUrl = img.url || img;
+                const caption = img.text || "";
                 return (
-                  <motion.div key={imgUrl} initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="relative aspect-square bg-zinc-900 shadow-2xl overflow-hidden group">
+                  <motion.div key={imgUrl + idx} initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="relative aspect-square bg-zinc-900 shadow-2xl overflow-hidden group">
                     <img src={imgUrl} loading="lazy" decoding="async" className="w-full h-full object-cover transition-transform duration-[2000ms] hover:scale-110 opacity-90 hover:opacity-100" alt="" />
                     {caption && (
                       <>
                         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none"></div>
-                        <div className="absolute bottom-3 right-4 text-right pointer-events-none">
-                          <span className="text-white text-[10px] md:text-[11px] font-elegant tracking-widest drop-shadow-md">{caption}</span>
+                        <div className="absolute bottom-3 left-3 right-3 flex justify-end items-end pointer-events-none z-10 relative">
+                          <span className="text-white text-[10px] md:text-[11px] font-elegant tracking-widest text-right drop-shadow-md leading-tight z-10 relative">{caption}</span>
                         </div>
                       </>
                     )}
@@ -675,41 +707,51 @@ const App = () => {
             {!showAllTable ? (
               <div className="relative aspect-square bg-zinc-900 shadow-2xl overflow-hidden">
                 <AnimatePresence mode="wait">
-                  <motion.div 
-                    key={galleryTableIndex} 
-                    initial={{ opacity: 0, scale: 1.1 }} 
-                    animate={{ opacity: 1, scale: 1 }} 
-                    exit={{ opacity: 0 }} 
-                    transition={{ duration: 1.5, ease: "easeOut" }}
-                    className="absolute inset-0"
-                  >
-                    <img src={typeof images.galleryTable[galleryTableIndex] === 'string' ? images.galleryTable[galleryTableIndex] : images.galleryTable[galleryTableIndex].url} loading="lazy" decoding="async" className="w-full h-full object-cover opacity-90" alt="" />
-                    {typeof images.galleryTable[galleryTableIndex] !== 'string' && images.galleryTable[galleryTableIndex].text && (
-                      <>
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none"></div>
-                        <div className="absolute bottom-4 right-4 w-full flex justify-end pointer-events-none z-10">
-                          <span className="text-white text-[10px] font-elegant tracking-widest text-right drop-shadow-md">
-                            {images.galleryTable[galleryTableIndex].text}
-                          </span>
-                        </div>
-                      </>
-                    )}
-                  </motion.div>
+                  {(() => {
+                    const currentImg = images.galleryTable[galleryTableIndex];
+                    if (!currentImg) return null;
+                    const imgUrl = currentImg.url || currentImg;
+                    const caption = currentImg.text || "";
+                    
+                    return (
+                      <motion.div 
+                        key={galleryTableIndex} 
+                        initial={{ opacity: 0, scale: 1.1 }} 
+                        animate={{ opacity: 1, scale: 1 }} 
+                        exit={{ opacity: 0 }} 
+                        transition={{ duration: 1.5, ease: "easeOut" }}
+                        className="absolute inset-0"
+                      >
+                        <img src={imgUrl} loading="lazy" decoding="async" className="w-full h-full object-cover opacity-90" alt="" />
+                        {caption && (
+                          <>
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none"></div>
+                            <div className="absolute bottom-3 left-3 right-3 flex justify-end items-end pointer-events-none z-10 relative">
+                              <span className="text-white text-[10px] font-elegant tracking-widest text-right drop-shadow-md leading-tight z-10 relative">
+                                {caption}
+                              </span>
+                            </div>
+                          </>
+                        )}
+                      </motion.div>
+                    );
+                  })()}
                 </AnimatePresence>
               </div>
             ) : (
               <div className="grid grid-cols-1 gap-4">
                 {images.galleryTable.map((img, i) => {
-                  const imgUrl = typeof img === 'string' ? img : img.url;
-                  const caption = typeof img === 'string' ? "" : img.text;
+                  if (!img) return null;
+                  const imgUrl = img.url || img;
+                  const caption = img.text || "";
                   return (
                     <div key={i} className="relative aspect-square bg-zinc-900 shadow-xl overflow-hidden">
                       <img src={imgUrl} loading="lazy" decoding="async" className="w-full h-full object-cover" alt="" />
                       {caption && (
                         <>
                           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none"></div>
-                          <div className="absolute bottom-4 right-4 w-full flex justify-end pointer-events-none z-10">
-                            <span className="text-white text-[10px] font-elegant tracking-widest text-right drop-shadow-md">
+                          <div className="absolute bottom-3 left-3 right-3 flex justify-end items-end pointer-events-none z-10 relative">
+                            <span className="text-white text-[10px] font-elegant tracking-widest text-right drop-shadow-md leading-tight z-10 relative">
                               {caption}
                             </span>
                           </div>
@@ -732,20 +774,12 @@ const App = () => {
           
           <div className="hidden md:grid grid-cols-3 gap-6">
             <AnimatePresence>
-              {displays.dish.map((img) => {
-                const imgUrl = typeof img === 'string' ? img : img.url;
-                const caption = typeof img === 'string' ? "" : img.text;
+              {displays.dish.map((img, idx) => {
+                if (!img) return null;
+                const imgUrl = img.url || img;
                 return (
-                  <motion.div key={imgUrl} initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="relative aspect-square bg-zinc-900 shadow-2xl overflow-hidden group">
+                  <motion.div key={imgUrl + idx} initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="relative aspect-square bg-zinc-900 shadow-2xl overflow-hidden group">
                     <img src={imgUrl} loading="lazy" decoding="async" className="w-full h-full object-cover transition-transform duration-[2000ms] hover:scale-110 opacity-90 hover:opacity-100" alt="" />
-                    {caption && (
-                      <>
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none"></div>
-                        <div className="absolute bottom-3 right-4 text-right pointer-events-none">
-                          <span className="text-white text-[10px] md:text-[11px] font-elegant tracking-widest drop-shadow-md">{caption}</span>
-                        </div>
-                      </>
-                    )}
                   </motion.div>
                 );
               })}
@@ -756,46 +790,34 @@ const App = () => {
             {!showAllDish ? (
               <div className="relative aspect-square bg-zinc-900 shadow-2xl overflow-hidden">
                 <AnimatePresence mode="wait">
-                  <motion.div 
-                    key={galleryDishIndex} 
-                    initial={{ opacity: 0, scale: 1.1 }} 
-                    animate={{ opacity: 1, scale: 1 }} 
-                    exit={{ opacity: 0 }} 
-                    transition={{ duration: 1.5, ease: "easeOut" }}
-                    className="absolute inset-0"
-                  >
-                    <img src={typeof images.galleryDish[galleryDishIndex] === 'string' ? images.galleryDish[galleryDishIndex] : images.galleryDish[galleryDishIndex].url} loading="lazy" decoding="async" className="w-full h-full object-cover opacity-90" alt="" />
-                    {typeof images.galleryDish[galleryDishIndex] !== 'string' && images.galleryDish[galleryDishIndex].text && (
-                      <>
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none"></div>
-                        <div className="absolute bottom-4 right-4 w-full flex justify-end pointer-events-none z-10">
-                          <span className="text-white text-[10px] font-elegant tracking-widest text-right drop-shadow-md">
-                            {images.galleryDish[galleryDishIndex].text}
-                          </span>
-                        </div>
-                      </>
-                    )}
-                  </motion.div>
+                  {(() => {
+                    const currentImg = images.galleryDish[galleryDishIndex];
+                    if (!currentImg) return null;
+                    const imgUrl = currentImg.url || currentImg;
+
+                    return (
+                      <motion.div 
+                        key={galleryDishIndex} 
+                        initial={{ opacity: 0, scale: 1.1 }} 
+                        animate={{ opacity: 1, scale: 1 }} 
+                        exit={{ opacity: 0 }} 
+                        transition={{ duration: 1.5, ease: "easeOut" }}
+                        className="absolute inset-0"
+                      >
+                        <img src={imgUrl} loading="lazy" decoding="async" className="w-full h-full object-cover opacity-90" alt="" />
+                      </motion.div>
+                    );
+                  })()}
                 </AnimatePresence>
               </div>
             ) : (
               <div className="grid grid-cols-1 gap-4">
                 {images.galleryDish.map((img, i) => {
-                  const imgUrl = typeof img === 'string' ? img : img.url;
-                  const caption = typeof img === 'string' ? "" : img.text;
+                  if (!img) return null;
+                  const imgUrl = img.url || img;
                   return (
                     <div key={i} className="relative aspect-square bg-zinc-900 shadow-xl overflow-hidden">
                       <img src={imgUrl} loading="lazy" decoding="async" className="w-full h-full object-cover" alt="" />
-                      {caption && (
-                        <>
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none"></div>
-                          <div className="absolute bottom-4 right-4 w-full flex justify-end pointer-events-none z-10">
-                            <span className="text-white text-[10px] font-elegant tracking-widest text-right drop-shadow-md">
-                              {caption}
-                            </span>
-                          </div>
-                        </>
-                      )}
                     </div>
                   );
                 })}
@@ -860,15 +882,25 @@ const App = () => {
                   <div>
                     <label className="text-amber-500 text-[10px] uppercase tracking-widest mb-1 block font-elegant">Time Select</label>
                     <div className="flex items-center justify-center border-b border-zinc-800 py-1 transition-colors w-full">
-                      <div className="flex flex-nowrap items-center justify-center w-full gap-1">
-                        <select onChange={(e)=>setFormData({...formData, startTime:e.target.value})} required className="bg-transparent text-white outline-none font-elegant text-base md:text-lg appearance-none cursor-pointer focus:border-amber-500 text-center w-20">
+                      <div className="flex flex-nowrap items-center justify-center w-full gap-1 px-2">
+                        <select onChange={(e)=>setFormData({...formData, startTime:e.target.value})} required className="bg-transparent text-white outline-none font-elegant text-base md:text-lg appearance-none cursor-pointer focus:text-amber-500 w-[65px] md:w-24 select-center">
                           <option value="" className="bg-zinc-900 text-stone-500">Start</option>
-                          {Array.from({ length: 25 }, (_, i) => { const h = Math.floor(i / 2) + 10; const m = i % 2 === 0 ? "00" : "30"; const t = `${h}:${m}`; return h <= 21 ? <option key={t} value={t} className="bg-zinc-900 text-white">{t}</option> : null; })}
+                          {Array.from({ length: 25 }, (_, i) => {
+                            const h = Math.floor(i / 2) + 10;
+                            const m = i % 2 === 0 ? "00" : "30";
+                            const t = `${h}:${m}`;
+                            return h <= 21 ? <option key={t} value={t} className="bg-zinc-900 text-white">{t}</option> : null;
+                          })}
                         </select>
-                        <span className="text-stone-600 font-elegant text-base md:text-lg">-</span>
-                        <select onChange={(e)=>setFormData({...formData, endTime:e.target.value})} required className="bg-transparent text-white outline-none font-elegant text-base md:text-lg appearance-none cursor-pointer focus:border-amber-500 text-center w-20">
+                        <span className="text-stone-600 font-elegant text-base md:text-lg mx-2 md:mx-2">-</span>
+                        <select onChange={(e)=>setFormData({...formData, endTime:e.target.value})} required className="bg-transparent text-white outline-none font-elegant text-base md:text-lg appearance-none cursor-pointer focus:text-amber-500 w-[65px] md:w-24 select-center">
                           <option value="" className="bg-zinc-900 text-stone-500">End</option>
-                          {Array.from({ length: 25 }, (_, i) => { const h = Math.floor(i / 2) + 10; const m = i % 2 === 0 ? "00" : "30"; const t = `${h}:${m}`; return h <= 22 ? <option key={t} value={t} className="bg-zinc-900 text-white">{t}</option> : null; })}
+                          {Array.from({ length: 25 }, (_, i) => {
+                            const h = Math.floor(i / 2) + 10;
+                            const m = i % 2 === 0 ? "00" : "30";
+                            const t = `${h}:${m}`;
+                            return h <= 22 ? <option key={t} value={t} className="bg-zinc-900 text-white">{t}</option> : null;
+                          })}
                         </select>
                       </div>
                     </div>
@@ -926,34 +958,69 @@ const App = () => {
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[100] flex items-center justify-center p-0 md:p-0">
             <div className="absolute inset-0 bg-black/80 backdrop-blur-md cursor-pointer" onClick={closeHallPopup}></div>
             <motion.div 
-              drag={isMobile ? "y" : false} dragControls={dragControls} dragListener={isMobile} dragConstraints={{ top: 0, bottom: 0 }} dragElastic={0.2} onDragEnd={handleDragEnd} animate={controls}
+              drag={isMobile ? "y" : false} dragControls={dragControls} dragListener={isMobile} dragConstraints={{ top: 0, bottom: 0 }} dragElastic={0.2} onDragEnd={handleDragEnd}
               initial={isMobile ? { y: "100%", opacity: 0 } : { scale: 0.95, opacity: 0 }} 
               animate={isMobile ? { y: 0, opacity: 1 } : { scale: 1, opacity: 1 }} 
               exit={isMobile ? { y: "100%", opacity: 0 } : { scale: 0.95, opacity: 0 }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
               className="relative w-full h-full bg-zinc-950 md:bg-transparent shadow-2xl overflow-hidden flex flex-col md:flex-row mt-auto md:mt-0 z-10"
             >
-              <div className="absolute inset-0 z-0">
-                <AnimatePresence mode="wait"><motion.img key={hallSlideIndex} src={CONFIG.hallSlides[hallSlideIndex]} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 1.5 }} className="absolute inset-0 w-full h-full object-cover opacity-50 md:opacity-40" alt="" /></AnimatePresence>
-                <div className="absolute inset-0 bg-black/70 md:bg-black/80 backdrop-blur-sm"></div>
+              <div className="absolute top-0 left-0 w-full h-[35vh] md:h-full md:inset-0 z-0">
+                <AnimatePresence mode="wait"><motion.img key={hallSlideIndex} src={CONFIG.hallSlides[hallSlideIndex]} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 1.5 }} className="absolute inset-0 w-full h-full object-cover opacity-70 md:opacity-40" alt="" /></AnimatePresence>
+                <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/50 to-zinc-950 md:bg-black/80 md:backdrop-blur-sm"></div>
               </div>
-              <div className="md:hidden w-full flex justify-center pt-3 pb-2 shrink-0 z-20" onPointerDown={(e) => dragControls.start(e)}><div className="w-12 h-1.5 bg-zinc-500/50 rounded-full"></div></div>
+              
+              <div className="md:hidden w-full flex justify-center pt-3 pb-2 shrink-0 z-20 absolute top-0 left-0" onPointerDown={(e) => dragControls.start(e)}><div className="w-12 h-1.5 bg-zinc-500/50 rounded-full"></div></div>
               <button onClick={closeHallPopup} className="absolute top-4 left-4 z-30 flex items-center gap-1 bg-black/40 px-3 py-1.5 rounded-sm text-stone-300 hover:text-amber-500 transition-colors backdrop-blur-md text-xs uppercase tracking-widest font-elegant border border-white/10"><ChevronLeft size={14} /> Back</button>
               
-              <div className="hidden md:flex relative w-1/2 shrink-0 flex-col justify-between p-20 z-10">
-                <div className="mt-8"><span className="text-amber-500 text-[13px] tracking-[0.4em] uppercase font-elegant block mb-2 drop-shadow-md">Partner Facility</span><h3 className="text-[42px] whitespace-nowrap text-white font-elegant tracking-widest drop-shadow-xl leading-tight">タウンセブンホール</h3></div>
-                <div className="bg-black/40 border border-white/10 p-8 rounded-sm backdrop-blur-sm mt-auto max-w-lg"><h4 className="text-amber-500 text-sm uppercase tracking-[0.3em] font-elegant mb-6 text-center">Exclusive Offers</h4><ul className="space-y-5 text-left text-stone-300 text-base">{["ケータリング指定店としてタウンセブンと提携","御紹介の内容により、会場使用料の特別割引に対応","設営・復帰・清掃は、会場使用時間から除外（無料）"].map((item, idx) => <li key={idx} className="flex items-start gap-2.5"><Check size={18} className="text-amber-500 shrink-0 mt-0.5" /><span>{item}</span></li>)}</ul></div>
+              <div className="relative w-full h-full flex flex-col md:flex-row z-10 overflow-y-auto custom-scrollbar md:overflow-hidden pb-20 md:pb-0">
+                <div className="flex flex-col md:relative w-full md:w-1/2 shrink-0 justify-end md:justify-between p-6 pt-[22vh] md:p-20 z-10">
+                  <div className="mt-0 md:mt-8">
+                    <span className="text-amber-500 text-[11px] md:text-[13px] tracking-[0.4em] uppercase font-elegant block mb-1 md:mb-2 drop-shadow-md">Partner Facility</span>
+                    <h3 className="text-[32px] md:text-[42px] whitespace-nowrap text-white font-elegant tracking-widest drop-shadow-xl leading-tight">タウンセブンホール</h3>
+                  </div>
+                  
+                  <div className="hidden md:block bg-black/40 border border-white/10 p-8 rounded-sm backdrop-blur-sm mt-auto max-w-lg">
+                    <h4 className="text-amber-500 text-sm uppercase tracking-[0.3em] font-elegant mb-6 text-center">Exclusive Offers</h4>
+                    <ul className="space-y-5 text-left text-stone-300 text-base">
+                      {["ケータリング指定店としてタウンセブンと提携","御紹介の内容により、会場使用料の特別割引に対応","設営・復帰・清掃は、会場使用時間から除外（無料）"].map((item, idx) => <li key={idx} className="flex items-start gap-2.5"><Check size={18} className="text-amber-500 shrink-0 mt-0.5" /><span>{item}</span></li>)}
+                    </ul>
+                  </div>
+                </div>
+
+                <div className="flex flex-col w-full md:w-1/2 z-10 md:overflow-y-auto custom-scrollbar justify-start md:justify-center">
+                  <div className="p-6 pt-0 md:p-20 md:pt-32 flex-grow flex flex-col justify-start md:justify-center">
+                    <p className="text-stone-300 text-[14px] md:text-lg leading-relaxed font-elegant italic mb-6 md:mb-10 drop-shadow-md text-left md:text-center">
+                      荻窪駅直結の好アクセス。洗練された広々とした空間で、<br />
+                      上質なケータリングとともに、大切なレセプションや<br />
+                      特別なパーティーを演出いたします。
+                    </p>
+                    
+                    <div className="md:hidden bg-zinc-900/60 border border-white/5 p-5 rounded-sm backdrop-blur-sm mb-6 w-full shadow-lg">
+                      <h4 className="text-amber-500 text-[11px] uppercase tracking-[0.3em] font-elegant mb-4 text-center font-bold">Exclusive Offers</h4>
+                      <ul className="space-y-3 text-left text-stone-300 text-[12px]">
+                        {["ケータリング指定店としてタウンセブンと提携","御紹介の内容により、会場使用料の特別割引に対応","設営・復帰・清掃は、会場使用時間から除外（無料）"].map((item, idx) => <li key={idx} className="flex items-start gap-2"><Check size={14} className="text-amber-500 shrink-0 mt-0.5" /><span>{item}</span></li>)}
+                      </ul>
+                    </div>
+
+                    <div className="space-y-4 md:space-y-6 mb-6 md:mb-8 w-full max-w-sm mx-auto">
+                      <div className="border-l-2 border-amber-500 pl-4 md:pl-6 py-0.5"><h4 className="text-white text-[13px] md:text-lg tracking-widest font-elegant uppercase mb-1 md:mb-1.5">Location</h4><p className="text-stone-400 text-[12px] md:text-base">東京都杉並区上荻1-9-1 タウンセブンビル 8F</p></div>
+                      <div className="border-l-2 border-amber-500 pl-4 md:pl-6 py-0.5"><h4 className="text-white text-[13px] md:text-lg tracking-widest font-elegant uppercase mb-1 md:mb-1.5">Capacity</h4><p className="text-stone-400 text-[12px] md:text-base">立食: 〜約120名 / 着席: 〜約80名様</p></div>
+                    </div>
+                    
+                    <div className="hidden md:flex shrink-0 w-full max-w-sm mx-auto mt-4 md:mt-0">
+                      <a href={CONFIG.hallUrl} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 w-full py-4 md:py-6 bg-amber-600 hover:bg-amber-500 text-black font-bold text-[12px] md:text-sm tracking-[0.3em] uppercase transition-all shadow-2xl rounded-sm">
+                        <ExternalLink size={18} /><span>空き状況・ご予約はこちら</span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
               </div>
 
-              <div className="flex flex-col w-full md:w-1/2 overflow-y-auto custom-scrollbar z-10 bg-black/40 backdrop-blur-md md:bg-transparent md:backdrop-blur-none justify-center">
-                <div className="p-6 pb-4 md:p-20 md:pt-32 flex-grow flex flex-col justify-start md:justify-center">
-                  <p className="text-stone-300 text-[14px] md:text-lg leading-relaxed font-elegant italic mb-6 md:mb-10 drop-shadow-md text-left md:text-center">荻窪駅直結の好アクセス。洗練された広々とした空間で、<br/>上質なケータリングとともに、大切なレセプションや<br/>特別なパーティーを演出いたします。</p>
-                  <div className="space-y-3 md:space-y-6 mb-6 md:mb-8 w-full max-w-sm mx-auto">
-                    <div className="border-l-2 border-amber-500 pl-4 md:pl-6 py-0.5"><h4 className="text-white text-[14px] md:text-lg tracking-widest font-elegant uppercase mb-1.5">Location</h4><p className="text-stone-400 text-[13px] md:text-base">東京都杉並区上荻1-9-1 タウンセブンビル 8F</p></div>
-                    <div className="border-l-2 border-amber-500 pl-4 md:pl-6 py-0.5"><h4 className="text-white text-[14px] md:text-lg tracking-widest font-elegant uppercase mb-1.5">Capacity</h4><p className="text-stone-400 text-[13px] md:text-base">立食: 〜約120名 / 着席: 〜約80名様</p></div>
-                  </div>
-                  <div className="shrink-0 w-full max-w-sm mx-auto mt-4 md:mt-0"><a href={CONFIG.hallUrl} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 w-full py-4 md:py-6 bg-amber-600 hover:bg-amber-500 text-black font-bold text-[12px] md:text-sm tracking-[0.3em] uppercase transition-all shadow-2xl rounded-sm"><ExternalLink size={18} /><span>空き状況・ご予約はこちら</span></a></div>
-                </div>
+              <div className="md:hidden fixed bottom-0 left-0 w-full p-4 bg-zinc-950/95 backdrop-blur-md border-t border-white/5 z-50">
+                <a href={CONFIG.hallUrl} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 w-full py-3.5 bg-amber-600 hover:bg-amber-500 text-black font-bold text-[11px] tracking-[0.3em] uppercase transition-all shadow-xl rounded-sm">
+                  <ExternalLink size={16} /><span>空き状況・ご予約はこちら</span>
+                </a>
               </div>
             </motion.div>
           </motion.div>
