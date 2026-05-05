@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+  import React, { useState, useEffect, useRef } from "react";
 import { Menu, X, ChevronRight, Star, Quote, Mail, ChevronLeft, Calendar, Clock, CheckCircle2, Trophy, ExternalLink, Check } from "lucide-react";
 import { motion, AnimatePresence, useAnimation, useDragControls } from "framer-motion";
 
@@ -150,9 +150,6 @@ const formatDate = (dateStr) => {
   return `${d.getFullYear()}年${d.getMonth() + 1}月${d.getDate()}日(${days[d.getDay()]})`;
 };
 
-// 高級感のあるカスタムイージング（スッと動いてゆっくり止まる）
-const elegantEasing = [0.22, 1, 0.36, 1];
-
 const App = () => {
   const[isScrolled, setIsScrolled] = useState(false);
   const[currentView, setCurrentView] = useState("home");
@@ -211,7 +208,6 @@ const App = () => {
   }, [totalAvailablePoints, bevLevel, ingLevel]);
 
   useEffect(() => {
-    // ページ切り替え時のカクツキを防止するため、瞬時に上部へ移動
     window.scrollTo({ top: 0, behavior: 'instant' });
     const handlePopState = (e) => {
       if (showHallPopup) {
@@ -343,7 +339,6 @@ const App = () => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ 
-          // ★ もしメールが届かない場合は、Web3Formsで新しいキーを取得し、この下の "" の中身を書き換えてください。
           access_key: "7322504e-6b63-4750-9446-9b2d96325934", 
           name: formData.name, 
           email: formData.email, 
@@ -373,15 +368,15 @@ const App = () => {
       <div className="min-h-screen bg-[#0a0a0a] text-stone-300 pt-16 md:pt-28 pb-24 px-6 animate-[fadeIn_0.5s_ease-out]">
         <div className="max-w-7xl mx-auto text-center">
           <button onClick={() => window.history.back()} className="text-amber-500 mb-8 md:mb-12 flex items-center gap-2 uppercase text-[10px] md:text-xs tracking-widest"><ChevronLeft size={16} className="mr-2" /> Back</button>
-          <motion.h2 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: elegantEasing }} className="font-brand text-3xl md:text-4xl text-amber-500 mb-6 italic tracking-widest font-elegant">{data?.title}</motion.h2>
-          <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.1, ease: elegantEasing }} className="text-stone-400 max-w-2xl mx-auto leading-loose mb-12 md:mb-16 text-base md:text-xl font-elegant italic">{data?.desc}</motion.p>
+          <h2 className="font-brand text-3xl md:text-4xl text-amber-500 mb-6 italic tracking-widest font-elegant">{data?.title}</h2>
+          <p className="text-stone-400 max-w-2xl mx-auto leading-loose mb-12 md:mb-16 text-base md:text-xl font-elegant italic">{data?.desc}</p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
             {data?.photos.map((item, i) => {
               if (!item) return null;
               const imgUrl = item.url || item;
               const caption = item.text || "";
               return (
-                <motion.div key={i} initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2 + (i * 0.1), ease: elegantEasing }} className="relative shadow-2xl group overflow-hidden bg-zinc-900">
+                <div key={i} className="relative shadow-2xl group overflow-hidden bg-zinc-900">
                   <img loading="lazy" decoding="async" src={imgUrl} className="w-full h-64 md:h-80 object-cover group-hover:scale-105 transition-transform duration-1000" alt="" />
                   {caption && (
                     <>
@@ -391,7 +386,7 @@ const App = () => {
                       </div>
                     </>
                   )}
-                </motion.div>
+                </div>
               );
             })}
           </div>
@@ -405,7 +400,7 @@ const App = () => {
       <style dangerouslySetInnerHTML={{ __html: `
         @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=EB+Garamond:ital,wght@0,400;1,400&family=Noto+Serif+JP:wght@200;300;500&display=swap');
         .font-elegant { font-family: 'Cormorant Garamond', serif; }
-        html, body { scroll-behavior: smooth; overflow-x: hidden; margin: 0; padding: 0; }
+        html, body { scroll-behavior: smooth; overflow-x: hidden; width: 100%; max-width: 100vw; margin: 0; padding: 0; }
         input[type=range] { -webkit-appearance: none; background: #2a2a2a; height: 1px; width: 100%; outline: none; }
         input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; background: #d4af37; height: 18px; width: 18px; border-radius: 50%; cursor: pointer; border: 1px solid #fff; box-shadow: 0 0 10px rgba(0,0,0,0.5); }
         
@@ -448,37 +443,37 @@ const App = () => {
           <div className="absolute inset-0 bg-gradient-to-b from-black/10 md:from-black/20 to-[#0a0a0a]"></div>
         </div>
         
-        <div className="relative z-10 w-full h-full flex flex-col items-center text-white">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 2, delay: 1 }} className="relative z-10 w-full h-full flex flex-col items-center text-white">
           <div className="hidden md:flex w-full h-full flex-col justify-center items-center">
-            <motion.h2 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.2, delay: 0.5, ease: elegantEasing }} className="text-2xl tracking-[0.4em] font-light mb-24 opacity-90 uppercase">UNE TABLE</motion.h2>
-            <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.5, delay: 0.8, ease: elegantEasing }} className="font-serif text-[70px] font-light leading-tight drop-shadow-2xl italic whitespace-nowrap">華やかな装いを<br/>あなただけの空間へ。</motion.h1>
-            <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.2, delay: 1.2, ease: elegantEasing }} className="mt-20 text-xl font-light text-white/90 leading-relaxed">
+            <h2 className="text-2xl tracking-[0.4em] font-light mb-24 opacity-90 uppercase">UNE TABLE</h2>
+            <h1 className="font-serif text-[70px] font-light leading-tight drop-shadow-2xl italic whitespace-nowrap">華やかな装いを<br/>あなただけの空間へ。</h1>
+            <p className="mt-20 text-xl font-light text-white/90 leading-relaxed">
               厳選された旬の食材を目にも楽しい彩りを添えて。<br />
               特別な日に最高峰のケータリングをお届け致します。
-            </motion.p>
+            </p>
           </div>
 
           <div className="md:hidden w-full h-full relative">
             <div className="absolute w-full top-[10%] left-0 text-center">
-              <motion.h2 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.2, delay: 0.5, ease: elegantEasing }} className="text-xl tracking-[0.4em] font-light opacity-90 uppercase text-shadow-md">UNE TABLE</motion.h2>
+              <h2 className="text-xl tracking-[0.4em] font-light opacity-90 uppercase text-shadow-md">UNE TABLE</h2>
             </div>
             <div className="absolute w-full top-[30%] left-0 text-center px-0">
-              <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.5, delay: 0.8, ease: elegantEasing }} className="font-serif text-[38px] xs:text-[42px] leading-tight font-light drop-shadow-2xl italic tracking-tighter">
+              <h1 className="font-serif text-[38px] xs:text-[42px] leading-tight font-light drop-shadow-2xl italic tracking-tighter">
                 華やかな装いを<br/>あなただけの空間へ。
-              </motion.h1>
+              </h1>
             </div>
             <div className="absolute w-full bottom-[26%] left-0 text-center px-0">
-              <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.2, delay: 1.2, ease: elegantEasing }} className="text-[17px] xs:text-[18px] leading-relaxed font-light text-white/90 tracking-[-0.095em] text-shadow-md">
+              <p className="text-[17px] xs:text-[18px] leading-relaxed font-light text-white/90 tracking-[-0.095em] text-shadow-md">
                 厳選された旬の食材を目にも楽しい彩りを添えて。<br />
                 特別な日に最高峰のケータリングをお届け致します。
-              </motion.p>
+              </p>
             </div>
           </div>
-        </div>
+        </motion.div>
       </section>
 
       {/* Concept Section */}
-      <motion.section initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-10%" }} transition={{ duration: 1.2, ease: elegantEasing }} id="concept" ref={conceptRef} className="pt-10 pb-16 md:pt-20 md:pb-32 px-4 md:px-6 max-w-7xl mx-auto flex flex-col md:flex-row gap-4 md:gap-24 items-start">
+      <section id="concept" ref={conceptRef} className="pt-10 pb-16 md:pt-20 md:pb-32 px-4 md:px-6 max-w-7xl mx-auto flex flex-col md:flex-row gap-4 md:gap-24 items-start">
         
         <div className="md:hidden w-full flex flex-col items-center relative z-10 mt-12 mb-4">
           <div className="relative text-white text-lg leading-relaxed min-h-[90px] w-full">
@@ -537,14 +532,14 @@ const App = () => {
             <span className="block">究極のおもてなしをお約束いたします。</span>
           </p>
         </div>
-      </motion.section>
+      </section>
 
       {/* Services Section */}
       <section id="services" className="py-24 md:py-16 md:-mt-12 bg-[#0a0a0a] px-6 md:px-12 max-w-7xl mx-auto flex flex-col justify-center">
         
         <div className="hidden md:grid grid-cols-3 gap-12">
           {serviceList.map((s, i) => (
-            <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-10%" }} transition={{ duration: 1, delay: i * 0.2, ease: elegantEasing }} key={i} onClick={() => handleViewChange(s.id)} className="group cursor-pointer">
+            <div key={i} onClick={() => handleViewChange(s.id)} className="group cursor-pointer">
               <div className="aspect-[3/4] overflow-hidden mb-8 shadow-xl relative bg-zinc-900">
                 <img src={s.img} loading="lazy" decoding="async" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none"></div>
@@ -556,11 +551,11 @@ const App = () => {
                 <div className="w-[2px] h-12 bg-amber-500 mt-1"></div>
                 <div><h4 className="text-2xl text-white font-light uppercase tracking-widest font-elegant">{s.title}</h4><p className="text-stone-300 text-lg leading-relaxed font-elegant italic">{s.desc}<br /><span className="text-amber-500 font-bold not-italic">{s.highlight}</span></p></div>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
 
-        <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-10%" }} transition={{ duration: 1, ease: elegantEasing }} className="md:hidden relative min-h-[650px] w-full flex flex-col overflow-hidden px-2">
+        <div className="md:hidden relative min-h-[650px] w-full flex flex-col overflow-hidden px-2">
           <div className="relative flex-grow w-full h-[460px]">
             <AnimatePresence initial={false} custom={serviceSlideIndex}>
               <motion.div 
@@ -601,11 +596,11 @@ const App = () => {
           <div className="w-full flex justify-center gap-3 pb-4 shrink-0 z-10 mt-10">
             {serviceList.map((_, i) => (<div key={i} className={`w-2 h-2 rounded-full transition-all duration-500 ${i === serviceSlideIndex ? 'bg-amber-500 scale-125' : 'bg-zinc-700'}`}></div>))}
           </div>
-        </motion.div>
+        </div>
       </section>
 
       {/* Simulation Section */}
-      <motion.section initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-10%" }} transition={{ duration: 1.2, ease: elegantEasing }} id="simulation" className="pt-10 pb-12 md:pt-16 md:pb-32 bg-[#080808] px-3 md:px-6 border-y border-white/5 relative">
+      <section id="simulation" className="pt-10 pb-12 md:pt-16 md:pb-32 bg-[#080808] px-3 md:px-6 border-y border-white/5 relative">
         <div className="mb-6 md:mb-12 text-center">
           <h2 className="text-3xl md:text-5xl text-white font-light tracking-wide italic font-elegant">Simulation</h2>
         </div>
@@ -691,11 +686,11 @@ const App = () => {
             </AnimatePresence>
           </div>
         </div>
-      </motion.section>
+      </section>
 
       {/* Gallery Section */}
       <section id="gallery" className="mt-10 pt-16 md:mt-[-64px] md:pt-16 pb-24 md:pb-40 px-4 max-w-screen-2xl mx-auto relative">
-        <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-10%" }} transition={{ duration: 1, ease: elegantEasing }} className="mb-24 text-center">
+        <div className="mb-24 text-center">
           <h2 className="text-3xl md:text-5xl text-white font-light tracking-wide italic mb-10 md:mb-16 font-elegant">「テーブル」の記録</h2>
           
           <div className="hidden md:grid grid-cols-3 gap-6">
@@ -705,7 +700,7 @@ const App = () => {
                 const imgUrl = img.url || img;
                 const caption = img.text || "";
                 return (
-                  <motion.div key={imgUrl + idx} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-10%" }} transition={{ duration: 1, delay: idx * 0.1, ease: elegantEasing }} className="relative aspect-square bg-zinc-900 shadow-2xl overflow-hidden group">
+                  <motion.div key={imgUrl + idx} initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="relative aspect-square bg-zinc-900 shadow-2xl overflow-hidden group">
                     <img src={imgUrl} loading="lazy" decoding="async" className="w-full h-full object-cover transition-transform duration-[2000ms] hover:scale-110 opacity-90 hover:opacity-100" alt="" />
                     {caption && (
                       <>
@@ -763,7 +758,7 @@ const App = () => {
                   const imgUrl = img.url || img;
                   const caption = img.text || "";
                   return (
-                    <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8, ease: elegantEasing }} className="relative aspect-square bg-zinc-900 shadow-xl overflow-hidden">
+                    <div key={i} className="relative aspect-square bg-zinc-900 shadow-xl overflow-hidden">
                       <img src={imgUrl} loading="lazy" decoding="async" className="w-full h-full object-cover" alt="" />
                       {caption && (
                         <>
@@ -775,7 +770,7 @@ const App = () => {
                           </div>
                         </>
                       )}
-                    </motion.div>
+                    </div>
                   );
                 })}
               </div>
@@ -785,9 +780,9 @@ const App = () => {
           {!showAllTable && (
             <button onClick={() => setShowAllTable(true)} className="mt-8 px-16 py-3 border border-zinc-700 bg-white/5 text-amber-500 text-xs tracking-[0.5em] uppercase hover:text-white hover:border-white transition-all font-elegant italic font-light shadow-lg">View More</button>
           )}
-        </motion.div>
+        </div>
         
-        <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-10%" }} transition={{ duration: 1, ease: elegantEasing }} className="text-center mt-40 md:mt-56">
+        <div className="text-center mt-40 md:mt-56">
           <h2 className="text-3xl md:text-5xl text-white font-light tracking-wide italic mb-10 md:mb-16 font-elegant">「一皿」の記録</h2>
           
           <div className="hidden md:grid grid-cols-3 gap-6">
@@ -796,7 +791,7 @@ const App = () => {
                 if (!img) return null;
                 const imgUrl = img.url || img;
                 return (
-                  <motion.div key={imgUrl + idx} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-10%" }} transition={{ duration: 1, delay: idx * 0.1, ease: elegantEasing }} className="relative aspect-square bg-zinc-900 shadow-2xl overflow-hidden group">
+                  <motion.div key={imgUrl + idx} initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="relative aspect-square bg-zinc-900 shadow-2xl overflow-hidden group">
                     <img src={imgUrl} loading="lazy" decoding="async" className="w-full h-full object-cover transition-transform duration-[2000ms] hover:scale-110 opacity-90 hover:opacity-100" alt="" />
                   </motion.div>
                 );
@@ -834,9 +829,9 @@ const App = () => {
                   if (!img) return null;
                   const imgUrl = img.url || img;
                   return (
-                    <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8, ease: elegantEasing }} className="relative aspect-square bg-zinc-900 shadow-xl overflow-hidden">
+                    <div key={i} className="relative aspect-square bg-zinc-900 shadow-xl overflow-hidden">
                       <img src={imgUrl} loading="lazy" decoding="async" className="w-full h-full object-cover" alt="" />
-                    </motion.div>
+                    </div>
                   );
                 })}
               </div>
@@ -846,11 +841,11 @@ const App = () => {
           {!showAllDish && (
             <button onClick={() => setShowAllDish(true)} className="mt-8 px-16 py-3 border border-zinc-700 bg-white/5 text-amber-500 text-xs tracking-[0.5em] uppercase hover:text-white hover:border-white transition-all font-elegant italic font-light shadow-lg">View More</button>
           )}
-        </motion.div>
+        </div>
       </section>
 
       {/* Reservation Section */}
-      <motion.section initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-10%" }} transition={{ duration: 1.2, ease: elegantEasing }} id="contact" className="py-16 md:py-20 -mt-16 md:-mt-40 bg-black px-4 md:px-6 text-center border-t border-white/5 relative">
+      <section id="contact" className="py-16 md:py-20 -mt-16 md:-mt-40 bg-black px-4 md:px-6 text-center border-t border-white/5 relative">
         <h2 className="text-2xl text-white font-elegant italic mb-2 tracking-[0.3em]">Reservation</h2>
         <p className="text-[12px] md:text-base text-amber-500 mb-6 italic font-medium tracking-widest font-elegant leading-relaxed flex flex-col items-center justify-center">
           <span className="block md:inline">※ご紹介・以前ご利用された方限定の</span>
@@ -968,7 +963,7 @@ const App = () => {
             <p className="lowercase tracking-widest italic">powered by tune table</p>
           </div>
         </div>
-      </motion.section>
+      </section>
 
       {/* --- ホール利用 ポップアップ (モーダル) --- */}
       <AnimatePresence>
@@ -992,7 +987,7 @@ const App = () => {
               <button onClick={closeHallPopup} className="absolute top-4 left-4 z-30 flex items-center gap-1 bg-black/40 px-3 py-1.5 rounded-sm text-stone-300 hover:text-amber-500 transition-colors backdrop-blur-md text-xs uppercase tracking-widest font-elegant border border-white/10"><ChevronLeft size={14} /> Back</button>
               
               <div className="relative w-full h-full flex flex-col md:flex-row z-10 overflow-y-auto custom-scrollbar md:overflow-hidden pb-20 md:pb-0">
-                <div className="flex flex-col md:relative w-full md:w-1/2 shrink-0 justify-end md:justify-between p-6 pt-[40vh] md:p-20 z-10">
+                <div className="flex flex-col md:relative w-full md:w-1/2 shrink-0 justify-end md:justify-between p-6 pt-[32vh] md:p-20 z-10">
                   <div className="mt-0 md:mt-8">
                     <span className="text-amber-500 text-[11px] md:text-[13px] tracking-[0.4em] uppercase font-elegant block mb-1 md:mb-2 drop-shadow-md">Partner Facility</span>
                     <h3 className="text-[32px] md:text-[42px] whitespace-nowrap text-white font-elegant tracking-widest drop-shadow-xl leading-tight">タウンセブンホール</h3>
