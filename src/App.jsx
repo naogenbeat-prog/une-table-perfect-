@@ -1,4 +1,4 @@
-  import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Menu, X, ChevronRight, Star, Quote, Mail, ChevronLeft, Calendar, Clock, CheckCircle2, Trophy, ExternalLink, Check } from "lucide-react";
 import { motion, AnimatePresence, useAnimation, useDragControls } from "framer-motion";
 
@@ -381,8 +381,8 @@ const App = () => {
                   {caption && (
                     <>
                       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none"></div>
-                      <div className="absolute bottom-3 right-4 text-right pointer-events-none z-10">
-                        <span className="text-white text-[10px] md:text-[11px] font-elegant tracking-widest drop-shadow-md">{caption}</span>
+                      <div className="absolute bottom-3 left-4 right-4 text-right pointer-events-none z-10">
+                        <span className="text-white text-[10px] md:text-[11px] font-elegant tracking-widest drop-shadow-md leading-tight break-words">{caption}</span>
                       </div>
                     </>
                   )}
@@ -705,8 +705,8 @@ const App = () => {
                     {caption && (
                       <>
                         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none"></div>
-                        <div className="absolute bottom-3 left-3 right-3 flex justify-end items-end pointer-events-none z-10 relative">
-                          <span className="text-white text-[10px] md:text-[11px] font-elegant tracking-widest text-right drop-shadow-md leading-tight z-10 relative">{caption}</span>
+                        <div className="absolute bottom-3 left-4 right-4 flex justify-end items-end pointer-events-none z-10 relative">
+                          <span className="text-white text-[10px] md:text-[11px] font-elegant tracking-widest text-right drop-shadow-md leading-tight break-words z-10 relative">{caption}</span>
                         </div>
                       </>
                     )}
@@ -739,8 +739,8 @@ const App = () => {
                         {caption && (
                           <>
                             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none"></div>
-                            <div className="absolute bottom-3 left-3 right-3 flex justify-end items-end pointer-events-none z-10 relative">
-                              <span className="text-white text-[10px] font-elegant tracking-widest text-right drop-shadow-md leading-tight z-10 relative">
+                            <div className="absolute bottom-3 left-4 right-4 flex justify-end items-end pointer-events-none z-10 relative">
+                              <span className="text-white text-[10px] font-elegant tracking-widest text-right drop-shadow-md leading-tight break-words z-10 relative">
                                 {caption}
                               </span>
                             </div>
@@ -763,8 +763,8 @@ const App = () => {
                       {caption && (
                         <>
                           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none"></div>
-                          <div className="absolute bottom-3 left-3 right-3 flex justify-end items-end pointer-events-none z-10 relative">
-                            <span className="text-white text-[10px] font-elegant tracking-widest text-right drop-shadow-md leading-tight z-10 relative">
+                          <div className="absolute bottom-3 left-4 right-4 flex justify-end items-end pointer-events-none z-10 relative">
+                            <span className="text-white text-[10px] font-elegant tracking-widest text-right drop-shadow-md leading-tight break-words z-10 relative">
                               {caption}
                             </span>
                           </div>
