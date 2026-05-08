@@ -58,7 +58,7 @@ const images = {
     { url: "/cocktail-13.jpeg", text: "Main" },
     { url: "/sozai-35.jpg", text: "Dessert" }, 
     { url: "/sozai-26.jpg", text: "Appetizer" }, 
-    { url: "/sozai-12.png", text: "Main" }
+    { url: "/business-11.png", text: "Main" }
   ]
 };
 
