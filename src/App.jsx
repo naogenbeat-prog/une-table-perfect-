@@ -381,8 +381,8 @@ const App = () => {
                   {caption && (
                     <>
                       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none"></div>
-                      <div className="absolute bottom-3 left-4 right-4 text-right pointer-events-none z-10 flex justify-end">
-                        <span className="text-white text-[10px] md:text-[11px] font-elegant tracking-widest drop-shadow-md leading-tight break-words max-w-[80%]">{caption}</span>
+                      <div className="absolute bottom-3 right-6 text-right pointer-events-none z-10">
+                        <span className="text-white text-[10px] md:text-[11px] font-elegant tracking-widest drop-shadow-md leading-tight break-words">{caption}</span>
                       </div>
                     </>
                   )}
@@ -543,7 +543,7 @@ const App = () => {
               <div className="aspect-[3/4] overflow-hidden mb-8 shadow-xl relative bg-zinc-900">
                 <img src={s.img} loading="lazy" decoding="async" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none"></div>
-                <div className="absolute bottom-3 right-4 text-right pointer-events-none">
+                <div className="absolute bottom-3 right-6 text-right pointer-events-none">
                   <span className="text-white text-[10px] md:text-[11px] font-elegant tracking-widest drop-shadow-md">{s.caption}</span>
                 </div>
               </div>
@@ -582,7 +582,7 @@ const App = () => {
                   <button onClick={(e) => { e.stopPropagation(); setServiceSlideIndex((p) => (p - 1 + serviceList.length) % serviceList.length); }} className="absolute left-2 top-1/2 -translate-y-1/2 z-20 bg-black/50 p-2 rounded-full text-white backdrop-blur-sm border border-white/20"><ChevronLeft size={20} /></button>
                   <button onClick={(e) => { e.stopPropagation(); setServiceSlideIndex((p) => (p + 1) % serviceList.length); }} className="absolute right-2 top-1/2 -translate-y-1/2 z-20 bg-black/50 p-2 rounded-full text-white backdrop-blur-sm border border-white/20"><ChevronRight size={20} /></button>
 
-                  <div className="absolute bottom-4 right-4 text-right pointer-events-none z-10"><span className="text-white text-[10px] font-elegant tracking-widest drop-shadow-md">{serviceList[serviceSlideIndex].caption}</span></div>
+                  <div className="absolute bottom-4 right-6 text-right pointer-events-none z-10"><span className="text-white text-[10px] font-elegant tracking-widest drop-shadow-md">{serviceList[serviceSlideIndex].caption}</span></div>
                   <div className="absolute top-4 right-4 bg-black/60 px-5 py-2 rounded-full border border-white/20 pointer-events-none z-10"><span className="text-white text-[14px] uppercase tracking-widest font-elegant flex items-center gap-1">Tap to View <ChevronRight size={16} className="text-amber-500"/></span></div>
                 </div>
                 
@@ -705,8 +705,8 @@ const App = () => {
                     {caption && (
                       <>
                         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none"></div>
-                        <div className="absolute bottom-3 left-4 right-4 flex justify-end items-end pointer-events-none z-10 relative">
-                          <span className="text-white text-[10px] md:text-[11px] font-elegant tracking-widest text-right drop-shadow-md leading-tight break-words max-w-[80%] z-10 relative">{caption}</span>
+                        <div className="absolute bottom-3 right-6 text-right pointer-events-none z-10">
+                          <span className="text-white text-[10px] md:text-[11px] font-elegant tracking-widest drop-shadow-md">{caption}</span>
                         </div>
                       </>
                     )}
@@ -739,8 +739,8 @@ const App = () => {
                         {caption && (
                           <>
                             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none"></div>
-                            <div className="absolute bottom-3 left-4 right-4 flex justify-end items-end pointer-events-none z-10 relative">
-                              <span className="text-white text-[10px] font-elegant tracking-widest text-right drop-shadow-md leading-tight break-words max-w-[80%] z-10 relative">
+                            <div className="absolute bottom-4 right-6 text-right pointer-events-none z-10">
+                              <span className="text-white text-[10px] font-elegant tracking-widest drop-shadow-md">
                                 {caption}
                               </span>
                             </div>
@@ -763,8 +763,8 @@ const App = () => {
                       {caption && (
                         <>
                           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none"></div>
-                          <div className="absolute bottom-3 left-4 right-4 flex justify-end items-end pointer-events-none z-10 relative">
-                            <span className="text-white text-[10px] font-elegant tracking-widest text-right drop-shadow-md leading-tight break-words max-w-[80%] z-10 relative">
+                          <div className="absolute bottom-4 right-6 text-right pointer-events-none z-10">
+                            <span className="text-white text-[10px] font-elegant tracking-widest drop-shadow-md">
                               {caption}
                             </span>
                           </div>
@@ -987,7 +987,7 @@ const App = () => {
               <button onClick={closeHallPopup} className="absolute top-4 left-4 z-30 flex items-center gap-1 bg-black/40 px-3 py-1.5 rounded-sm text-stone-300 hover:text-amber-500 transition-colors backdrop-blur-md text-xs uppercase tracking-widest font-elegant border border-white/10"><ChevronLeft size={14} /> Back</button>
               
               <div className="relative w-full h-full flex flex-col md:flex-row z-10 overflow-y-auto custom-scrollbar md:overflow-hidden pb-20 md:pb-0">
-                <div className="flex flex-col md:relative w-full md:w-1/2 shrink-0 justify-end md:justify-between p-6 pt-[40vh] md:p-20 z-10">
+                <div className="flex flex-col md:relative w-full md:w-1/2 shrink-0 justify-end md:justify-between p-6 pt-[32vh] md:p-20 z-10">
                   <div className="mt-0 md:mt-8">
                     <span className="text-amber-500 text-[11px] md:text-[13px] tracking-[0.4em] uppercase font-elegant block mb-1 md:mb-2 drop-shadow-md">Partner Facility</span>
                     <h3 className="text-[32px] md:text-[42px] whitespace-nowrap text-white font-elegant tracking-widest drop-shadow-xl leading-tight">タウンセブンホール</h3>
