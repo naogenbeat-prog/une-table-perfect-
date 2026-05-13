@@ -41,7 +41,10 @@ const images = {
     { url: "/cocktail-2.png", text: "45名様 / Cocktail party / free-flow drinks / ￥5500" },
     { url: "/cocktail-31.jpg", text: "125名様 / Cocktail party / ￥4000" },
     { url: "/cocktail-1-10.jpg", text: "65名様 / Cocktail party / free-flow drinks / ￥7000" },
-    { url: "/cocktail-3.png", text: "125名様 / Cocktail party / ￥4000" }
+    { url: "/cocktail-3.png", text: "125名様 / Cocktail party / ￥4000" },
+    { url: "/garally-2.png", text: "" },
+    { url: "/garally-5.jpg", text: "" },
+    { url: "/garally-4.jpeg", text: "" }
   ],
   galleryDish:[
     { url: "/sozai-19.jpeg", text: "Appetizer" }, 
@@ -58,7 +61,19 @@ const images = {
     { url: "/cocktail-13.jpeg", text: "Main" },
     { url: "/sozai-35.jpg", text: "Dessert" }, 
     { url: "/sozai-26.jpg", text: "Appetizer" }, 
-    { url: "/business-11.png", text: "Main" }
+    { url: "/business-11.png", text: "Main" },
+    { url: "/garally-13.jpeg", text: "" },
+    { url: "/garally-14.jpeg", text: "" },
+    { url: "/garally-18.jpeg", text: "" },
+    { url: "/garally-21.jpeg", text: "" },
+    { url: "/garally-15.jpeg", text: "" },
+    { url: "/garally-19.jpeg", text: "" },
+    { url: "/garally-7.jpeg", text: "" },
+    { url: "/garally-11.jpeg", text: "" },
+    { url: "/garally-12.jpeg", text: "" },
+    { url: "/garally-6.jpeg", text: "" },
+    { url: "/garally-9.png", text: "" },
+    { url: "/garally-10.jpeg", text: "" }
   ]
 };
 
@@ -381,8 +396,8 @@ const App = () => {
                   {caption && (
                     <>
                       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none"></div>
-                      <div className="absolute bottom-3 right-6 text-right pointer-events-none z-10">
-                        <span className="text-white text-[10px] md:text-[11px] font-elegant tracking-widest drop-shadow-md leading-tight break-words">{caption}</span>
+                      <div className="absolute bottom-3 left-4 right-8 text-right pointer-events-none z-10 flex justify-end pr-2">
+                        <span className="text-white text-[10px] md:text-[11px] font-elegant tracking-widest drop-shadow-md leading-tight break-words max-w-[80%]">{caption}</span>
                       </div>
                     </>
                   )}
@@ -543,7 +558,7 @@ const App = () => {
               <div className="aspect-[3/4] overflow-hidden mb-8 shadow-xl relative bg-zinc-900">
                 <img src={s.img} loading="lazy" decoding="async" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none"></div>
-                <div className="absolute bottom-3 right-6 text-right pointer-events-none">
+                <div className="absolute bottom-3 right-4 text-right pointer-events-none">
                   <span className="text-white text-[10px] md:text-[11px] font-elegant tracking-widest drop-shadow-md">{s.caption}</span>
                 </div>
               </div>
@@ -582,7 +597,7 @@ const App = () => {
                   <button onClick={(e) => { e.stopPropagation(); setServiceSlideIndex((p) => (p - 1 + serviceList.length) % serviceList.length); }} className="absolute left-2 top-1/2 -translate-y-1/2 z-20 bg-black/50 p-2 rounded-full text-white backdrop-blur-sm border border-white/20"><ChevronLeft size={20} /></button>
                   <button onClick={(e) => { e.stopPropagation(); setServiceSlideIndex((p) => (p + 1) % serviceList.length); }} className="absolute right-2 top-1/2 -translate-y-1/2 z-20 bg-black/50 p-2 rounded-full text-white backdrop-blur-sm border border-white/20"><ChevronRight size={20} /></button>
 
-                  <div className="absolute bottom-4 right-6 text-right pointer-events-none z-10"><span className="text-white text-[10px] font-elegant tracking-widest drop-shadow-md">{serviceList[serviceSlideIndex].caption}</span></div>
+                  <div className="absolute bottom-4 right-4 text-right pointer-events-none z-10"><span className="text-white text-[10px] font-elegant tracking-widest drop-shadow-md">{serviceList[serviceSlideIndex].caption}</span></div>
                   <div className="absolute top-4 right-4 bg-black/60 px-5 py-2 rounded-full border border-white/20 pointer-events-none z-10"><span className="text-white text-[14px] uppercase tracking-widest font-elegant flex items-center gap-1">Tap to View <ChevronRight size={16} className="text-amber-500"/></span></div>
                 </div>
                 
@@ -691,7 +706,7 @@ const App = () => {
       {/* Gallery Section */}
       <section id="gallery" className="mt-10 pt-16 md:mt-[-64px] md:pt-16 pb-24 md:pb-40 px-4 max-w-screen-2xl mx-auto relative">
         <div className="mb-24 text-center">
-          <h2 className="text-3xl md:text-5xl text-white font-light tracking-wide italic mb-10 md:mb-16 font-elegant">「テーブル」の記録</h2>
+          <h2 className="text-3xl md:text-5xl text-white font-light tracking-wide italic mb-10 md:mb-16 font-elegant">テーブルの記憶</h2>
           
           <div className="hidden md:grid grid-cols-3 gap-6">
             <AnimatePresence>
@@ -705,8 +720,8 @@ const App = () => {
                     {caption && (
                       <>
                         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none"></div>
-                        <div className="absolute bottom-3 right-6 text-right pointer-events-none z-10">
-                          <span className="text-white text-[10px] md:text-[11px] font-elegant tracking-widest drop-shadow-md">{caption}</span>
+                        <div className="absolute bottom-3 left-4 right-8 flex justify-end items-end pointer-events-none z-10 relative pr-2">
+                          <span className="text-white text-[10px] md:text-[11px] font-elegant tracking-widest text-right drop-shadow-md leading-tight break-words max-w-[80%] z-10 relative">{caption}</span>
                         </div>
                       </>
                     )}
@@ -739,8 +754,8 @@ const App = () => {
                         {caption && (
                           <>
                             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none"></div>
-                            <div className="absolute bottom-4 right-6 text-right pointer-events-none z-10">
-                              <span className="text-white text-[10px] font-elegant tracking-widest drop-shadow-md">
+                            <div className="absolute bottom-3 left-4 right-8 flex justify-end items-end pointer-events-none z-10 relative pr-2">
+                              <span className="text-white text-[10px] font-elegant tracking-widest text-right drop-shadow-md leading-tight break-words max-w-[80%] z-10 relative">
                                 {caption}
                               </span>
                             </div>
@@ -763,8 +778,8 @@ const App = () => {
                       {caption && (
                         <>
                           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none"></div>
-                          <div className="absolute bottom-4 right-6 text-right pointer-events-none z-10">
-                            <span className="text-white text-[10px] font-elegant tracking-widest drop-shadow-md">
+                          <div className="absolute bottom-3 left-4 right-8 flex justify-end items-end pointer-events-none z-10 relative pr-2">
+                            <span className="text-white text-[10px] font-elegant tracking-widest text-right drop-shadow-md leading-tight break-words max-w-[80%] z-10 relative">
                               {caption}
                             </span>
                           </div>
@@ -783,7 +798,7 @@ const App = () => {
         </div>
         
         <div className="text-center mt-40 md:mt-56">
-          <h2 className="text-3xl md:text-5xl text-white font-light tracking-wide italic mb-10 md:mb-16 font-elegant">「一皿」の記録</h2>
+          <h2 className="text-3xl md:text-5xl text-white font-light tracking-wide italic mb-10 md:mb-16 font-elegant">一皿の記憶</h2>
           
           <div className="hidden md:grid grid-cols-3 gap-6">
             <AnimatePresence>
