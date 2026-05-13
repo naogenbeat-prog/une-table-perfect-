@@ -68,6 +68,9 @@ const images = {
     { url: "/garally-21.jpeg", text: "" },
     { url: "/garally-15.jpeg", text: "" },
     { url: "/garally-19.jpeg", text: "" },
+    { url: "/garally-20.jpg", text: "" },
+    { url: "/garally-17.jpeg", text: "" },
+    { url: "/garally-16.jpeg", text: "" },
     { url: "/garally-7.jpeg", text: "" },
     { url: "/garally-11.jpeg", text: "" },
     { url: "/garally-12.jpeg", text: "" },
@@ -798,7 +801,7 @@ const App = () => {
         </div>
         
         <div className="text-center mt-40 md:mt-56">
-          <h2 className="text-3xl md:text-5xl text-white font-light tracking-wide italic mb-10 md:mb-16 font-elegant">一皿の記憶</h2>
+          <h2 className="text-3xl md:text-5xl text-white font-light tracking-wide italic mb-10 md:mb-16 font-elegant">一皿の記録</h2>
           
           <div className="hidden md:grid grid-cols-3 gap-6">
             <AnimatePresence>
@@ -1002,7 +1005,7 @@ const App = () => {
               <button onClick={closeHallPopup} className="absolute top-4 left-4 z-30 flex items-center gap-1 bg-black/40 px-3 py-1.5 rounded-sm text-stone-300 hover:text-amber-500 transition-colors backdrop-blur-md text-xs uppercase tracking-widest font-elegant border border-white/10"><ChevronLeft size={14} /> Back</button>
               
               <div className="relative w-full h-full flex flex-col md:flex-row z-10 overflow-y-auto custom-scrollbar md:overflow-hidden pb-20 md:pb-0">
-                <div className="flex flex-col md:relative w-full md:w-1/2 shrink-0 justify-end md:justify-between p-6 pt-[32vh] md:p-20 z-10">
+                <div className="flex flex-col md:relative w-full md:w-1/2 shrink-0 justify-end md:justify-between p-6 pt-[40vh] md:p-20 z-10">
                   <div className="mt-0 md:mt-8">
                     <span className="text-amber-500 text-[11px] md:text-[13px] tracking-[0.4em] uppercase font-elegant block mb-1 md:mb-2 drop-shadow-md">Partner Facility</span>
                     <h3 className="text-[32px] md:text-[42px] whitespace-nowrap text-white font-elegant tracking-widest drop-shadow-xl leading-tight">タウンセブンホール</h3>
