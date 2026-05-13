@@ -381,8 +381,8 @@ const App = () => {
                   {caption && (
                     <>
                       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none"></div>
-                      <div className="absolute bottom-3 left-4 right-4 text-right pointer-events-none z-10">
-                        <span className="text-white text-[10px] md:text-[11px] font-elegant tracking-widest drop-shadow-md leading-tight break-words">{caption}</span>
+                      <div className="absolute bottom-3 left-4 right-8 text-right pointer-events-none z-10 flex justify-end pr-2">
+                        <span className="text-white text-[10px] md:text-[11px] font-elegant tracking-widest drop-shadow-md leading-tight break-words max-w-[calc(100%-2rem)]">{caption}</span>
                       </div>
                     </>
                   )}
@@ -443,7 +443,7 @@ const App = () => {
           <div className="absolute inset-0 bg-gradient-to-b from-black/10 md:from-black/20 to-[#0a0a0a]"></div>
         </div>
         
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 2, delay: 1 }} className="relative z-10 w-full h-full flex flex-col items-center text-white">
+        <div className="relative z-10 w-full h-full flex flex-col items-center text-white">
           <div className="hidden md:flex w-full h-full flex-col justify-center items-center">
             <h2 className="text-2xl tracking-[0.4em] font-light mb-24 opacity-90 uppercase">UNE TABLE</h2>
             <h1 className="font-serif text-[70px] font-light leading-tight drop-shadow-2xl italic whitespace-nowrap">華やかな装いを<br/>あなただけの空間へ。</h1>
@@ -469,7 +469,7 @@ const App = () => {
               </p>
             </div>
           </div>
-        </motion.div>
+        </div>
       </section>
 
       {/* Concept Section */}
@@ -705,8 +705,8 @@ const App = () => {
                     {caption && (
                       <>
                         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none"></div>
-                        <div className="absolute bottom-3 left-4 right-4 flex justify-end items-end pointer-events-none z-10 relative">
-                          <span className="text-white text-[10px] md:text-[11px] font-elegant tracking-widest text-right drop-shadow-md leading-tight break-words z-10 relative">{caption}</span>
+                        <div className="absolute bottom-3 left-4 right-8 flex justify-end items-end pointer-events-none z-10 relative pr-2">
+                          <span className="text-white text-[10px] md:text-[11px] font-elegant tracking-widest text-right drop-shadow-md leading-tight break-words max-w-[calc(100%-2rem)] z-10 relative">{caption}</span>
                         </div>
                       </>
                     )}
@@ -739,8 +739,8 @@ const App = () => {
                         {caption && (
                           <>
                             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none"></div>
-                            <div className="absolute bottom-3 left-4 right-4 flex justify-end items-end pointer-events-none z-10 relative">
-                              <span className="text-white text-[10px] font-elegant tracking-widest text-right drop-shadow-md leading-tight break-words z-10 relative">
+                            <div className="absolute bottom-3 left-4 right-8 flex justify-end items-end pointer-events-none z-10 relative pr-2">
+                              <span className="text-white text-[10px] font-elegant tracking-widest text-right drop-shadow-md leading-tight break-words max-w-[calc(100%-2rem)] z-10 relative">
                                 {caption}
                               </span>
                             </div>
@@ -763,8 +763,8 @@ const App = () => {
                       {caption && (
                         <>
                           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none"></div>
-                          <div className="absolute bottom-3 left-4 right-4 flex justify-end items-end pointer-events-none z-10 relative">
-                            <span className="text-white text-[10px] font-elegant tracking-widest text-right drop-shadow-md leading-tight break-words z-10 relative">
+                          <div className="absolute bottom-3 left-4 right-8 flex justify-end items-end pointer-events-none z-10 relative pr-2">
+                            <span className="text-white text-[10px] font-elegant tracking-widest text-right drop-shadow-md leading-tight break-words max-w-[calc(100%-2rem)] z-10 relative">
                               {caption}
                             </span>
                           </div>
@@ -987,7 +987,7 @@ const App = () => {
               <button onClick={closeHallPopup} className="absolute top-4 left-4 z-30 flex items-center gap-1 bg-black/40 px-3 py-1.5 rounded-sm text-stone-300 hover:text-amber-500 transition-colors backdrop-blur-md text-xs uppercase tracking-widest font-elegant border border-white/10"><ChevronLeft size={14} /> Back</button>
               
               <div className="relative w-full h-full flex flex-col md:flex-row z-10 overflow-y-auto custom-scrollbar md:overflow-hidden pb-20 md:pb-0">
-                <div className="flex flex-col md:relative w-full md:w-1/2 shrink-0 justify-end md:justify-between p-6 pt-[32vh] md:p-20 z-10">
+                <div className="flex flex-col md:relative w-full md:w-1/2 shrink-0 justify-end md:justify-between p-6 pt-[40vh] md:p-20 z-10">
                   <div className="mt-0 md:mt-8">
                     <span className="text-amber-500 text-[11px] md:text-[13px] tracking-[0.4em] uppercase font-elegant block mb-1 md:mb-2 drop-shadow-md">Partner Facility</span>
                     <h3 className="text-[32px] md:text-[42px] whitespace-nowrap text-white font-elegant tracking-widest drop-shadow-xl leading-tight">タウンセブンホール</h3>
