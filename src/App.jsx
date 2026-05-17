@@ -399,8 +399,8 @@ const App = () => {
                   {caption && (
                     <>
                       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none"></div>
-                      <div className="absolute bottom-3 left-4 right-8 text-right pointer-events-none z-10 flex justify-end pr-2">
-                        <span className="text-white text-[10px] md:text-[11px] font-elegant tracking-widest drop-shadow-md leading-tight break-words max-w-[80%]">{caption}</span>
+                      <div className="absolute bottom-3 left-2 right-4 text-right pointer-events-none z-10 flex justify-end mr-4">
+                        <span className="text-white text-[9px] md:text-[11px] font-elegant tracking-widest drop-shadow-md leading-tight break-words max-w-full">{caption}</span>
                       </div>
                     </>
                   )}
@@ -723,8 +723,8 @@ const App = () => {
                     {caption && (
                       <>
                         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none"></div>
-                        <div className="absolute bottom-3 left-4 right-8 flex justify-end items-end pointer-events-none z-10 relative pr-2">
-                          <span className="text-white text-[10px] md:text-[11px] font-elegant tracking-widest text-right drop-shadow-md leading-tight break-words max-w-[80%] z-10 relative">{caption}</span>
+                        <div className="absolute bottom-3 left-2 right-4 text-right pointer-events-none z-10 flex justify-end mr-4">
+                          <span className="text-white text-[9px] md:text-[11px] font-elegant tracking-widest drop-shadow-md leading-tight break-words max-w-full">{caption}</span>
                         </div>
                       </>
                     )}
@@ -757,8 +757,8 @@ const App = () => {
                         {caption && (
                           <>
                             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none"></div>
-                            <div className="absolute bottom-3 left-4 right-8 flex justify-end items-end pointer-events-none z-10 relative pr-2">
-                              <span className="text-white text-[10px] font-elegant tracking-widest text-right drop-shadow-md leading-tight break-words max-w-[80%] z-10 relative">
+                            <div className="absolute bottom-3 left-2 right-4 text-right pointer-events-none z-10 flex justify-end mr-4">
+                              <span className="text-white text-[9px] md:text-[11px] font-elegant tracking-widest drop-shadow-md leading-tight break-words max-w-full">
                                 {caption}
                               </span>
                             </div>
@@ -781,8 +781,8 @@ const App = () => {
                       {caption && (
                         <>
                           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none"></div>
-                          <div className="absolute bottom-3 left-4 right-8 flex justify-end items-end pointer-events-none z-10 relative pr-2">
-                            <span className="text-white text-[10px] font-elegant tracking-widest text-right drop-shadow-md leading-tight break-words max-w-[80%] z-10 relative">
+                          <div className="absolute bottom-3 left-2 right-4 text-right pointer-events-none z-10 flex justify-end mr-4">
+                            <span className="text-white text-[9px] md:text-[11px] font-elegant tracking-widest text-right drop-shadow-md leading-tight break-words max-w-full">
                               {caption}
                             </span>
                           </div>
